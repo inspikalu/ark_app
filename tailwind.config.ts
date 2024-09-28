@@ -11,9 +11,18 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        cteal: "#008080",
+        clightTeal: "#20B2AA",
+      },
+      fontFamily: {
+        sans: ['var(--font-ibm-plex-mono)', 'monospace'],
+        heading: ['var(--font-space-grotesk)', 'sans-serif'],
+        futuristic: ['var(--font-exo2)', 'sans-serif'],
+        poppins: ['var(--font-poppins)', 'sans-serif'], 
+        orbitron: ['var(--font-orbitron)', 'sans-serif'],
       },
     },
   },
-  plugins: [],
+  plugins: [require('daisyui'),],
 };
 export default config;
