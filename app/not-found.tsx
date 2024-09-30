@@ -3,14 +3,12 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { FiArrowLeft } from "react-icons/fi";
-import Header from "../components/landing/Header"; // Make sure the path is correct
 
 export default function NotFound() {
   const router = useRouter();
 
   return (
     <>
-      <Header />
       <section className="relative min-h-screen flex items-center justify-center text-center p-5 overflow-hidden bg-gradient-to-br from-black to-teal-900">
         <motion.div
           className="absolute inset-0 z-0"
