@@ -1,0 +1,3812 @@
+{
+  "address": "ADp9DgS9ZpsVDCXb4ysDjJoB1d8cL3CUmm4ErwVtqWzu",
+  "metadata": {
+    "name": "absolute_monarchy",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "abdicate",
+      "discriminator": [
+        33,
+        194,
+        141,
+        34,
+        135,
+        207,
+        221,
+        18
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "monarch",
+          "writable": true,
+          "relations": [
+            "kingdom"
+          ]
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "monarch"
+          ]
+        },
+        {
+          "name": "new_monarch",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "heir_name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "add_member",
+      "discriminator": [
+        13,
+        116,
+        123,
+        130,
+        126,
+        198,
+        57,
+        34
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "subject",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  117,
+                  98,
+                  106,
+                  101,
+                  99,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "kingdom"
+              },
+              {
+                "kind": "account",
+                "path": "kingdom.total_subjects",
+                "account": "Kingdom"
+              }
+            ]
+          }
+        },
+        {
+          "name": "member_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "authority"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "kingdom_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "kingdom_mint",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "add_token_to_treasury",
+      "discriminator": [
+        28,
+        154,
+        239,
+        139,
+        180,
+        134,
+        113,
+        194
+      ],
+      "accounts": [
+        {
+          "name": "governance",
+          "writable": true
+        },
+        {
+          "name": "treasury"
+        },
+        {
+          "name": "token_account"
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "treasury_program",
+          "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "appoint_official",
+      "discriminator": [
+        9,
+        188,
+        184,
+        230,
+        76,
+        24,
+        187,
+        40
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "monarch",
+          "writable": true
+        },
+        {
+          "name": "subject",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  117,
+                  98,
+                  106,
+                  101,
+                  99,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "kingdom"
+              },
+              {
+                "kind": "account",
+                "path": "kingdom.total_subjects",
+                "account": "Kingdom"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "monarch"
+          ]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "role",
+          "type": "string"
+        },
+        {
+          "name": "jurisdiction",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "create_treasury",
+      "discriminator": [
+        254,
+        98,
+        217,
+        51,
+        25,
+        88,
+        140,
+        45
+      ],
+      "accounts": [
+        {
+          "name": "governance",
+          "writable": true
+        },
+        {
+          "name": "treasury"
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "treasury_program",
+          "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "declare_war",
+      "discriminator": [
+        184,
+        73,
+        169,
+        200,
+        244,
+        124,
+        29,
+        116
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "monarch",
+          "writable": true
+        },
+        {
+          "name": "war",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  119,
+                  97,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "kingdom"
+              }
+            ]
+          }
+        },
+        {
+          "name": "enemy_program"
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "monarch"
+          ]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "reason",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "decree",
+      "discriminator": [
+        141,
+        90,
+        168,
+        95,
+        207,
+        111,
+        221,
+        144
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "monarch",
+          "writable": true
+        },
+        {
+          "name": "decree",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  101,
+                  99,
+                  114,
+                  101,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "monarch"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "monarch"
+          ]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "decree_text",
+          "type": "string"
+        },
+        {
+          "name": "decree_type",
+          "type": {
+            "defined": {
+              "name": "DecreeType"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "expand_organization",
+      "discriminator": [
+        36,
+        72,
+        219,
+        147,
+        182,
+        49,
+        170,
+        173
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "monarch",
+          "writable": true
+        },
+        {
+          "name": "main_treasury",
+          "writable": true
+        },
+        {
+          "name": "division",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  105,
+                  118,
+                  105,
+                  115,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "monarch"
+              },
+              {
+                "kind": "arg",
+                "path": "new_division_name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "division_treasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "division"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "mint",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "monarch"
+          ]
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "new_division_name",
+          "type": "string"
+        },
+        {
+          "name": "budget",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "grant_nobility",
+      "discriminator": [
+        184,
+        79,
+        227,
+        144,
+        124,
+        130,
+        170,
+        143
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "monarch",
+          "writable": true
+        },
+        {
+          "name": "subject",
+          "writable": true
+        },
+        {
+          "name": "noble",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  110,
+                  111,
+                  98,
+                  108,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "kingdom"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "monarch"
+          ]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "title",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "grant_privileged_access",
+      "discriminator": [
+        89,
+        31,
+        108,
+        130,
+        168,
+        152,
+        97,
+        223
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "monarch",
+          "writable": true
+        },
+        {
+          "name": "beneficiary",
+          "writable": true
+        },
+        {
+          "name": "privileged_access",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  105,
+                  118,
+                  105,
+                  108,
+                  101,
+                  103,
+                  101,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "kingdom"
+              }
+            ]
+          }
+        },
+        {
+          "name": "beneficiary_token_account",
+          "writable": true
+        },
+        {
+          "name": "treasury",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "monarch"
+          ]
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "access_type",
+          "type": "string"
+        },
+        {
+          "name": "duration",
+          "type": "i64"
+        },
+        {
+          "name": "usage_fee_rate",
+          "type": "u8"
+        },
+        {
+          "name": "access_level",
+          "type": "u8"
+        },
+        {
+          "name": "initial_fee",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "implement_policy",
+      "discriminator": [
+        18,
+        235,
+        114,
+        114,
+        235,
+        178,
+        21,
+        20
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "monarch",
+          "writable": true
+        },
+        {
+          "name": "policy",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  108,
+                  105,
+                  99,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "kingdom"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "monarch"
+          ]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "target_jurisdiction",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "initialize_absolute_monarchy",
+      "discriminator": [
+        17,
+        78,
+        8,
+        254,
+        96,
+        70,
+        27,
+        17
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  107,
+                  105,
+                  110,
+                  103,
+                  100,
+                  111,
+                  109
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "monarch"
+              }
+            ]
+          }
+        },
+        {
+          "name": "monarch",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  111,
+                  110,
+                  97,
+                  114,
+                  99,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "kingdom"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "nft_mint",
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "spl_mint",
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "sbt_mint",
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "InitializeKingdomArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "initialize_and_register_government",
+      "discriminator": [
+        95,
+        138,
+        185,
+        166,
+        143,
+        12,
+        8,
+        30
+      ],
+      "accounts": [
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "ark_analytics",
+          "writable": true
+        },
+        {
+          "name": "state_info",
+          "writable": true
+        },
+        {
+          "name": "government_program"
+        },
+        {
+          "name": "ark_program",
+          "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "initialize_spl_token",
+      "discriminator": [
+        11,
+        149,
+        217,
+        116,
+        137,
+        154,
+        68,
+        112
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  112,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "kingdom"
+              },
+              {
+                "kind": "arg",
+                "path": "params.symbol"
+              }
+            ]
+          }
+        },
+        {
+          "name": "metadata",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "token_metadata_program",
+          "address": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": {
+              "name": "InitTokenParams"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "make_decision",
+      "discriminator": [
+        7,
+        24,
+        24,
+        138,
+        49,
+        223,
+        79,
+        124
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "monarch",
+          "signer": true
+        },
+        {
+          "name": "router_program",
+          "address": "7aQvq1fEiDXqK36H7mW8MSTGdnHn6XAHDd9pauZwZXGQ"
+        },
+        {
+          "name": "router_state"
+        },
+        {
+          "name": "government_account"
+        },
+        {
+          "name": "decision_account"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "MakeDecisionArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "mint_new_nft",
+      "discriminator": [
+        112,
+        41,
+        155,
+        3,
+        227,
+        247,
+        71,
+        202
+      ],
+      "accounts": [
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  110,
+                  102,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "kingdom"
+              },
+              {
+                "kind": "arg",
+                "path": "args.symbol"
+              }
+            ]
+          }
+        },
+        {
+          "name": "subject_token_account",
+          "writable": true
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "MintNftArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "mint_new_sbt",
+      "discriminator": [
+        40,
+        169,
+        232,
+        225,
+        56,
+        166,
+        79,
+        97
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "mint",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "subject",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  117,
+                  98,
+                  106,
+                  101,
+                  99,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "kingdom"
+              },
+              {
+                "kind": "account",
+                "path": "kingdom.total_subjects",
+                "account": "Kingdom"
+              }
+            ]
+          }
+        },
+        {
+          "name": "subject_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "subject"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "InitializeSbtArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "mint_spl_tokens_to_kingdom",
+      "discriminator": [
+        113,
+        108,
+        124,
+        79,
+        29,
+        141,
+        70,
+        6
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "mint",
+          "writable": true
+        },
+        {
+          "name": "kingdom_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "kingdom"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "mint_spl_tokens_to_subject",
+      "discriminator": [
+        235,
+        135,
+        148,
+        101,
+        87,
+        138,
+        54,
+        185
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "mint",
+          "writable": true
+        },
+        {
+          "name": "subject",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  117,
+                  98,
+                  106,
+                  101,
+                  99,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "kingdom"
+              },
+              {
+                "kind": "account",
+                "path": "kingdom.total_subjects",
+                "account": "Kingdom"
+              }
+            ]
+          }
+        },
+        {
+          "name": "subject_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "subject"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "pay_tax",
+      "discriminator": [
+        51,
+        5,
+        236,
+        118,
+        42,
+        113,
+        61,
+        53
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "subject",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  117,
+                  98,
+                  106,
+                  101,
+                  99,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "kingdom"
+              },
+              {
+                "kind": "account",
+                "path": "kingdom.total_subjects",
+                "account": "Kingdom"
+              }
+            ]
+          }
+        },
+        {
+          "name": "subject_token_account",
+          "writable": true
+        },
+        {
+          "name": "treasury_token_account",
+          "writable": true
+        },
+        {
+          "name": "economic_policy",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  99,
+                  111,
+                  110,
+                  111,
+                  109,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "kingdom"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "tax_type",
+          "type": {
+            "defined": {
+              "name": "TaxType"
+            }
+          }
+        },
+        {
+          "name": "taxable_amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "repeal_decree",
+      "discriminator": [
+        8,
+        70,
+        156,
+        238,
+        44,
+        92,
+        160,
+        127
+      ],
+      "accounts": [
+        {
+          "name": "monarch",
+          "writable": true
+        },
+        {
+          "name": "decree",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "monarch"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "decree_id",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "royal_judgment",
+      "discriminator": [
+        206,
+        73,
+        55,
+        69,
+        45,
+        230,
+        224,
+        109
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "monarch",
+          "writable": true
+        },
+        {
+          "name": "subject",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "monarch"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "verdict",
+          "type": {
+            "defined": {
+              "name": "Verdict"
+            }
+          }
+        },
+        {
+          "name": "punishment",
+          "type": {
+            "option": {
+              "defined": {
+                "name": "Punishment"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "royal_pardon",
+      "discriminator": [
+        222,
+        136,
+        56,
+        151,
+        12,
+        163,
+        48,
+        82
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "monarch",
+          "writable": true
+        },
+        {
+          "name": "subject",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "monarch"
+          ]
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "set_economic_policy",
+      "discriminator": [
+        254,
+        188,
+        196,
+        100,
+        4,
+        30,
+        229,
+        22
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "monarch",
+          "writable": true
+        },
+        {
+          "name": "economic_policy",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  99,
+                  111,
+                  110,
+                  111,
+                  109,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "kingdom"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "monarch"
+          ]
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "policy",
+          "type": {
+            "defined": {
+              "name": "EconomicPolicyType"
+            }
+          }
+        },
+        {
+          "name": "income_tax_rate",
+          "type": "u8"
+        },
+        {
+          "name": "property_tax_rate",
+          "type": "u8"
+        },
+        {
+          "name": "trade_tax_rate",
+          "type": "u8"
+        },
+        {
+          "name": "luxury_tax_rate",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "transfer_revenue",
+      "discriminator": [
+        157,
+        95,
+        197,
+        188,
+        159,
+        230,
+        249,
+        224
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "monarch",
+          "writable": true
+        },
+        {
+          "name": "division",
+          "writable": true
+        },
+        {
+          "name": "division_treasury",
+          "writable": true
+        },
+        {
+          "name": "main_treasury",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  105,
+                  118,
+                  105,
+                  115,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "monarch"
+              },
+              {
+                "kind": "account",
+                "path": "division.name",
+                "account": "Division"
+              }
+            ]
+          },
+          "relations": [
+            "monarch"
+          ]
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "unappoint_official",
+      "discriminator": [
+        158,
+        169,
+        168,
+        92,
+        83,
+        151,
+        221,
+        21
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "monarch",
+          "writable": true
+        },
+        {
+          "name": "subject",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "monarch"
+          ]
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "update_policy",
+      "discriminator": [
+        212,
+        245,
+        246,
+        7,
+        163,
+        151,
+        18,
+        57
+      ],
+      "accounts": [
+        {
+          "name": "kingdom",
+          "writable": true
+        },
+        {
+          "name": "monarch",
+          "writable": true,
+          "relations": [
+            "policy"
+          ]
+        },
+        {
+          "name": "policy",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "monarch"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "new_description",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "new_target_jurisdiction",
+          "type": {
+            "option": "string"
+          }
+        },
+        {
+          "name": "new_is_active",
+          "type": {
+            "option": "bool"
+          }
+        }
+      ]
+    },
+    {
+      "name": "use_privileged_access",
+      "discriminator": [
+        92,
+        136,
+        233,
+        103,
+        214,
+        229,
+        80,
+        158
+      ],
+      "accounts": [
+        {
+          "name": "privileged_access"
+        },
+        {
+          "name": "user",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "user_account",
+          "writable": true
+        },
+        {
+          "name": "holder_account",
+          "writable": true
+        },
+        {
+          "name": "treasury_account",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "usage_amount",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "ArkAnalytics",
+      "discriminator": [
+        222,
+        47,
+        90,
+        164,
+        175,
+        77,
+        25,
+        117
+      ]
+    },
+    {
+      "name": "Decree",
+      "discriminator": [
+        101,
+        171,
+        2,
+        214,
+        37,
+        129,
+        192,
+        0
+      ]
+    },
+    {
+      "name": "Division",
+      "discriminator": [
+        54,
+        116,
+        149,
+        82,
+        235,
+        137,
+        171,
+        4
+      ]
+    },
+    {
+      "name": "EconomicPolicy",
+      "discriminator": [
+        154,
+        230,
+        39,
+        170,
+        238,
+        57,
+        225,
+        232
+      ]
+    },
+    {
+      "name": "Kingdom",
+      "discriminator": [
+        106,
+        125,
+        178,
+        151,
+        103,
+        94,
+        150,
+        222
+      ]
+    },
+    {
+      "name": "Monarch",
+      "discriminator": [
+        227,
+        161,
+        210,
+        163,
+        181,
+        33,
+        180,
+        185
+      ]
+    },
+    {
+      "name": "Noble",
+      "discriminator": [
+        90,
+        51,
+        60,
+        250,
+        206,
+        18,
+        7,
+        144
+      ]
+    },
+    {
+      "name": "Policy",
+      "discriminator": [
+        222,
+        135,
+        7,
+        163,
+        235,
+        177,
+        33,
+        68
+      ]
+    },
+    {
+      "name": "PrivilegedAccess",
+      "discriminator": [
+        17,
+        119,
+        223,
+        76,
+        122,
+        79,
+        255,
+        199
+      ]
+    },
+    {
+      "name": "StateInfo",
+      "discriminator": [
+        84,
+        40,
+        95,
+        251,
+        34,
+        189,
+        94,
+        185
+      ]
+    },
+    {
+      "name": "Subject",
+      "discriminator": [
+        52,
+        161,
+        41,
+        165,
+        202,
+        238,
+        138,
+        166
+      ]
+    },
+    {
+      "name": "War",
+      "discriminator": [
+        54,
+        31,
+        229,
+        114,
+        29,
+        29,
+        212,
+        65
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "MemberAdded",
+      "discriminator": [
+        198,
+        220,
+        228,
+        196,
+        92,
+        235,
+        240,
+        79
+      ]
+    },
+    {
+      "name": "MintEvent",
+      "discriminator": [
+        197,
+        144,
+        146,
+        149,
+        66,
+        164,
+        95,
+        16
+      ]
+    },
+    {
+      "name": "NftMinted",
+      "discriminator": [
+        175,
+        29,
+        105,
+        0,
+        195,
+        2,
+        245,
+        38
+      ]
+    },
+    {
+      "name": "SbtMinted",
+      "discriminator": [
+        168,
+        19,
+        193,
+        105,
+        238,
+        55,
+        225,
+        206
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "NotMonarch",
+      "msg": "Only the current Monarch can perform this action"
+    },
+    {
+      "code": 6001,
+      "name": "InsufficientFunds",
+      "msg": "Insufficient funds in the royal treasury"
+    },
+    {
+      "code": 6002,
+      "name": "InsufficientTokens",
+      "msg": "Insufficient tokens to become a member"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidTokenAccountOwner",
+      "msg": "Invalid token account owner"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidTreasuryAccount",
+      "msg": "Invalid treasury account"
+    },
+    {
+      "code": 6005,
+      "name": "SubjectNotFound",
+      "msg": "Subject not found"
+    },
+    {
+      "code": 6006,
+      "name": "AlreadyInitialized",
+      "msg": "Monarchy already initialized"
+    },
+    {
+      "code": 6007,
+      "name": "InvalidDecree",
+      "msg": "Invalid decree"
+    },
+    {
+      "code": 6008,
+      "name": "WarAlreadyDeclared",
+      "msg": "War already declared against this enemy"
+    },
+    {
+      "code": 6009,
+      "name": "SubjectNotConvicted",
+      "msg": "Subject is not convicted"
+    },
+    {
+      "code": 6010,
+      "name": "InvalidNobleTitle",
+      "msg": "Invalid noble title"
+    },
+    {
+      "code": 6011,
+      "name": "TerritoryAlreadyColonized",
+      "msg": "Territory already colonized"
+    },
+    {
+      "code": 6012,
+      "name": "InvalidEconomicPolicy",
+      "msg": "Invalid economic policy"
+    },
+    {
+      "code": 6013,
+      "name": "InvalidTaxRate",
+      "msg": "Invalid tax rate"
+    },
+    {
+      "code": 6014,
+      "name": "PolicyTitleTooLong",
+      "msg": "Policy title is too long"
+    },
+    {
+      "code": 6015,
+      "name": "PolicyDescriptionTooLong",
+      "msg": "Policy description is too long"
+    },
+    {
+      "code": 6016,
+      "name": "JurisdictionTooLong",
+      "msg": "Jurisdiction name is too long"
+    },
+    {
+      "code": 6017,
+      "name": "NotPolicyOwner",
+      "msg": "Not the policy owner"
+    },
+    {
+      "code": 6018,
+      "name": "InvalidUsageFeeRate",
+      "msg": "Invalid usage fee rate"
+    },
+    {
+      "code": 6019,
+      "name": "InvalidAccessLevel",
+      "msg": "Invalid access level"
+    },
+    {
+      "code": 6020,
+      "name": "AccessExpired",
+      "msg": "Privileged access has expired"
+    },
+    {
+      "code": 6021,
+      "name": "TransferTooSoon",
+      "msg": "Transfer is not yet due"
+    },
+    {
+      "code": 6022,
+      "name": "InvalidTreasury",
+      "msg": "Wrong treasury"
+    },
+    {
+      "code": 6023,
+      "name": "MissingRequiredAccount",
+      "msg": "Missing required account"
+    },
+    {
+      "code": 6024,
+      "name": "InvalidSPLMint",
+      "msg": "Invalid SPL mint"
+    },
+    {
+      "code": 6025,
+      "name": "MissingNFTConfig",
+      "msg": "Missing NFT configuration"
+    },
+    {
+      "code": 6026,
+      "name": "MissingSPLConfig",
+      "msg": "Missing SPL configuration"
+    },
+    {
+      "code": 6027,
+      "name": "NoKingdomTokenSpecified",
+      "msg": "No kingdom token specified"
+    },
+    {
+      "code": 6028,
+      "name": "InvalidTreasuryOwner",
+      "msg": "Invalid treasury owner"
+    },
+    {
+      "code": 6029,
+      "name": "EmptyDivisionName",
+      "msg": "Division name cannot be empty"
+    },
+    {
+      "code": 6030,
+      "name": "InvalidMonarch",
+      "msg": "Invalid monarch for this kingdom"
+    },
+    {
+      "code": 6031,
+      "name": "MonarchKingdomMismatch",
+      "msg": "Monarch and kingdom accounts do not match"
+    },
+    {
+      "code": 6032,
+      "name": "EmptyHeirName",
+      "msg": "Heir name cannot be empty"
+    },
+    {
+      "code": 6033,
+      "name": "InvalidMint",
+      "msg": "This mint is not valid"
+    },
+    {
+      "code": 6034,
+      "name": "ExceedsSupply",
+      "msg": "Supply has been exceeded"
+    },
+    {
+      "code": 6035,
+      "name": "Overflow",
+      "msg": "Overflow error"
+    }
+  ],
+  "types": [
+    {
+      "name": "ArkAnalytics",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "total_governments",
+            "type": "u64"
+          },
+          {
+            "name": "governments",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "polls",
+            "type": "u64"
+          },
+          {
+            "name": "approved",
+            "type": "u64"
+          },
+          {
+            "name": "rejected",
+            "type": "u64"
+          },
+          {
+            "name": "points",
+            "type": "u64"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "auth_bump",
+            "type": "u8"
+          },
+          {
+            "name": "state_bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Decree",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "u64"
+          },
+          {
+            "name": "text",
+            "type": "string"
+          },
+          {
+            "name": "decree_type",
+            "type": {
+              "defined": {
+                "name": "DecreeType"
+              }
+            }
+          },
+          {
+            "name": "issued_at",
+            "type": "i64"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DecreeType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Law"
+          },
+          {
+            "name": "EconomicPolicy"
+          },
+          {
+            "name": "MilitaryOrder"
+          },
+          {
+            "name": "RoyalProclamation"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Division",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "manager",
+            "type": "pubkey"
+          },
+          {
+            "name": "established_at",
+            "type": "i64"
+          },
+          {
+            "name": "last_transfer_at",
+            "type": "i64"
+          },
+          {
+            "name": "treasury",
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EconomicPolicy",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "policy_type",
+            "type": {
+              "defined": {
+                "name": "EconomicPolicyType"
+              }
+            }
+          },
+          {
+            "name": "implemented_at",
+            "type": "i64"
+          },
+          {
+            "name": "income_tax_rate",
+            "type": "u8"
+          },
+          {
+            "name": "property_tax_rate",
+            "type": "u8"
+          },
+          {
+            "name": "trade_tax_rate",
+            "type": "u8"
+          },
+          {
+            "name": "luxury_tax_rate",
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EconomicPolicyType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Mercantilism"
+          },
+          {
+            "name": "FreeTrade"
+          },
+          {
+            "name": "Protectionism"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GovernmentType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Monarchy"
+          },
+          {
+            "name": "Democracy"
+          },
+          {
+            "name": "Autocracy"
+          },
+          {
+            "name": "Oligarchy"
+          },
+          {
+            "name": "Republic"
+          },
+          {
+            "name": "Federalism"
+          },
+          {
+            "name": "Communism"
+          },
+          {
+            "name": "Imperialism"
+          },
+          {
+            "name": "Anarchy"
+          },
+          {
+            "name": "Colonialism"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InitTokenParams",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          },
+          {
+            "name": "decimals",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InitializeKingdomArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "monarch_name",
+            "type": "string"
+          },
+          {
+            "name": "divine_mandate",
+            "type": "string"
+          },
+          {
+            "name": "collection_price",
+            "type": "u64"
+          },
+          {
+            "name": "nft_supply",
+            "type": "u64"
+          },
+          {
+            "name": "spl_supply",
+            "type": "u64"
+          },
+          {
+            "name": "royal_decree_threshold",
+            "type": "u64"
+          },
+          {
+            "name": "min_loyalty_amount",
+            "type": "u64"
+          },
+          {
+            "name": "membership_tokens_threshold",
+            "type": "u64"
+          },
+          {
+            "name": "knighthood_price",
+            "type": "u64"
+          },
+          {
+            "name": "nft_config",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "TokenConfig"
+                }
+              }
+            }
+          },
+          {
+            "name": "spl_config",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "TokenConfig"
+                }
+              }
+            }
+          },
+          {
+            "name": "primary_kingdom_token",
+            "type": {
+              "defined": {
+                "name": "PrimaryKingdomToken"
+              }
+            }
+          },
+          {
+            "name": "initialize_sbt",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InitializeSbtArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "supply",
+            "type": "u32"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "transferrable",
+            "type": "bool"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Kingdom",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "monarch",
+            "type": "pubkey"
+          },
+          {
+            "name": "monarch_name",
+            "type": "string"
+          },
+          {
+            "name": "primary_token_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "nft_mint",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "spl_mint",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "sbt_mint",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "nft_symbol",
+            "type": "string"
+          },
+          {
+            "name": "spl_symbol",
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "nft_minted",
+            "type": "u64"
+          },
+          {
+            "name": "spl_minted",
+            "type": "u64"
+          },
+          {
+            "name": "sbt_minted",
+            "type": "u64"
+          },
+          {
+            "name": "royal_treasury",
+            "type": "u64"
+          },
+          {
+            "name": "total_decrees",
+            "type": "u64"
+          },
+          {
+            "name": "total_active_decrees",
+            "type": "u64"
+          },
+          {
+            "name": "total_subjects",
+            "type": "u64"
+          },
+          {
+            "name": "min_loyalty_amount",
+            "type": "u64"
+          },
+          {
+            "name": "total_spl_token_supply",
+            "type": "u64"
+          },
+          {
+            "name": "total_nft_token_supply",
+            "type": "u64"
+          },
+          {
+            "name": "total_sbt_token_supply",
+            "type": "u64"
+          },
+          {
+            "name": "established_at",
+            "type": "i64"
+          },
+          {
+            "name": "wars_declared",
+            "type": "u64"
+          },
+          {
+            "name": "royal_judgments",
+            "type": "u64"
+          },
+          {
+            "name": "economic_policies_set",
+            "type": "u64"
+          },
+          {
+            "name": "pardons_granted",
+            "type": "u64"
+          },
+          {
+            "name": "policies_implemented",
+            "type": "u64"
+          },
+          {
+            "name": "divisions",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "membership_tokens_threshold",
+            "type": "u64"
+          },
+          {
+            "name": "officials_appointed",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "nobles",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "collection_price",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "KingdomTokenType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "New"
+          },
+          {
+            "name": "Existing"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MakeDecisionArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "instruction_data",
+            "type": "bytes"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MemberAdded",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "kingdom",
+            "type": "pubkey"
+          },
+          {
+            "name": "member",
+            "type": "pubkey"
+          },
+          {
+            "name": "joined_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MintEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "kingdom",
+            "type": "pubkey"
+          },
+          {
+            "name": "treasury_amount",
+            "type": "u64"
+          },
+          {
+            "name": "subject_amount",
+            "type": "u64"
+          },
+          {
+            "name": "total_minted",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MintNftArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Monarch",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "divine_mandate",
+            "type": "string"
+          },
+          {
+            "name": "coronation_date",
+            "type": "i64"
+          },
+          {
+            "name": "abdication_date",
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "decrees_issued",
+            "type": "u64"
+          },
+          {
+            "name": "wars_declared",
+            "type": "u64"
+          },
+          {
+            "name": "royal_judgments",
+            "type": "u64"
+          },
+          {
+            "name": "economic_policies_set",
+            "type": "u64"
+          },
+          {
+            "name": "pardons_granted",
+            "type": "u64"
+          },
+          {
+            "name": "policies_implemented",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "NftMinted",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "absolute_monarchy_kingdom",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          },
+          {
+            "name": "cost",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Noble",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "subject",
+            "type": "pubkey"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "granted_at",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Policy",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "u64"
+          },
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "target_jurisdiction",
+            "type": "string"
+          },
+          {
+            "name": "implemented_at",
+            "type": "i64"
+          },
+          {
+            "name": "last_updated_at",
+            "type": "i64"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "monarch",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrimaryKingdomToken",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "NFT"
+          },
+          {
+            "name": "SPL"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrivilegedAccess",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "access_type",
+            "type": "string"
+          },
+          {
+            "name": "holder",
+            "type": "pubkey"
+          },
+          {
+            "name": "granted_at",
+            "type": "i64"
+          },
+          {
+            "name": "expires_at",
+            "type": "i64"
+          },
+          {
+            "name": "usage_fee_rate",
+            "type": "u8"
+          },
+          {
+            "name": "access_level",
+            "type": "u8"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Punishment",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Fine",
+            "fields": [
+              "u64"
+            ]
+          },
+          {
+            "name": "Imprisonment",
+            "fields": [
+              "u64"
+            ]
+          },
+          {
+            "name": "Exile"
+          },
+          {
+            "name": "Execution"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SbtMinted",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "kingdom",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "subject",
+            "type": "pubkey"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "StateInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "government_type",
+            "type": {
+              "defined": {
+                "name": "GovernmentType"
+              }
+            }
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "program_id",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Subject",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "key",
+            "type": "pubkey"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "role",
+            "type": "string"
+          },
+          {
+            "name": "nobility_title",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "loyalty",
+            "type": "u8"
+          },
+          {
+            "name": "wealth",
+            "type": "u64"
+          },
+          {
+            "name": "is_convicted",
+            "type": "bool"
+          },
+          {
+            "name": "jurisdiction",
+            "type": "string"
+          },
+          {
+            "name": "appointed_at",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TaxType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Income"
+          },
+          {
+            "name": "Property"
+          },
+          {
+            "name": "Trade"
+          },
+          {
+            "name": "Luxury"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TokenConfig",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "token_type",
+            "type": {
+              "defined": {
+                "name": "KingdomTokenType"
+              }
+            }
+          },
+          {
+            "name": "custom_mint",
+            "type": {
+              "option": "pubkey"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Verdict",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Guilty"
+          },
+          {
+            "name": "Innocent"
+          }
+        ]
+      }
+    },
+    {
+      "name": "War",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "enemy_program",
+            "type": "pubkey"
+          },
+          {
+            "name": "reason",
+            "type": "string"
+          },
+          {
+            "name": "declared_at",
+            "type": "i64"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          },
+          {
+            "name": "battles_won",
+            "type": "u64"
+          },
+          {
+            "name": "battles_lost",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ]
+}

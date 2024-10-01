@@ -6,12 +6,12 @@ const NewsLetter = () => {
     <div>
       <div className="hero w-full bg-gradient-to-br from-black via-teal-700 to-black py-12 sm:py-20 px-4">
         <div className="hero-content flex-col lg:flex-row">
-          <div className="text-center lg:text-left">
-            <h1 className="text-5xl font-bold">Stay Updated with Ark!</h1>
+          <div className="text-center lg:text-left text-white">
+            <h1 className="text-5xl font-bold text-teal-300">Stay Updated with Ark!</h1>
             <p className="py-6">
               Be the first to know about the latest features, updates, and news
               from Ark. Our newsletter is packed with valuable insights, tips,
-              and announcements to help you make the most out of your Public
+              and announcements to help you make the most out of your Para
               Autonomous Organization (PAO)
             </p>
           </div>
@@ -19,7 +19,7 @@ const NewsLetter = () => {
             <form className="card-body">
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text">Email</span>
+                  <span className="label-text text-white">Email</span>
                 </label>
                 <input
                   type="email"

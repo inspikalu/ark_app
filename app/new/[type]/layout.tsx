@@ -9,7 +9,6 @@ export default function NewLayout({ children }: { children: React.ReactNode }) {
         <AppWalletProvider>
           <DashboardHeader />
           {children}
-          <Footer />
         </AppWalletProvider>
       </main>
     </div>

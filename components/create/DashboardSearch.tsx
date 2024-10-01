@@ -1,10 +1,67 @@
 'use client'
-import Link from "next/link";
 import React, { useRef } from "react";
 import { FiSearch, FiHelpCircle } from "react-icons/fi";
+import { useRouter } from "next/navigation";
+import { PublicKey } from '@solana/web3.js';
+import { BN } from '@coral-xyz/anchor';
 
+export interface GoverningStructure {
+  structureName: string;
+  pathName: string;
+  structureDescription: string;
+}
 
-const governingStructures = [
+export type GovernanceType = 
+  | 'absolute-monarchy'
+  | 'flat-dao'
+  | 'military-junta'
+  | 'conviction'
+  | 'sortition'
+  | 'polycentric'
+  | 'sociocracy';
+
+  export type InitializeKingdomArgs = {
+    name: string;
+    description: string;
+    monarchName: string;
+    divineMandate: string;
+    collectionPrice: BN;
+    nftSupply: BN;
+    splSupply: BN;
+    royalDecreeThreshold: BN;
+    minLoyaltyAmount: BN;
+    membershipTokensThreshold: BN;
+    knighthoodPrice: BN;
+    nftConfig: TokenConfig | null;
+    splConfig: TokenConfig | null;
+    primaryKingdomToken: PrimaryKingdomToken;
+    initializeSbt: boolean;
+  };
+
+  export type DecreeType = 
+  | { Law: {} }
+  | { EconomicPolicy: {} }
+  | { MilitaryOrder: {} }
+  | { RoyalProclamation: {} };
+
+  export type KingdomTokenType = {
+    new: {}
+  } | {
+    existing: {}
+  };
+  
+  export type PrimaryKingdomToken = {
+    nft: {}
+  } | {
+    spl: {}
+  };
+  
+  export type TokenConfig = {
+    tokenType: KingdomTokenType;
+    customMint: PublicKey | null;
+  };
+
+const governingStructures: GoverningStructure[] = [
   {
     "structureName": "Absolute Monarchy",
     "pathName": "absolute-monarchy",
@@ -31,19 +88,9 @@ const governingStructures = [
     "structureDescription": "Leaders or decision-makers are randomly picked, making it fair and unbiased."
   },
   {
-    "structureName": "Meritocracy",
-    "pathName": "meritocracy",
-    "structureDescription": "Power and voting rights are given based on how much someone has contributed to the group."
-  },
-  {
     "structureName": "Polycentric",
     "pathName": "polycentric",
     "structureDescription": "Multiple groups make decisions independently, allowing for flexibility and avoiding central control."
-  },
-  {
-    "structureName": "Direct",
-    "pathName": "direct",
-    "structureDescription": "Everyone votes directly on proposals, ensuring open and transparent decisions."
   },
   {
     "structureName": "Sociocracy",
@@ -51,6 +98,11 @@ const governingStructures = [
     "structureDescription": "Decisions are made in smaller, independent groups, with each group having the power to decide, ensuring everyone’s voice is heard."
   }
 ];
+
+interface CreatePAOModalProps {
+  modalRef: React.RefObject<HTMLDialogElement>;
+  onSelectGovernance: (governanceType: GovernanceType) => void;
+}
 
 
 const LocationSearch = () => {
@@ -78,7 +130,7 @@ const LocationSearch = () => {
   );
 };
 
-const CreatePAOModal = ({ modalRef }: { modalRef: React.RefObject<HTMLDialogElement> }) => {
+const CreatePAOModal: React.FC<CreatePAOModalProps> = ({ modalRef, onSelectGovernance }) => {
   return (
     <dialog ref={modalRef} className="modal">
       <div className="modal-box p-6 bg-gradient-to-br from-teal-500 to-teal-900 text-white">
@@ -86,22 +138,19 @@ const CreatePAOModal = ({ modalRef }: { modalRef: React.RefObject<HTMLDialogElem
         <ul>
           {governingStructures.map((item, index) => (
             <div key={`${item.structureName}${index}`}>
-              <li key={index} className="flex flex-row items-center justify-start gap-3 py-4">
-                <Link href={`/new/${item.pathName}`}>
+              <li className="flex flex-row items-center justify-start gap-3 py-4">
+                <button onClick={() => onSelectGovernance(item.pathName as GovernanceType)}>
                   {item.structureName}
-                </Link>
-                <div className="dropdown">
-                  <div tabIndex={0} role="button" ><FiHelpCircle size={20} /></div>
+                </button>
+                <div className="dropdown dropdown-hover">
+                  <div tabIndex={0} role="button"><FiHelpCircle size={20} /></div>
                   <ul tabIndex={0} className="dropdown-content menu bg-teal-800 rounded-box z-[1] w-52 p-2 shadow">
                     <li><a>{item.structureDescription}</a></li>
                   </ul>
                 </div>
               </li>
-
-
-              {index <= 9 && <hr />}
+              {index < governingStructures.length - 1 && <hr />}
             </div>
-
           ))}
         </ul>
         <div className="modal-action">
@@ -116,11 +165,17 @@ const CreatePAOModal = ({ modalRef }: { modalRef: React.RefObject<HTMLDialogElem
   );
 };
 
-const DashSearch = () => {
+const DashSearch: React.FC = () => {
   const modalRef = useRef<HTMLDialogElement>(null);
+  const router = useRouter();
 
   const openModal = () => {
     modalRef.current?.showModal();
+  };
+
+  const handleSelectGovernance = (governanceType: GovernanceType) => {
+    modalRef.current?.close();
+    router.push(`/new/${governanceType}`);
   };
 
   return (
@@ -139,14 +194,14 @@ const DashSearch = () => {
               Create PAO
             </button>
           </div>
-          <CreatePAOModal modalRef={modalRef} />
+          <CreatePAOModal modalRef={modalRef} onSelectGovernance={handleSelectGovernance} />
         </div>
       </div>
     </div>
   );
 };
 
-const DashboardSearch = () => {
+const DashboardSearch: React.FC = () => {
   return (
     <div className="w-full bg-gradient-to-br from-teal-900 to-black text-white">
       <DashSearch />

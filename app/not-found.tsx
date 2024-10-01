@@ -4,11 +4,13 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { FiArrowLeft } from "react-icons/fi";
 
+
 export default function NotFound() {
   const router = useRouter();
 
   return (
     <>
+
       <section className="relative min-h-screen flex items-center justify-center text-center p-5 overflow-hidden bg-gradient-to-br from-black to-teal-900">
         <motion.div
           className="absolute inset-0 z-0"
@@ -97,4 +99,3 @@ export default function NotFound() {
       </section>
     </>
   );
-}
