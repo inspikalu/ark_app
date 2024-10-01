@@ -1,0 +1,3277 @@
+{
+  "address": "2fPj7RDkm4FJouSo6DE6vHbE5rjTvdZPnnxJUgFvYVm2",
+  "metadata": {
+    "name": "military_junta",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "add_new_junta_member",
+      "discriminator": [
+        65,
+        48,
+        14,
+        31,
+        93,
+        10,
+        87,
+        204
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "citizen",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  105,
+                  116,
+                  105,
+                  122,
+                  101,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "junta"
+              },
+              {
+                "kind": "account",
+                "path": "new_member"
+              }
+            ]
+          }
+        },
+        {
+          "name": "new_member",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "member_token_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "new_member"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance_token_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "governance_token_mint"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "add_token_to_treasury",
+      "discriminator": [
+        28,
+        154,
+        239,
+        139,
+        180,
+        134,
+        113,
+        194
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "treasury"
+        },
+        {
+          "name": "token_account"
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "treasury_program",
+          "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "appoint_officers",
+      "discriminator": [
+        66,
+        200,
+        142,
+        22,
+        196,
+        232,
+        176,
+        154
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "officer",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  111,
+                  102,
+                  102,
+                  105,
+                  99,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "junta"
+              },
+              {
+                "kind": "account",
+                "path": "junta.total_subjects",
+                "account": "Junta"
+              }
+            ]
+          }
+        },
+        {
+          "name": "leader",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "rank",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "change_leadership",
+      "discriminator": [
+        245,
+        67,
+        196,
+        205,
+        144,
+        234,
+        160,
+        227
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "current_leader",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "new_leader",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "new_leader",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "create_treasury",
+      "discriminator": [
+        254,
+        98,
+        217,
+        51,
+        25,
+        88,
+        140,
+        45
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "treasury"
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "treasury_program",
+          "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "delegate_token_account",
+      "discriminator": [
+        194,
+        30,
+        12,
+        253,
+        185,
+        89,
+        111,
+        251
+      ],
+      "accounts": [
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "mint",
+          "writable": true
+        },
+        {
+          "name": "citizen",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  105,
+                  116,
+                  105,
+                  122,
+                  101,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "junta"
+              },
+              {
+                "kind": "account",
+                "path": "junta.total_subjects",
+                "account": "Junta"
+              }
+            ]
+          }
+        },
+        {
+          "name": "citizen_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "citizen"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "leader",
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "exile",
+      "discriminator": [
+        118,
+        7,
+        78,
+        203,
+        13,
+        205,
+        32,
+        241
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "mint",
+          "writable": true
+        },
+        {
+          "name": "leader",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "citizen",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  105,
+                  116,
+                  105,
+                  122,
+                  101,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "junta"
+              },
+              {
+                "kind": "account",
+                "path": "junta.total_subjects",
+                "account": "Junta"
+              }
+            ]
+          }
+        },
+        {
+          "name": "citizen_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "citizen"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "target",
+          "type": "pubkey"
+        },
+        {
+          "name": "amount_to_burn",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "impose_martiallaw",
+      "discriminator": [
+        0,
+        94,
+        159,
+        102,
+        82,
+        62,
+        252,
+        83
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "leader",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "imprison",
+      "discriminator": [
+        94,
+        197,
+        68,
+        52,
+        161,
+        224,
+        84,
+        9
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "citizen",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  105,
+                  116,
+                  105,
+                  122,
+                  101,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "junta"
+              },
+              {
+                "kind": "account",
+                "path": "junta.total_subjects",
+                "account": "Junta"
+              }
+            ]
+          }
+        },
+        {
+          "name": "leader",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint",
+          "writable": true
+        },
+        {
+          "name": "citizen_ata",
+          "writable": true
+        },
+        {
+          "name": "junta_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "junta"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "target",
+          "type": "pubkey"
+        },
+        {
+          "name": "end_date",
+          "type": {
+            "option": "i64"
+          }
+        },
+        {
+          "name": "amount_to_seize",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "init_citizen",
+      "discriminator": [
+        164,
+        249,
+        147,
+        47,
+        215,
+        20,
+        125,
+        96
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "citizen",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  105,
+                  116,
+                  105,
+                  122,
+                  101,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "junta"
+              },
+              {
+                "kind": "account",
+                "path": "junta.total_subjects",
+                "account": "Junta"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "authority",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "initialize_and_register_government",
+      "discriminator": [
+        95,
+        138,
+        185,
+        166,
+        143,
+        12,
+        8,
+        30
+      ],
+      "accounts": [
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "ark_analytics",
+          "writable": true
+        },
+        {
+          "name": "state_info",
+          "writable": true
+        },
+        {
+          "name": "government_program"
+        },
+        {
+          "name": "ark_program",
+          "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "initialize_mil_junta",
+      "discriminator": [
+        250,
+        91,
+        100,
+        153,
+        21,
+        143,
+        28,
+        231
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  106,
+                  117,
+                  110,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "arg",
+                "path": "args.name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "leader",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "nft_mint",
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "spl_mint",
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "sbt_mint",
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "InitializeJuntaArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "initialize_spl_token",
+      "discriminator": [
+        11,
+        149,
+        217,
+        116,
+        137,
+        154,
+        68,
+        112
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  112,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "junta"
+              },
+              {
+                "kind": "account",
+                "path": "junta.symbol",
+                "account": "Junta"
+              }
+            ]
+          }
+        },
+        {
+          "name": "metadata",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "token_metadata_program",
+          "address": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": {
+              "name": "InitTokenParams"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "issue_decrees",
+      "discriminator": [
+        82,
+        216,
+        244,
+        101,
+        95,
+        30,
+        221,
+        11
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "decree",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  100,
+                  101,
+                  99,
+                  114,
+                  101,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "junta"
+              },
+              {
+                "kind": "account",
+                "path": "junta.total_subjects",
+                "account": "Junta"
+              }
+            ]
+          }
+        },
+        {
+          "name": "issuer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "content",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "manage_junta_resources",
+      "discriminator": [
+        171,
+        116,
+        128,
+        170,
+        163,
+        68,
+        169,
+        53
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  106,
+                  117,
+                  110,
+                  116,
+                  97
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "junta.name",
+                "account": "Junta"
+              }
+            ]
+          }
+        },
+        {
+          "name": "recipient",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "action",
+          "type": {
+            "defined": {
+              "name": "ResourceAction"
+            }
+          }
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "mint_nfts_to_citizen",
+      "discriminator": [
+        105,
+        78,
+        198,
+        8,
+        185,
+        212,
+        222,
+        94
+      ],
+      "accounts": [
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  110,
+                  102,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "junta"
+              },
+              {
+                "kind": "arg",
+                "path": "args.symbol"
+              }
+            ]
+          }
+        },
+        {
+          "name": "citizen",
+          "writable": true
+        },
+        {
+          "name": "citizen_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "citizen"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "MintNftArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "mint_sbts_to_citizen",
+      "discriminator": [
+        70,
+        25,
+        77,
+        227,
+        187,
+        91,
+        70,
+        171
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "junta_mint",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "citizen",
+          "writable": true
+        },
+        {
+          "name": "citizen_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "citizen"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "junta_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "InitializeSbtArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "mint_spl_tokens",
+      "discriminator": [
+        30,
+        119,
+        43,
+        38,
+        212,
+        32,
+        25,
+        253
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "mint",
+          "writable": true
+        },
+        {
+          "name": "citizen",
+          "writable": true
+        },
+        {
+          "name": "junta_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "junta"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "citizen_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "citizen"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount_to_treasury",
+          "type": "u64"
+        },
+        {
+          "name": "amount_to_citizen",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "reward_citizen",
+      "discriminator": [
+        193,
+        89,
+        205,
+        114,
+        27,
+        101,
+        101,
+        76
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "leader",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint",
+          "writable": true
+        },
+        {
+          "name": "citizen",
+          "writable": true
+        },
+        {
+          "name": "citizen_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "citizen"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "start_rebel",
+      "discriminator": [
+        208,
+        215,
+        0,
+        77,
+        204,
+        238,
+        81,
+        54
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "rebel_leader",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "rebels",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  98,
+                  101,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "junta"
+              },
+              {
+                "kind": "account",
+                "path": "junta.total_subjects",
+                "account": "Junta"
+              }
+            ]
+          }
+        },
+        {
+          "name": "citizen",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  105,
+                  116,
+                  105,
+                  122,
+                  101,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "junta"
+              },
+              {
+                "kind": "account",
+                "path": "junta.total_subjects",
+                "account": "Junta"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "support_junta",
+      "discriminator": [
+        69,
+        228,
+        180,
+        52,
+        65,
+        50,
+        108,
+        148
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "supporters",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  117,
+                  112,
+                  112,
+                  111,
+                  114,
+                  116,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "junta"
+              },
+              {
+                "kind": "account",
+                "path": "junta.total_subjects",
+                "account": "Junta"
+              }
+            ]
+          }
+        },
+        {
+          "name": "citizen",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  105,
+                  116,
+                  105,
+                  122,
+                  101,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "junta"
+              },
+              {
+                "kind": "account",
+                "path": "junta.total_subjects",
+                "account": "Junta"
+              }
+            ]
+          }
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint",
+          "writable": true
+        },
+        {
+          "name": "citizen_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "citizen"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "junta_token_account",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "suppress_dissents",
+      "discriminator": [
+        253,
+        34,
+        121,
+        112,
+        190,
+        179,
+        100,
+        237
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "citizen",
+          "writable": true
+        },
+        {
+          "name": "suppressor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "target",
+          "type": "pubkey"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "ArkAnalytics",
+      "discriminator": [
+        222,
+        47,
+        90,
+        164,
+        175,
+        77,
+        25,
+        117
+      ]
+    },
+    {
+      "name": "Citizen",
+      "discriminator": [
+        46,
+        45,
+        63,
+        201,
+        241,
+        115,
+        110,
+        93
+      ]
+    },
+    {
+      "name": "Decree",
+      "discriminator": [
+        101,
+        171,
+        2,
+        214,
+        37,
+        129,
+        192,
+        0
+      ]
+    },
+    {
+      "name": "Junta",
+      "discriminator": [
+        171,
+        35,
+        187,
+        100,
+        185,
+        166,
+        232,
+        185
+      ]
+    },
+    {
+      "name": "Officer",
+      "discriminator": [
+        89,
+        91,
+        240,
+        249,
+        102,
+        50,
+        177,
+        88
+      ]
+    },
+    {
+      "name": "Rebel",
+      "discriminator": [
+        82,
+        206,
+        62,
+        40,
+        64,
+        97,
+        41,
+        224
+      ]
+    },
+    {
+      "name": "StateInfo",
+      "discriminator": [
+        84,
+        40,
+        95,
+        251,
+        34,
+        189,
+        94,
+        185
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "MemberAdded",
+      "discriminator": [
+        198,
+        220,
+        228,
+        196,
+        92,
+        235,
+        240,
+        79
+      ]
+    },
+    {
+      "name": "MintEvent",
+      "discriminator": [
+        197,
+        144,
+        146,
+        149,
+        66,
+        164,
+        95,
+        16
+      ]
+    },
+    {
+      "name": "NewSupporterEvent",
+      "discriminator": [
+        47,
+        21,
+        61,
+        68,
+        193,
+        79,
+        134,
+        57
+      ]
+    },
+    {
+      "name": "NftMinted",
+      "discriminator": [
+        175,
+        29,
+        105,
+        0,
+        195,
+        2,
+        245,
+        38
+      ]
+    },
+    {
+      "name": "NftPriceUpdated",
+      "discriminator": [
+        209,
+        202,
+        98,
+        231,
+        86,
+        60,
+        93,
+        81
+      ]
+    },
+    {
+      "name": "ResourceManaged",
+      "discriminator": [
+        35,
+        77,
+        140,
+        4,
+        78,
+        246,
+        167,
+        183
+      ]
+    },
+    {
+      "name": "SupportContributionEvent",
+      "discriminator": [
+        121,
+        186,
+        182,
+        82,
+        202,
+        248,
+        231,
+        62
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "Unauthorized",
+      "msg": "Invalid authority."
+    },
+    {
+      "code": 6001,
+      "name": "TooManyOfficers",
+      "msg": "Too many officers. Maximum number is 10."
+    },
+    {
+      "code": 6002,
+      "name": "MaxRebelsReached",
+      "msg": "The maximum amount of 10 rebels have been reached."
+    },
+    {
+      "code": 6003,
+      "name": "MaxSupportersReached",
+      "msg": "The maximum amount of 100 rebels have been reached."
+    },
+    {
+      "code": 6004,
+      "name": "RebelNotFound",
+      "msg": "This rebel does not exist."
+    },
+    {
+      "code": 6005,
+      "name": "InvalidTarget",
+      "msg": "e started specified is invalid."
+    },
+    {
+      "code": 6006,
+      "name": "NotEnoughRebels",
+      "msg": "More rebels are needed for a rebellion to start."
+    },
+    {
+      "code": 6007,
+      "name": "InsufficientResources",
+      "msg": "Not enough resources."
+    },
+    {
+      "code": 6008,
+      "name": "InvalidSupporter",
+      "msg": "Not a valid supporter."
+    },
+    {
+      "code": 6009,
+      "name": "InsufficientSupporters",
+      "msg": "Not enough supporters."
+    },
+    {
+      "code": 6010,
+      "name": "SupporterIsDissident",
+      "msg": "The supporter is a dissident."
+    },
+    {
+      "code": 6011,
+      "name": "TooManyDecrees",
+      "msg": "Too many decrees. Maximum number is 100."
+    },
+    {
+      "code": 6012,
+      "name": "InvalidLeader",
+      "msg": "Not the valid new leader"
+    },
+    {
+      "code": 6013,
+      "name": "MintFailed",
+      "msg": "Failed to mint NFT"
+    },
+    {
+      "code": 6014,
+      "name": "SupplyReached",
+      "msg": "Supply has reached the maximum limit"
+    },
+    {
+      "code": 6015,
+      "name": "UnauthorizedSigner",
+      "msg": "Unauthorized Signer"
+    },
+    {
+      "code": 6016,
+      "name": "SameUserAccounts",
+      "msg": "Same user accounts "
+    },
+    {
+      "code": 6017,
+      "name": "Overflow",
+      "msg": "Overflow error"
+    },
+    {
+      "code": 6018,
+      "name": "Underflow",
+      "msg": "Underflow error"
+    },
+    {
+      "code": 6019,
+      "name": "ExceedsSupply",
+      "msg": "Exceeeds maximum supply "
+    },
+    {
+      "code": 6020,
+      "name": "InvalidJuntaVault",
+      "msg": "Invalid Junta Vault "
+    },
+    {
+      "code": 6021,
+      "name": "SupportAmountsArrayFull",
+      "msg": "The maximum size of support has been met"
+    },
+    {
+      "code": 6022,
+      "name": "MissingAccount",
+      "msg": "Account is missing"
+    },
+    {
+      "code": 6023,
+      "name": "MissingRequiredAccount",
+      "msg": "Account required is missing"
+    },
+    {
+      "code": 6024,
+      "name": "InvalidMint",
+      "msg": "Mint is not valid"
+    },
+    {
+      "code": 6025,
+      "name": "MissingNFTConfig",
+      "msg": "Miissing NFT config"
+    },
+    {
+      "code": 6026,
+      "name": "MissingSPLConfig",
+      "msg": "Missing spl config"
+    },
+    {
+      "code": 6027,
+      "name": "NoJuntaTokenSpecified",
+      "msg": "No Junta token specified"
+    },
+    {
+      "code": 6028,
+      "name": "InsufficientTokens",
+      "msg": "Insufficient tokens to join junta"
+    },
+    {
+      "code": 6029,
+      "name": "AlreadyMember",
+      "msg": "Already a member of this junta"
+    },
+    {
+      "code": 6030,
+      "name": "ArithmeticError",
+      "msg": "Arithmetic Error"
+    }
+  ],
+  "types": [
+    {
+      "name": "ArkAnalytics",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "total_governments",
+            "type": "u64"
+          },
+          {
+            "name": "governments",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "polls",
+            "type": "u64"
+          },
+          {
+            "name": "approved",
+            "type": "u64"
+          },
+          {
+            "name": "rejected",
+            "type": "u64"
+          },
+          {
+            "name": "points",
+            "type": "u64"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "auth_bump",
+            "type": "u8"
+          },
+          {
+            "name": "state_bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Citizen",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "loyalty_score",
+            "type": "u8"
+          },
+          {
+            "name": "resources",
+            "type": "u64"
+          },
+          {
+            "name": "is_dissident",
+            "type": "bool"
+          },
+          {
+            "name": "is_imprisoned",
+            "type": "bool"
+          },
+          {
+            "name": "imprisonment_end",
+            "type": {
+              "option": "i64"
+            }
+          },
+          {
+            "name": "joined_at",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Decree",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "issuer",
+            "type": "pubkey"
+          },
+          {
+            "name": "content",
+            "type": "string"
+          },
+          {
+            "name": "issued_at",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GovernmentType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Monarchy"
+          },
+          {
+            "name": "Democracy"
+          },
+          {
+            "name": "Autocracy"
+          },
+          {
+            "name": "Oligarchy"
+          },
+          {
+            "name": "Republic"
+          },
+          {
+            "name": "Federalism"
+          },
+          {
+            "name": "Communism"
+          },
+          {
+            "name": "Imperialism"
+          },
+          {
+            "name": "Anarchy"
+          },
+          {
+            "name": "Colonialism"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InitTokenParams",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          },
+          {
+            "name": "decimals",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InitializeJuntaArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "supply",
+            "type": "u32"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "support_threshold",
+            "type": "u8"
+          },
+          {
+            "name": "collection_price",
+            "type": "u64"
+          },
+          {
+            "name": "nft_config",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "JuntaTokenConfig"
+                }
+              }
+            }
+          },
+          {
+            "name": "spl_config",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "JuntaTokenConfig"
+                }
+              }
+            }
+          },
+          {
+            "name": "nft_symbol",
+            "type": "string"
+          },
+          {
+            "name": "spl_symbol",
+            "type": "string"
+          },
+          {
+            "name": "nft_supply",
+            "type": "u64"
+          },
+          {
+            "name": "spl_supply",
+            "type": "u64"
+          },
+          {
+            "name": "primary_junta_token",
+            "type": {
+              "defined": {
+                "name": "PrimaryJuntaToken"
+              }
+            }
+          },
+          {
+            "name": "initialize_sbt",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InitializeSbtArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "supply",
+            "type": "u32"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "transferrable",
+            "type": "bool"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Junta",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "leader",
+            "type": "pubkey"
+          },
+          {
+            "name": "officers",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "resources",
+            "type": "u64"
+          },
+          {
+            "name": "decrees",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "dissent_level",
+            "type": "u8"
+          },
+          {
+            "name": "control_level",
+            "type": "u8"
+          },
+          {
+            "name": "governance_token_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "martial_law_active",
+            "type": "bool"
+          },
+          {
+            "name": "is_overthrown",
+            "type": "bool"
+          },
+          {
+            "name": "spl_symbol",
+            "type": "string"
+          },
+          {
+            "name": "nft_symbol",
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "total_spl_token_supply",
+            "type": "u64"
+          },
+          {
+            "name": "total_nft_token_supply",
+            "type": "u64"
+          },
+          {
+            "name": "total_sbt_token_supply",
+            "type": "u64"
+          },
+          {
+            "name": "spl_minted",
+            "type": "u64"
+          },
+          {
+            "name": "nft_minted",
+            "type": "u64"
+          },
+          {
+            "name": "sbt_minted",
+            "type": "u64"
+          },
+          {
+            "name": "collection_price",
+            "type": "u64"
+          },
+          {
+            "name": "support_threshold",
+            "type": "u8"
+          },
+          {
+            "name": "spl_mint",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "nft_mint",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "sbt_mint",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "total_subjects",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "JuntaTokenConfig",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "token_type",
+            "type": {
+              "defined": {
+                "name": "JuntaTokenType"
+              }
+            }
+          },
+          {
+            "name": "token_mint",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "JuntaTokenType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "New"
+          },
+          {
+            "name": "Existing"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MemberAdded",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "junta",
+            "type": "pubkey"
+          },
+          {
+            "name": "member",
+            "type": "pubkey"
+          },
+          {
+            "name": "governance_power",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MintEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "junta",
+            "type": "pubkey"
+          },
+          {
+            "name": "treasury_amount",
+            "type": "u64"
+          },
+          {
+            "name": "citizen_amount",
+            "type": "u64"
+          },
+          {
+            "name": "total_minted",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MintNftArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "NewSupporterEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "junta",
+            "type": "pubkey"
+          },
+          {
+            "name": "supporter",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "NftMinted",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "junta",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          },
+          {
+            "name": "cost",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "NftPriceUpdated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "junta",
+            "type": "pubkey"
+          },
+          {
+            "name": "new_price",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Officer",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "rank",
+            "type": "u8"
+          },
+          {
+            "name": "appointed_at",
+            "type": "i64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrimaryJuntaToken",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "NFT"
+          },
+          {
+            "name": "SPL"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Rebel",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "rebels",
+            "type": {
+              "array": [
+                {
+                  "option": {
+                    "defined": {
+                      "name": "Citizen"
+                    }
+                  }
+                },
+                10
+              ]
+            }
+          },
+          {
+            "name": "count",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ResourceAction",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Collect"
+          },
+          {
+            "name": "Distribute"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ResourceManaged",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "action",
+            "type": {
+              "defined": {
+                "name": "ResourceAction"
+              }
+            }
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "new_balance",
+            "type": "u64"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "recipient",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "StateInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "government_type",
+            "type": {
+              "defined": {
+                "name": "GovernmentType"
+              }
+            }
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "program_id",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "SupportContributionEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "junta",
+            "type": "pubkey"
+          },
+          {
+            "name": "supporter",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "total_support",
+            "type": "u64"
+          }
+        ]
+      }
+    }
+  ]
+}

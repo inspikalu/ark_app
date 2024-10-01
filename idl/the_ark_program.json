@@ -1,0 +1,748 @@
+{
+  "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V",
+  "metadata": {
+    "name": "the_ark_program",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "add_new_token_to_treasury",
+      "discriminator": [
+        206,
+        175,
+        211,
+        205,
+        128,
+        117,
+        249,
+        227
+      ],
+      "accounts": [
+        {
+          "name": "treasury",
+          "writable": true
+        },
+        {
+          "name": "token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "treasury"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "mint",
+          "writable": true
+        },
+        {
+          "name": "owner",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "treasury"
+          ]
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "create_government_treasury",
+      "discriminator": [
+        125,
+        207,
+        88,
+        96,
+        180,
+        175,
+        240,
+        216
+      ],
+      "accounts": [
+        {
+          "name": "treasury",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  116,
+                  114,
+                  101,
+                  97,
+                  115,
+                  117,
+                  114,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "owner"
+              },
+              {
+                "kind": "arg",
+                "path": "name"
+              }
+            ]
+          }
+        },
+        {
+          "name": "owner",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "authority",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "init_escrow",
+      "discriminator": [
+        70,
+        46,
+        40,
+        23,
+        6,
+        11,
+        81,
+        139
+      ],
+      "accounts": [
+        {
+          "name": "escrow_info",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_ark",
+      "discriminator": [
+        105,
+        98,
+        142,
+        228,
+        204,
+        10,
+        162,
+        177
+      ],
+      "accounts": [
+        {
+          "name": "ark_analytics",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "register_government",
+      "discriminator": [
+        64,
+        244,
+        252,
+        190,
+        245,
+        177,
+        38,
+        121
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "ark_analytics",
+          "writable": true
+        },
+        {
+          "name": "state_info",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "government_program",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "government_type",
+          "type": {
+            "defined": {
+              "name": "GovernmentType"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "register_services",
+      "discriminator": [
+        87,
+        91,
+        196,
+        20,
+        32,
+        98,
+        178,
+        243
+      ],
+      "accounts": [
+        {
+          "name": "escrow_info",
+          "writable": true
+        },
+        {
+          "name": "service_provider",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "services_address",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "register_trades",
+      "discriminator": [
+        158,
+        158,
+        136,
+        195,
+        59,
+        51,
+        214,
+        18
+      ],
+      "accounts": [
+        {
+          "name": "escrow_info",
+          "writable": true
+        },
+        {
+          "name": "party_a",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "party_b",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "trade_address",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "update_analytics",
+      "discriminator": [
+        154,
+        189,
+        52,
+        60,
+        128,
+        104,
+        116,
+        143
+      ],
+      "accounts": [
+        {
+          "name": "ark_analytics",
+          "writable": true
+        },
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "approved",
+          "type": "bool"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "ArkAnalytics",
+      "discriminator": [
+        222,
+        47,
+        90,
+        164,
+        175,
+        77,
+        25,
+        117
+      ]
+    },
+    {
+      "name": "EscrowInfo",
+      "discriminator": [
+        137,
+        170,
+        26,
+        57,
+        81,
+        19,
+        181,
+        233
+      ]
+    },
+    {
+      "name": "StateInfo",
+      "discriminator": [
+        84,
+        40,
+        95,
+        251,
+        34,
+        189,
+        94,
+        185
+      ]
+    },
+    {
+      "name": "Treasury",
+      "discriminator": [
+        238,
+        239,
+        123,
+        238,
+        89,
+        1,
+        168,
+        253
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "StateRegistered",
+      "discriminator": [
+        80,
+        93,
+        115,
+        210,
+        92,
+        237,
+        23,
+        216
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "Unauthorized",
+      "msg": "Unauthorized action"
+    },
+    {
+      "code": 6001,
+      "name": "InvalidInstructionData",
+      "msg": "Invalid instruction data"
+    },
+    {
+      "code": 6002,
+      "name": "InactiveGovernment",
+      "msg": "Government program is inactive"
+    }
+  ],
+  "types": [
+    {
+      "name": "ArkAnalytics",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "total_governments",
+            "type": "u64"
+          },
+          {
+            "name": "governments",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "polls",
+            "type": "u64"
+          },
+          {
+            "name": "approved",
+            "type": "u64"
+          },
+          {
+            "name": "rejected",
+            "type": "u64"
+          },
+          {
+            "name": "points",
+            "type": "u64"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "auth_bump",
+            "type": "u8"
+          },
+          {
+            "name": "state_bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EscrowInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "total_trades",
+            "type": "u64"
+          },
+          {
+            "name": "trades",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "services",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "total_services",
+            "type": "u64"
+          },
+          {
+            "name": "total_fees_collected",
+            "type": "u64"
+          },
+          {
+            "name": "total_amount_transferred",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GovernmentType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Monarchy"
+          },
+          {
+            "name": "Democracy"
+          },
+          {
+            "name": "Autocracy"
+          },
+          {
+            "name": "Oligarchy"
+          },
+          {
+            "name": "Republic"
+          },
+          {
+            "name": "Federalism"
+          },
+          {
+            "name": "Communism"
+          },
+          {
+            "name": "Imperialism"
+          },
+          {
+            "name": "Anarchy"
+          },
+          {
+            "name": "Colonialism"
+          }
+        ]
+      }
+    },
+    {
+      "name": "StateInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "government_type",
+            "type": {
+              "defined": {
+                "name": "GovernmentType"
+              }
+            }
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "program_id",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "StateRegistered",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "government_type",
+            "type": {
+              "defined": {
+                "name": "GovernmentType"
+              }
+            }
+          },
+          {
+            "name": "program_id",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "TokenAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "account",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Treasury",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "tokens",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "TokenAccount"
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,2541 @@
+{
+  "address": "7naXQjiC6W4Vz28Z4cPjBqjWVFVbRipVrZ9VQsuUAPcg",
+  "metadata": {
+    "name": "sortition",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "add_new_governance_member",
+      "discriminator": [
+        141,
+        79,
+        70,
+        255,
+        5,
+        36,
+        173,
+        38
+      ],
+      "accounts": [
+        {
+          "name": "governance_pool",
+          "writable": true
+        },
+        {
+          "name": "citizen_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  105,
+                  116,
+                  105,
+                  122,
+                  101,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance_pool"
+              },
+              {
+                "kind": "account",
+                "path": "new_member"
+              }
+            ]
+          }
+        },
+        {
+          "name": "new_member",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "citizen_index",
+          "writable": true
+        },
+        {
+          "name": "member_token_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "new_member"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance_token_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "governance_token_mint"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "region",
+          "type": "u8"
+        },
+        {
+          "name": "age_group",
+          "type": "u8"
+        },
+        {
+          "name": "other_demographic",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "add_token_to_treasury",
+      "discriminator": [
+        28,
+        154,
+        239,
+        139,
+        180,
+        134,
+        113,
+        194
+      ],
+      "accounts": [
+        {
+          "name": "governance_pool",
+          "writable": true
+        },
+        {
+          "name": "treasury"
+        },
+        {
+          "name": "token_account"
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "treasury_program",
+          "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "create_new_proposal",
+      "discriminator": [
+        29,
+        76,
+        177,
+        198,
+        183,
+        126,
+        153,
+        223
+      ],
+      "accounts": [
+        {
+          "name": "assembly",
+          "writable": true
+        },
+        {
+          "name": "proposal",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  114,
+                  111,
+                  112,
+                  111,
+                  115,
+                  97,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "assembly"
+              },
+              {
+                "kind": "arg",
+                "path": "description"
+              }
+            ]
+          }
+        },
+        {
+          "name": "proposer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "name": "end_time",
+          "type": "i64"
+        }
+      ]
+    },
+    {
+      "name": "create_treasury",
+      "discriminator": [
+        254,
+        98,
+        217,
+        51,
+        25,
+        88,
+        140,
+        45
+      ],
+      "accounts": [
+        {
+          "name": "governance_pool",
+          "writable": true
+        },
+        {
+          "name": "treasury"
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "treasury_program",
+          "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "finalize_sortition_assembly_selection",
+      "discriminator": [
+        109,
+        141,
+        71,
+        214,
+        207,
+        196,
+        27,
+        107
+      ],
+      "accounts": [
+        {
+          "name": "governance_pool",
+          "writable": true
+        },
+        {
+          "name": "assembly",
+          "writable": true
+        },
+        {
+          "name": "pagination_state",
+          "writable": true
+        },
+        {
+          "name": "citizen_index",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  105,
+                  116,
+                  105,
+                  122,
+                  101,
+                  110,
+                  95,
+                  105,
+                  110,
+                  100,
+                  101,
+                  120
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance_pool"
+              },
+              {
+                "kind": "account",
+                "path": "pagination_state.current_index",
+                "account": "PaginationState"
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "recent_blockhashes",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  99,
+                  101,
+                  110,
+                  116,
+                  45,
+                  98,
+                  108,
+                  111,
+                  99,
+                  107,
+                  104,
+                  97,
+                  115,
+                  104,
+                  101,
+                  115
+                ]
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                6,
+                167,
+                213,
+                23,
+                25,
+                44,
+                86,
+                142,
+                224,
+                138,
+                132,
+                95,
+                115,
+                210,
+                151,
+                136,
+                207,
+                3,
+                92,
+                49,
+                69,
+                178,
+                26,
+                179,
+                68,
+                216,
+                6,
+                46,
+                169,
+                64,
+                0,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_and_register_government",
+      "discriminator": [
+        95,
+        138,
+        185,
+        166,
+        143,
+        12,
+        8,
+        30
+      ],
+      "accounts": [
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "ark_analytics",
+          "writable": true
+        },
+        {
+          "name": "state_info",
+          "writable": true
+        },
+        {
+          "name": "government_program"
+        },
+        {
+          "name": "ark_program",
+          "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "initialize_sortition_governance",
+      "discriminator": [
+        32,
+        203,
+        86,
+        144,
+        143,
+        121,
+        241,
+        94
+      ],
+      "accounts": [
+        {
+          "name": "governance_pool",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  111,
+                  118,
+                  101,
+                  114,
+                  110,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  112,
+                  111,
+                  111,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "admin"
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "nft_mint",
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "spl_mint",
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "sbt_mint",
+          "writable": true,
+          "optional": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "InitializeGovernmentArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "initialize_spl_token",
+      "discriminator": [
+        11,
+        149,
+        217,
+        116,
+        137,
+        154,
+        68,
+        112
+      ],
+      "accounts": [
+        {
+          "name": "governance_pool",
+          "writable": true
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  112,
+                  108
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance_pool"
+              },
+              {
+                "kind": "arg",
+                "path": "params.symbol"
+              }
+            ]
+          }
+        },
+        {
+          "name": "metadata",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "token_metadata_program",
+          "address": "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": {
+              "name": "InitTokenParams"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "mint_new_nft",
+      "discriminator": [
+        112,
+        41,
+        155,
+        3,
+        227,
+        247,
+        71,
+        202
+      ],
+      "accounts": [
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "governance_pool",
+          "writable": true
+        },
+        {
+          "name": "mint",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  110,
+                  102,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance_pool"
+              },
+              {
+                "kind": "arg",
+                "path": "args.symbol"
+              }
+            ]
+          }
+        },
+        {
+          "name": "citizen_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "signer"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "MintNftArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "mint_new_sbt",
+      "discriminator": [
+        40,
+        169,
+        232,
+        225,
+        56,
+        166,
+        79,
+        97
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "governance",
+          "writable": true
+        },
+        {
+          "name": "mint",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "citizen_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "payer"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "InitializeSbtArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "mint_spl_tokens",
+      "discriminator": [
+        30,
+        119,
+        43,
+        38,
+        212,
+        32,
+        25,
+        253
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "governance_pool",
+          "writable": true
+        },
+        {
+          "name": "mint",
+          "writable": true
+        },
+        {
+          "name": "governance_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "governance_pool"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "citizen_ata",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "payer"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount_to_treasury",
+          "type": "u64"
+        },
+        {
+          "name": "amount_to_subject",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "register_sortition_citizen",
+      "discriminator": [
+        98,
+        218,
+        220,
+        200,
+        27,
+        233,
+        172,
+        107
+      ],
+      "accounts": [
+        {
+          "name": "governance_pool",
+          "writable": true
+        },
+        {
+          "name": "citizen_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  105,
+                  116,
+                  105,
+                  122,
+                  101,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance_pool"
+              },
+              {
+                "kind": "account",
+                "path": "citizen"
+              }
+            ]
+          }
+        },
+        {
+          "name": "citizen",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "citizen_index",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "region",
+          "type": "u8"
+        },
+        {
+          "name": "age_group",
+          "type": "u8"
+        },
+        {
+          "name": "other_demographic",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "select_sortition_assembly",
+      "discriminator": [
+        49,
+        55,
+        28,
+        175,
+        167,
+        154,
+        83,
+        42
+      ],
+      "accounts": [
+        {
+          "name": "governance_pool",
+          "writable": true
+        },
+        {
+          "name": "assembly",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  115,
+                  115,
+                  101,
+                  109,
+                  98,
+                  108,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance_pool"
+              },
+              {
+                "kind": "account",
+                "path": "governance_pool.total_citizens",
+                "account": "GovernancePool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "pagination_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  97,
+                  103,
+                  105,
+                  110,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance_pool"
+              },
+              {
+                "kind": "account",
+                "path": "governance_pool.total_citizens",
+                "account": "GovernancePool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "term_length",
+          "type": "i64"
+        }
+      ]
+    },
+    {
+      "name": "vote_on_sortition_proposal",
+      "discriminator": [
+        12,
+        202,
+        112,
+        96,
+        254,
+        164,
+        180,
+        16
+      ],
+      "accounts": [
+        {
+          "name": "assembly",
+          "writable": true
+        },
+        {
+          "name": "proposal",
+          "writable": true
+        },
+        {
+          "name": "member",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "clock",
+          "address": "SysvarC1ock11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "approve",
+          "type": "bool"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "ArkAnalytics",
+      "discriminator": [
+        222,
+        47,
+        90,
+        164,
+        175,
+        77,
+        25,
+        117
+      ]
+    },
+    {
+      "name": "Assembly",
+      "discriminator": [
+        128,
+        195,
+        50,
+        118,
+        116,
+        213,
+        225,
+        145
+      ]
+    },
+    {
+      "name": "Citizen",
+      "discriminator": [
+        46,
+        45,
+        63,
+        201,
+        241,
+        115,
+        110,
+        93
+      ]
+    },
+    {
+      "name": "CitizenIndex",
+      "discriminator": [
+        45,
+        158,
+        235,
+        192,
+        133,
+        194,
+        25,
+        57
+      ]
+    },
+    {
+      "name": "GovernancePool",
+      "discriminator": [
+        192,
+        123,
+        114,
+        35,
+        62,
+        238,
+        236,
+        130
+      ]
+    },
+    {
+      "name": "PaginationState",
+      "discriminator": [
+        47,
+        180,
+        50,
+        40,
+        125,
+        237,
+        66,
+        170
+      ]
+    },
+    {
+      "name": "StateInfo",
+      "discriminator": [
+        84,
+        40,
+        95,
+        251,
+        34,
+        189,
+        94,
+        185
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "AssemblySelected",
+      "discriminator": [
+        163,
+        102,
+        229,
+        0,
+        227,
+        193,
+        99,
+        4
+      ]
+    },
+    {
+      "name": "MemberAdded",
+      "discriminator": [
+        198,
+        220,
+        228,
+        196,
+        92,
+        235,
+        240,
+        79
+      ]
+    },
+    {
+      "name": "MintEvent",
+      "discriminator": [
+        197,
+        144,
+        146,
+        149,
+        66,
+        164,
+        95,
+        16
+      ]
+    },
+    {
+      "name": "NftMinted",
+      "discriminator": [
+        175,
+        29,
+        105,
+        0,
+        195,
+        2,
+        245,
+        38
+      ]
+    },
+    {
+      "name": "VoteEvent",
+      "discriminator": [
+        195,
+        71,
+        250,
+        105,
+        120,
+        119,
+        234,
+        134
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "CitizenAlreadyRegistered",
+      "msg": "Citizen already registered"
+    },
+    {
+      "code": 6001,
+      "name": "AssemblyAlreadyActive",
+      "msg": "Assembly already active"
+    },
+    {
+      "code": 6002,
+      "name": "NotEnoughCitizens",
+      "msg": "Not enough citizens for selection"
+    },
+    {
+      "code": 6003,
+      "name": "NotAssemblyMember",
+      "msg": "Not a member of the current assembly"
+    },
+    {
+      "code": 6004,
+      "name": "ProposalAlreadyExists",
+      "msg": "Proposal already exists"
+    },
+    {
+      "code": 6005,
+      "name": "InvalidVote",
+      "msg": "Invalid vote"
+    },
+    {
+      "code": 6006,
+      "name": "ProposalNotActive",
+      "msg": "Proposal not active"
+    },
+    {
+      "code": 6007,
+      "name": "AssemblyTermEnded",
+      "msg": "Assembly term has ended"
+    },
+    {
+      "code": 6008,
+      "name": "CitizenNotEligible",
+      "msg": "Citizen not eligible"
+    },
+    {
+      "code": 6009,
+      "name": "InvalidAssemblySize",
+      "msg": "Invalid assembly size"
+    },
+    {
+      "code": 6010,
+      "name": "InvalidTermLength",
+      "msg": "Invalid term length"
+    },
+    {
+      "code": 6011,
+      "name": "RandomSelectionInProgress",
+      "msg": "Random selection in progress"
+    },
+    {
+      "code": 6012,
+      "name": "InvalidQuotas",
+      "msg": "Invalid demographic quotas"
+    },
+    {
+      "code": 6013,
+      "name": "InvalidDemographic",
+      "msg": "Invalid demographic information"
+    },
+    {
+      "code": 6014,
+      "name": "CitizenIndexFull",
+      "msg": "Citizen index is full"
+    },
+    {
+      "code": 6015,
+      "name": "InvalidInput",
+      "msg": "Invalid data"
+    },
+    {
+      "code": 6016,
+      "name": "VotingNotStarted",
+      "msg": "Voting has not yet started"
+    },
+    {
+      "code": 6017,
+      "name": "VotingEnded",
+      "msg": "Voting has not ended"
+    },
+    {
+      "code": 6018,
+      "name": "InvalidProposal",
+      "msg": "Invalid proposal"
+    },
+    {
+      "code": 6019,
+      "name": "Overflow",
+      "msg": "Overflow error"
+    },
+    {
+      "code": 6020,
+      "name": "ExceedsSupply",
+      "msg": "Supply has been exceeded"
+    },
+    {
+      "code": 6021,
+      "name": "MissingAccount",
+      "msg": "Account is missing"
+    },
+    {
+      "code": 6022,
+      "name": "MissingRequiredAccount",
+      "msg": "Account required is missing"
+    },
+    {
+      "code": 6023,
+      "name": "InvalidMint",
+      "msg": "Mint is not valid"
+    },
+    {
+      "code": 6024,
+      "name": "MissingNFTConfig",
+      "msg": "Miissing NFT config"
+    },
+    {
+      "code": 6025,
+      "name": "MissingSPLConfig",
+      "msg": "Missing spl config"
+    },
+    {
+      "code": 6026,
+      "name": "NoTokenSpecified",
+      "msg": "No Junta token specified"
+    },
+    {
+      "code": 6027,
+      "name": "InsufficientTokens",
+      "msg": "Insufficient tokens to join junta"
+    },
+    {
+      "code": 6028,
+      "name": "AlreadyMember",
+      "msg": "Already a member of this junta"
+    },
+    {
+      "code": 6029,
+      "name": "ArithmeticError",
+      "msg": "Arithmetic Error"
+    }
+  ],
+  "types": [
+    {
+      "name": "ArkAnalytics",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "total_governments",
+            "type": "u64"
+          },
+          {
+            "name": "governments",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "polls",
+            "type": "u64"
+          },
+          {
+            "name": "approved",
+            "type": "u64"
+          },
+          {
+            "name": "rejected",
+            "type": "u64"
+          },
+          {
+            "name": "points",
+            "type": "u64"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "auth_bump",
+            "type": "u8"
+          },
+          {
+            "name": "state_bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Assembly",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "governance_pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "members",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "term_start",
+            "type": "i64"
+          },
+          {
+            "name": "term_end",
+            "type": "i64"
+          },
+          {
+            "name": "proposals",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AssemblySelected",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "governance_pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "assembly",
+            "type": "pubkey"
+          },
+          {
+            "name": "member_count",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Citizen",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "governance_pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "is_eligible",
+            "type": "bool"
+          },
+          {
+            "name": "last_participation",
+            "type": "i64"
+          },
+          {
+            "name": "region",
+            "type": "u8"
+          },
+          {
+            "name": "age_group",
+            "type": "u8"
+          },
+          {
+            "name": "other_demographic",
+            "type": "u8"
+          },
+          {
+            "name": "is_initialized",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CitizenIndex",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "governance_pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "citizens",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "count",
+            "type": "u32"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DemographicQuotas",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "regions",
+            "type": {
+              "array": [
+                "u32",
+                10
+              ]
+            }
+          },
+          {
+            "name": "age_groups",
+            "type": {
+              "array": [
+                "u32",
+                5
+              ]
+            }
+          },
+          {
+            "name": "other_demographic",
+            "type": {
+              "array": [
+                "u32",
+                3
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "GovernancePool",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "pubkey"
+          },
+          {
+            "name": "total_citizens",
+            "type": "u32"
+          },
+          {
+            "name": "assembly_size",
+            "type": "u8"
+          },
+          {
+            "name": "assembly_term",
+            "type": "i64"
+          },
+          {
+            "name": "current_assembly",
+            "type": "pubkey"
+          },
+          {
+            "name": "last_random_seed",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "selection_in_progress",
+            "type": "bool"
+          },
+          {
+            "name": "total_citizen_indices",
+            "type": "u32"
+          },
+          {
+            "name": "demographic_quotas",
+            "type": {
+              "defined": {
+                "name": "DemographicQuotas"
+              }
+            }
+          },
+          {
+            "name": "nft_symbol",
+            "type": "string"
+          },
+          {
+            "name": "spl_symbol",
+            "type": "string"
+          },
+          {
+            "name": "collection_price",
+            "type": "u64"
+          },
+          {
+            "name": "resources",
+            "type": "u64"
+          },
+          {
+            "name": "nft_minted",
+            "type": "u32"
+          },
+          {
+            "name": "total_nft_token_supply",
+            "type": "u64"
+          },
+          {
+            "name": "spl_minted",
+            "type": "u32"
+          },
+          {
+            "name": "total_spl_token_supply",
+            "type": "u64"
+          },
+          {
+            "name": "sbt_minted",
+            "type": "u32"
+          },
+          {
+            "name": "total_sbt_token_supply",
+            "type": "u64"
+          },
+          {
+            "name": "spl_mint",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "nft_mint",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "sbt_mint",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "governance_token_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GovernanceTokenConfig",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "token_type",
+            "type": {
+              "defined": {
+                "name": "GovernanceTokenType"
+              }
+            }
+          },
+          {
+            "name": "token_mint",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GovernanceTokenType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "New"
+          },
+          {
+            "name": "Existing"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GovernmentType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Monarchy"
+          },
+          {
+            "name": "Democracy"
+          },
+          {
+            "name": "Autocracy"
+          },
+          {
+            "name": "Oligarchy"
+          },
+          {
+            "name": "Republic"
+          },
+          {
+            "name": "Federalism"
+          },
+          {
+            "name": "Communism"
+          },
+          {
+            "name": "Imperialism"
+          },
+          {
+            "name": "Anarchy"
+          },
+          {
+            "name": "Colonialism"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InitTokenParams",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          },
+          {
+            "name": "decimals",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InitializeGovernmentArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "type": "string"
+          },
+          {
+            "name": "assembly_size",
+            "type": "u8"
+          },
+          {
+            "name": "regions",
+            "type": {
+              "array": [
+                "u32",
+                10
+              ]
+            }
+          },
+          {
+            "name": "age_groups",
+            "type": {
+              "array": [
+                "u32",
+                5
+              ]
+            }
+          },
+          {
+            "name": "other_demographic",
+            "type": {
+              "array": [
+                "u32",
+                3
+              ]
+            }
+          },
+          {
+            "name": "nft_config",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "GovernanceTokenConfig"
+                }
+              }
+            }
+          },
+          {
+            "name": "spl_config",
+            "type": {
+              "option": {
+                "defined": {
+                  "name": "GovernanceTokenConfig"
+                }
+              }
+            }
+          },
+          {
+            "name": "nft_symbol",
+            "type": "string"
+          },
+          {
+            "name": "spl_symbol",
+            "type": "string"
+          },
+          {
+            "name": "nft_supply",
+            "type": "u64"
+          },
+          {
+            "name": "spl_supply",
+            "type": "u64"
+          },
+          {
+            "name": "collection_price",
+            "type": "u64"
+          },
+          {
+            "name": "primary_governance_token",
+            "type": {
+              "defined": {
+                "name": "PrimaryGovernanceToken"
+              }
+            }
+          },
+          {
+            "name": "initialize_sbt",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InitializeSbtArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "supply",
+            "type": "u32"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "transferrable",
+            "type": "bool"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MemberAdded",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "governance_pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "member",
+            "type": "pubkey"
+          },
+          {
+            "name": "token_amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MintEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "governance_pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "treasury_amount",
+            "type": "u64"
+          },
+          {
+            "name": "citizen_amount",
+            "type": "u64"
+          },
+          {
+            "name": "total_minted",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MintNftArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "NftMinted",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "governance_pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          },
+          {
+            "name": "cost",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PaginationState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "governance_pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "current_index",
+            "type": "u32"
+          },
+          {
+            "name": "current_citizen_in_index",
+            "type": "u32"
+          },
+          {
+            "name": "selected_citizens",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "demographic_counts",
+            "type": {
+              "defined": {
+                "name": "DemographicQuotas"
+              }
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PrimaryGovernanceToken",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "NFT"
+          },
+          {
+            "name": "SPL"
+          }
+        ]
+      }
+    },
+    {
+      "name": "StateInfo",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "government_type",
+            "type": {
+              "defined": {
+                "name": "GovernmentType"
+              }
+            }
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "program_id",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VoteEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "proposal",
+            "type": "pubkey"
+          },
+          {
+            "name": "voter",
+            "type": "pubkey"
+          },
+          {
+            "name": "approve",
+            "type": "bool"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    }
+  ]
+}

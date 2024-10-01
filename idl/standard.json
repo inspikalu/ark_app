@@ -1,0 +1,1179 @@
+{
+  "address": "7aQvq1fEiDXqK36H7mW8MSTGdnHn6XAHDd9pauZwZXGQ",
+  "metadata": {
+    "name": "standard",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "create_conditional_escrow",
+      "discriminator": [
+        141,
+        30,
+        251,
+        150,
+        86,
+        60,
+        7,
+        8
+      ],
+      "accounts": [
+        {
+          "name": "escrow",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "sender",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "recipient"
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "sender_token_account",
+          "writable": true
+        },
+        {
+          "name": "escrow_token_account",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "condition",
+          "type": "string"
+        },
+        {
+          "name": "expiry_time",
+          "type": "i64"
+        }
+      ]
+    },
+    {
+      "name": "fulfill_payment_condition",
+      "discriminator": [
+        235,
+        230,
+        2,
+        105,
+        121,
+        54,
+        32,
+        242
+      ],
+      "accounts": [
+        {
+          "name": "escrow",
+          "writable": true
+        },
+        {
+          "name": "recipient",
+          "signer": true,
+          "relations": [
+            "escrow"
+          ]
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize",
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ],
+      "accounts": [
+        {
+          "name": "router_state",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_market",
+      "discriminator": [
+        35,
+        35,
+        189,
+        193,
+        155,
+        48,
+        170,
+        203
+      ],
+      "accounts": [
+        {
+          "name": "market",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "base_mint",
+          "type": "pubkey"
+        },
+        {
+          "name": "quote_mint",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "list_reclaim_verifications",
+      "discriminator": [
+        163,
+        76,
+        57,
+        218,
+        91,
+        185,
+        38,
+        147
+      ],
+      "accounts": [
+        {
+          "name": "signer",
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "place_order",
+      "discriminator": [
+        51,
+        194,
+        155,
+        175,
+        109,
+        130,
+        96,
+        106
+      ],
+      "accounts": [
+        {
+          "name": "market",
+          "writable": true
+        },
+        {
+          "name": "owner",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "owner_token_account",
+          "writable": true
+        },
+        {
+          "name": "escrow_token_account",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": [
+        {
+          "name": "side",
+          "type": {
+            "defined": {
+              "name": "OrderSide"
+            }
+          }
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "price",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "process_orders",
+      "discriminator": [
+        103,
+        153,
+        11,
+        160,
+        27,
+        40,
+        70,
+        174
+      ],
+      "accounts": [
+        {
+          "name": "market",
+          "writable": true
+        },
+        {
+          "name": "base_vault",
+          "writable": true
+        },
+        {
+          "name": "quote_vault",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "reclaim_verify",
+      "discriminator": [
+        61,
+        97,
+        173,
+        141,
+        159,
+        90,
+        242,
+        68
+      ],
+      "accounts": [
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "epoch_config"
+        },
+        {
+          "name": "epoch"
+        },
+        {
+          "name": "reclaim_program",
+          "address": "9XQD57wwrLaigMLcrcpTJphwmwdbqNKhJWczBH9derGT"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "verification_result",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  101,
+                  114,
+                  105,
+                  102,
+                  105,
+                  99,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "signer"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "VerifyArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "refund_payment",
+      "discriminator": [
+        121,
+        205,
+        211,
+        181,
+        202,
+        147,
+        45,
+        248
+      ],
+      "accounts": [
+        {
+          "name": "escrow",
+          "writable": true
+        },
+        {
+          "name": "sender",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "escrow"
+          ]
+        },
+        {
+          "name": "escrow_token_account",
+          "writable": true
+        },
+        {
+          "name": "sender_token_account",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "register_government",
+      "discriminator": [
+        64,
+        244,
+        252,
+        190,
+        245,
+        177,
+        38,
+        121
+      ],
+      "accounts": [
+        {
+          "name": "router_state",
+          "writable": true
+        },
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "router_state"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "government_type",
+          "type": {
+            "defined": {
+              "name": "GovernmentTypes"
+            }
+          }
+        },
+        {
+          "name": "government_program_id",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "release_payment_for_condition",
+      "discriminator": [
+        235,
+        250,
+        167,
+        166,
+        47,
+        60,
+        153,
+        155
+      ],
+      "accounts": [
+        {
+          "name": "escrow",
+          "writable": true
+        },
+        {
+          "name": "sender"
+        },
+        {
+          "name": "recipient",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "escrow"
+          ]
+        },
+        {
+          "name": "escrow_token_account",
+          "writable": true
+        },
+        {
+          "name": "recipient_token_account",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "revoke_reclaim_verification",
+      "discriminator": [
+        210,
+        131,
+        227,
+        90,
+        135,
+        145,
+        134,
+        236
+      ],
+      "accounts": [
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "verification_result",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  118,
+                  101,
+                  114,
+                  105,
+                  102,
+                  105,
+                  99,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "signer"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "route_instruction",
+      "discriminator": [
+        97,
+        6,
+        152,
+        164,
+        220,
+        160,
+        198,
+        88
+      ],
+      "accounts": [
+        {
+          "name": "router_state",
+          "writable": true
+        },
+        {
+          "name": "government_account"
+        },
+        {
+          "name": "decision_account"
+        },
+        {
+          "name": "authority",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "instruction_data",
+          "type": "bytes"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Epoch",
+      "discriminator": [
+        93,
+        83,
+        120,
+        89,
+        151,
+        138,
+        152,
+        108
+      ]
+    },
+    {
+      "name": "EpochConfig",
+      "discriminator": [
+        190,
+        66,
+        87,
+        197,
+        214,
+        153,
+        144,
+        193
+      ]
+    },
+    {
+      "name": "Escrow",
+      "discriminator": [
+        31,
+        213,
+        123,
+        187,
+        186,
+        22,
+        218,
+        155
+      ]
+    },
+    {
+      "name": "Market",
+      "discriminator": [
+        219,
+        190,
+        213,
+        55,
+        0,
+        227,
+        198,
+        154
+      ]
+    },
+    {
+      "name": "RouterState",
+      "discriminator": [
+        141,
+        157,
+        194,
+        155,
+        75,
+        208,
+        200,
+        27
+      ]
+    },
+    {
+      "name": "VerificationResult",
+      "discriminator": [
+        104,
+        111,
+        80,
+        172,
+        219,
+        191,
+        162,
+        38
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "VerificationCompleteEvent",
+      "discriminator": [
+        168,
+        41,
+        195,
+        82,
+        222,
+        211,
+        45,
+        180
+      ]
+    },
+    {
+      "name": "VerificationRevokedEvent",
+      "discriminator": [
+        46,
+        18,
+        153,
+        148,
+        32,
+        211,
+        55,
+        71
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "TooManyGovernments",
+      "msg": "Too many governments registered."
+    },
+    {
+      "code": 6001,
+      "name": "DecisionRejected",
+      "msg": "Decision was rejected by the government."
+    },
+    {
+      "code": 6002,
+      "name": "GovernmentNotFound",
+      "msg": "Government not found."
+    },
+    {
+      "code": 6003,
+      "name": "AlreadyFulfilled",
+      "msg": "The escrow condition has already been fulfilled"
+    },
+    {
+      "code": 6004,
+      "name": "ConditionNotFulfilled",
+      "msg": "The escrow condition has not been fulfilled"
+    },
+    {
+      "code": 6005,
+      "name": "Expired",
+      "msg": "The escrow has expired"
+    },
+    {
+      "code": 6006,
+      "name": "NotExpired",
+      "msg": "The escrow has not yet expired"
+    },
+    {
+      "code": 6007,
+      "name": "VerificationFailed",
+      "msg": "Verification failed"
+    },
+    {
+      "code": 6008,
+      "name": "Unauthorized",
+      "msg": "Unauthorized to perform this action"
+    },
+    {
+      "code": 6009,
+      "name": "AlreadyRevoked",
+      "msg": "Verification has already been revoked"
+    }
+  ],
+  "types": [
+    {
+      "name": "ClaimData",
+      "docs": [
+        "Data of the claim"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "identifier",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "owner",
+            "type": "string"
+          },
+          {
+            "name": "timestamp",
+            "type": "u32"
+          },
+          {
+            "name": "epoch_index",
+            "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ClaimInfo",
+      "docs": [
+        "Information about the claim"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "provider",
+            "type": "string"
+          },
+          {
+            "name": "parameters",
+            "type": "string"
+          },
+          {
+            "name": "context_address",
+            "type": "pubkey"
+          },
+          {
+            "name": "context_message",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Epoch",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "epoch_config",
+            "type": "pubkey"
+          },
+          {
+            "name": "index",
+            "type": "u32"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "expired_at",
+            "type": "i64"
+          },
+          {
+            "name": "minimum_witnesses_for_claim",
+            "type": "u8"
+          },
+          {
+            "name": "witnesses",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "Witness"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "EpochConfig",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "create_key",
+            "type": "pubkey"
+          },
+          {
+            "name": "deployer",
+            "type": "pubkey"
+          },
+          {
+            "name": "epoch_duration_seconds",
+            "type": "u64"
+          },
+          {
+            "name": "epoch_index",
+            "type": "u32"
+          },
+          {
+            "name": "epochs",
+            "type": {
+              "vec": "pubkey"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Escrow",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "sender",
+            "type": "pubkey"
+          },
+          {
+            "name": "recipient",
+            "type": "pubkey"
+          },
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "condition",
+            "type": "string"
+          },
+          {
+            "name": "is_fulfilled",
+            "type": "bool"
+          },
+          {
+            "name": "expiry_time",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GovernmentEntry",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "government_type",
+            "type": {
+              "defined": {
+                "name": "GovernmentTypes"
+              }
+            }
+          },
+          {
+            "name": "program_id",
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GovernmentTypes",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "AbsoluteMonarchy"
+          },
+          {
+            "name": "Conviction"
+          },
+          {
+            "name": "Sortition"
+          },
+          {
+            "name": "Sociocracy"
+          },
+          {
+            "name": "FlatDAO"
+          },
+          {
+            "name": "MilitaryJunta"
+          },
+          {
+            "name": "Polycentric"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Market",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "base_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "quote_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "orders",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "Order"
+                }
+              }
+            }
+          },
+          {
+            "name": "next_order_id",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Order",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "u64"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "side",
+            "type": {
+              "defined": {
+                "name": "OrderSide"
+              }
+            }
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "price",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "OrderSide",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Bid"
+          },
+          {
+            "name": "Ask"
+          }
+        ]
+      }
+    },
+    {
+      "name": "RouterState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "governments",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "GovernmentEntry"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "SignedClaim",
+      "docs": [
+        "Represents a signed claim"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "claim_data",
+            "type": {
+              "defined": {
+                "name": "ClaimData"
+              }
+            }
+          },
+          {
+            "name": "signatures",
+            "type": {
+              "vec": {
+                "array": [
+                  "u8",
+                  65
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "VerificationCompleteEvent",
+      "docs": [
+        "The event emitted when a verification is completed"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "signer",
+            "type": "pubkey"
+          },
+          {
+            "name": "provider",
+            "type": "string"
+          },
+          {
+            "name": "success",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VerificationResult",
+      "docs": [
+        "Struct to store verification results"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "signer",
+            "type": "pubkey"
+          },
+          {
+            "name": "provider",
+            "type": "string"
+          },
+          {
+            "name": "verified_at",
+            "type": "i64"
+          },
+          {
+            "name": "is_active",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VerificationRevokedEvent",
+      "docs": [
+        "The event emitted when a verification is revoked"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "signer",
+            "type": "pubkey"
+          },
+          {
+            "name": "provider",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "VerifyArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "claim_info",
+            "type": {
+              "defined": {
+                "name": "ClaimInfo"
+              }
+            }
+          },
+          {
+            "name": "signed_claim",
+            "type": {
+              "defined": {
+                "name": "SignedClaim"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Witness",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "address",
+            "type": "string"
+          },
+          {
+            "name": "url",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ]
+}
