@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
 import { BN } from '@coral-xyz/anchor';
-import { SortitionClient, useSortitionClient } from '../../client/sortition/initializeSortition';
+import { SortitionClient, useSortitionClient, TokenConfig, InitializeGovernmentArgs } from '../../client/sortition/initializeSortition';
 import { CustomWallet } from './CustomWallet';  
 
 const PROGRAM_ID = new PublicKey('7naXQjiC6W4Vz28Z4cPjBqjWVFVbRipVrZ9VQsuUAPcg');
@@ -17,6 +17,8 @@ interface SortitionCreationFormProps {
 const SortitionCreationForm: React.FC<SortitionCreationFormProps> = ({ governanceType }) => {
   const [loading, setLoading] = useState(true);
   const [client, setClient] = useState<SortitionClient | null>(null);
+  const [nftTokenType, setNftTokenType] = useState('new');
+  const [splTokenType, setSplTokenType] = useState('new');
   const router = useRouter();
   const { connection } = useConnection();
   const wallet = useWallet();
@@ -50,24 +52,37 @@ const SortitionCreationForm: React.FC<SortitionCreationFormProps> = ({ governanc
       return;
     }
 
+
     try {
       const formData = new FormData(event.currentTarget);
-      const args = {
+      const primaryTokenType = formData.get('primaryKingdomToken') as 'NFT' | 'SPL';
+      const nftConfig: TokenConfig | undefined = nftTokenType === 'new'
+        ? { token_type: { new: {} }, custom_mint: PublicKey.default }
+        : formData.get('nftMintAddress')
+          ? { token_type: { existing: {} }, custom_mint: new PublicKey(formData.get('nftMintAddress') as string) }
+          : undefined;
+  
+      const splConfig: TokenConfig | undefined = splTokenType === 'new'
+        ? { token_type: { new: {} }, custom_mint: PublicKey.default }
+        : formData.get('splMintAddress')
+          ? { token_type: { existing: {} }, custom_mint: new PublicKey(formData.get('splMintAddress') as string) }
+          : undefined;
+        
+      const args: InitializeGovernmentArgs = {
         name: formData.get('name') as string,
         description: formData.get('description') as string,
         assembly_size: Number(formData.get('assembly_size')),
         regions: Array(10).fill(0).map((_, i) => Number(formData.get(`region_${i}`))),
         age_groups: Array(5).fill(0).map((_, i) => Number(formData.get(`age_group_${i}`))),
         other_demographic: Array(3).fill(0).map((_, i) => Number(formData.get(`other_demographic_${i}`))),
-        nft_config: null,  // Implement NFT config logic if needed
-        spl_config: null,  // Implement SPL config logic if needed
+        nft_config: nftConfig,  
+        spl_config: splConfig, 
         nft_symbol: formData.get('nft_symbol') as string,
         spl_symbol: formData.get('spl_symbol') as string,
         nft_supply: new BN(formData.get('nft_supply') as string),
         spl_supply: new BN(formData.get('spl_supply') as string),
         collection_price: new BN(formData.get('collection_price') as string),
-        primary_governance_token: { nft: {} },  // or { spl: {} } based on your needs
-        initialize_sbt: formData.get('initialize_sbt') === 'true',
+        primary_governance_token: primaryTokenType === 'NFT' ? { NFT: {} } : { SPL: {} },  
       };
 
       const tx = await client.initializeSortitionGovernance(args);
@@ -140,12 +155,39 @@ const SortitionCreationForm: React.FC<SortitionCreationFormProps> = ({ governanc
           <label htmlFor="collection_price" className="block text-white mb-2">Collection Price</label>
           <input type="number" id="collection_price" name="collection_price" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3" />
         </div>
-        <div>
-          <label htmlFor="initialize_sbt" className="block text-white mb-2">Initialize SBT</label>
-          <select id="initialize_sbt" name="initialize_sbt" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
-          </select>
+          {/* NFT Configuration */}
+          <div className="space-y-4">
+          <h3 className="text-xl font-semibold text-white">NFT Configuration</h3>
+          <div>
+            <label htmlFor="nftTokenType" className="block text-white mb-2">NFT Token Type</label>
+            <select 
+              id="nftTokenType" 
+              name="nftTokenType" 
+              className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3"
+              value={nftTokenType}
+              onChange={(e) => setNftTokenType(e.target.value)}
+            >
+              <option value="new">Create New NFT</option>
+              <option value="existing">Use Existing NFT</option>
+            </select>
+          </div>
+        </div>
+        {/* SPL Configuration */}
+        <div className="space-y-4">
+          <h3 className="text-xl font-semibold text-white">SPL Token Configuration</h3>
+          <div>
+            <label htmlFor="splTokenType" className="block text-white mb-2">SPL Token Type</label>
+            <select 
+              id="splTokenType" 
+              name="splTokenType" 
+              className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3"
+              value={splTokenType}
+              onChange={(e) => setSplTokenType(e.target.value)}
+            >
+              <option value="new">Create New SPL Token</option>
+              <option value="existing">Use Existing SPL Token</option>
+            </select>
+          </div>
         </div>
       </div>
       <motion.button

@@ -35,23 +35,26 @@ import {
   
   type SortitionIDL = typeof idl;
   
-  interface InitializeGovernmentArgs {
+  export interface InitializeGovernmentArgs {
     name: string;
     description: string;
     assembly_size: number;
     regions: number[];
     age_groups: number[];
     other_demographic: number[];
-    nft_config: { tokenType: { new: {} } | { existing: {} }; customMint: PublicKey | null } | null;
-    spl_config: { tokenType: { new: {} } | { existing: {} }; customMint: PublicKey | null } | null;
+    nft_config?: TokenConfig;
+    spl_config?: TokenConfig;
     nft_symbol: string;
     spl_symbol: string;
     nft_supply: BN;
     spl_supply: BN;
     collection_price: BN;
-    primary_governance_token: { nft: {} } | { spl: {} };
-    initialize_sbt: boolean;
+    primary_governance_token: PrimaryGovernanceToken;
   }
+
+  export type TokenConfig = { token_type: { new: {} } | { existing: {} }; custom_mint: PublicKey };
+  export type PrimaryGovernanceToken = { NFT: {} } | { SPL: {} };
+
   
   export class SortitionClient {
     private program: Program<SortitionIDL>;
@@ -69,6 +72,9 @@ import {
     }
   
     private getGovernancePoolPDA(): [PublicKey, number] {
+      if (!this.wallet.publicKey) {
+        throw new Error("Wallet public key is null. Please connect your wallet.");
+      }
       return PublicKey.findProgramAddressSync(
         [utils.bytes.utf8.encode('governance_pool'), this.wallet.publicKey.toBuffer()],
         this.program.programId
@@ -76,20 +82,39 @@ import {
     }
   
     public async initializeSortitionGovernance(args: InitializeGovernmentArgs): Promise<string> {
+      if (!this.wallet.publicKey) {
+        throw new Error("Wallet public key is null. Please connect your wallet.");
+      }
       const [governancePoolPDA] = this.getGovernancePoolPDA();
   
       try {
+        // Define the base accounts structure
+        const accounts: {
+          governancePool: PublicKey;
+          admin: PublicKey;
+          nftMint?: PublicKey;
+          splMint?: PublicKey;
+          systemProgram: PublicKey;
+          rent: PublicKey;
+        } = {
+          governancePool: governancePoolPDA,
+          admin: this.wallet.publicKey,
+          systemProgram: SystemProgram.programId,
+          rent: SYSVAR_RENT_PUBKEY,
+        };
+  
+        // Conditionally include optional accounts if they exist in the args
+        if (args.nft_config?.custom_mint) {
+          accounts.nftMint = args.nft_config.custom_mint;
+        }
+  
+        if (args.spl_config?.custom_mint) {
+          accounts.splMint = args.spl_config.custom_mint;
+        }
+  
         const tx = await this.program.methods
           .initializeSortitionGovernance(args)
-          .accounts({
-            governancePool: governancePoolPDA,
-            admin: this.wallet.publicKey,
-            nftMint: args.nft_config?.customMint || null,
-            splMint: args.spl_config?.customMint || null,
-            sbtMint: null,
-            systemProgram: SystemProgram.programId,
-            rent: SYSVAR_RENT_PUBKEY,
-          })
+          .accounts(accounts)
           .rpc();
   
         return tx;

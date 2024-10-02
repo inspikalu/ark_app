@@ -35,7 +35,7 @@ const idl: CustomIdl = rawIdl as CustomIdl;
 
 type AbsoluteMonarchyIDL = typeof idl;
 
-interface InitializeAbsoluteMonarchyArgs {
+export interface InitializeAbsoluteMonarchyArgs {
   name: string;
   description: string;
   monarchName: string;
@@ -47,12 +47,13 @@ interface InitializeAbsoluteMonarchyArgs {
   minLoyaltyAmount: BN;
   membershipTokensThreshold: BN;
   knighthoodPrice: BN;
-  // 7. Fix: Handle `nftConfig` and `splConfig` more safely with nullish coalescing later in code.
-  nftConfig: { tokenType: { new: {} } | { existing: {} }; customMint: PublicKey | null } | null;
-  splConfig: { tokenType: { new: {} } | { existing: {} }; customMint: PublicKey | null } | null;
-  primaryKingdomToken: { nft: {} } | { spl: {} };
-  initializeSbt: boolean;
+  nftConfig?: TokenConfig;
+  splConfig?: TokenConfig;
+  primaryKingdomToken: PrimaryGovernanceToken;
 }
+
+export type TokenConfig = { token_type: { new: {} } | { existing: {} }; custom_mint: PublicKey };
+type PrimaryGovernanceToken = { NFT: {} } | { SPL: {} };
 
 interface DecreeArgs {
   decreeText: string;
@@ -75,6 +76,9 @@ export class AbsoluteMonarchyClient {
   }
 
   private getKingdomPDA(): [PublicKey, number] {
+    if (!this.wallet.publicKey) {
+      throw new Error("Wallet public key is null. Please connect your wallet.");
+    }
     return PublicKey.findProgramAddressSync(
       [utils.bytes.utf8.encode('kingdom'), this.wallet.publicKey.toBuffer()],
       this.program.programId
@@ -89,25 +93,46 @@ export class AbsoluteMonarchyClient {
   }
 
   public async initializeAbsoluteMonarchy(args: InitializeAbsoluteMonarchyArgs): Promise<string> {
+    if (!this.wallet.publicKey) {
+      throw new Error("Wallet public key is null. Please connect your wallet.");
+    }
     const [kingdomPDA] = this.getKingdomPDA();
     const [monarchPDA] = this.getMonarchPDA(kingdomPDA);
 
     try {
+      // Define the base accounts structure
+      const accounts: {
+        kingdom: PublicKey;
+        monarch: PublicKey;
+        authority: PublicKey;
+        systemProgram: PublicKey;
+        tokenProgram: PublicKey;
+        associatedTokenProgram: PublicKey;
+        rent: PublicKey;
+        nftMint?: PublicKey;
+        splMint?: PublicKey;
+      } = {
+        kingdom: kingdomPDA,
+        monarch: monarchPDA,
+        authority: this.wallet.publicKey,
+        systemProgram: SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+        rent: SYSVAR_RENT_PUBKEY,
+      };
+
+      // Conditionally include optional accounts if they exist in the args
+      if (args.nftConfig?.custom_mint) {
+        accounts.nftMint = args.nftConfig.custom_mint;
+      }
+
+      if (args.splConfig?.custom_mint) {
+        accounts.splMint = args.splConfig.custom_mint;
+      }
+
       const tx = await this.program.methods
-        .initializeAbsoluteMonarchy({
-          ...args,
-          nftConfig: args.nftConfig ?? null,
-          splConfig: args.splConfig ?? null,
-        })
-        .accounts({
-          kingdom: kingdomPDA,
-          monarch: monarchPDA,
-          authority: this.wallet.publicKey,
-          systemProgram: SystemProgram.programId,
-          tokenProgram: TOKEN_PROGRAM_ID,
-          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-          rent: SYSVAR_RENT_PUBKEY,
-        })
+        .initializeAbsoluteMonarchy(args)
+        .accounts(accounts)
         .rpc();
 
       return tx;
@@ -124,6 +149,9 @@ export class AbsoluteMonarchyClient {
   }
 
   public async decree(args: DecreeArgs): Promise<string> {
+    if (!this.wallet.publicKey) {
+      throw new Error("Wallet public key is null. Please connect your wallet.");
+    }
     // 3. Fix: Reuse the `getKingdomPDA()` and `getMonarchPDA()` methods here as well.
     const [kingdomPDA] = this.getKingdomPDA();
     const [monarchPDA] = this.getMonarchPDA(kingdomPDA);

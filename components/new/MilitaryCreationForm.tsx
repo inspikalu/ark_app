@@ -6,7 +6,6 @@ import { PublicKey } from '@solana/web3.js';
 import { BN } from '@coral-xyz/anchor';
 import { MilJuntaClient, useMilJuntaClient, InitializeJuntaArgs, JuntaTokenConfig } from '../../client/military/initializeMilitary';
 import { CustomWallet } from './CustomWallet';
-import { TokenConfig } from "../create/DashboardSearch";
 
 
 const PROGRAM_ID = new PublicKey('2fPj7RDkm4FJouSo6DE6vHbE5rjTvdZPnnxJUgFvYVm2');
@@ -55,11 +54,11 @@ const MilJuntaCreationForm: React.FC<MilJuntaCreationFormProps> = ({ governanceT
 
     try {
       const formData = new FormData(event.currentTarget);
-      const nftConfig: JuntaTokenConfig | null = nftTokenType === 'new'
+      const nftConfig: JuntaTokenConfig = nftTokenType === 'new'
         ? { token_type: { new: {} }, token_mint: PublicKey.default }
         : { token_type: { existing: {} }, token_mint: new PublicKey(formData.get('nftMintAddress') as string) };
 
-      const splConfig: JuntaTokenConfig | null = splTokenType === 'new'
+      const splConfig: JuntaTokenConfig = splTokenType === 'new'
         ? { token_type: { new: {} }, token_mint: PublicKey.default }
         : { token_type: { existing: {} }, token_mint: new PublicKey(formData.get('splMintAddress') as string) };
 
@@ -76,7 +75,6 @@ const MilJuntaCreationForm: React.FC<MilJuntaCreationFormProps> = ({ governanceT
         nft_supply: new BN(formData.get('nft_supply') as string),
         spl_supply: new BN(formData.get('spl_supply') as string),
         primary_junta_token: formData.get('primary_junta_token') === 'NFT' ? { NFT: {} } : { SPL: {} },
-        initialize_sbt: formData.get('initialize_sbt') === 'true',
       };
 
       const tx = await client.initializeMilJunta(args);
@@ -196,13 +194,6 @@ const MilJuntaCreationForm: React.FC<MilJuntaCreationFormProps> = ({ governanceT
           <select id="primary_junta_token" name="primary_junta_token" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3">
             <option value="NFT">NFT</option>
             <option value="SPL">SPL</option>
-          </select>
-        </div>
-        <div>
-          <label htmlFor="initialize_sbt" className="block text-white mb-2">Initialize SBT</label>
-          <select id="initialize_sbt" name="initialize_sbt" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
           </select>
         </div>
       </div>

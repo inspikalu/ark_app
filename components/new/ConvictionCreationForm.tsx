@@ -4,9 +4,8 @@ import { motion } from "framer-motion";
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
 import { BN } from '@coral-xyz/anchor';
-import { ConvictionClient, useConvictionClient, InitializeGovernanceArgs } from '../../client/conviction/initializeConviction';
+import { ConvictionClient, useConvictionClient, InitializeGovernanceArgs, TokenConfig } from '../../client/conviction/initializeConviction';
 import { CustomWallet } from './CustomWallet';
-import { TokenConfig } from "../create/DashboardSearch";
 
 const PROGRAM_ID = new PublicKey('ATsZoBzoVyPF97HLn9kt2ffNSGcnYwUApbNxfsVknNVr');
 
@@ -54,13 +53,17 @@ const ConvictionCreationForm: React.FC<ConvictionCreationFormProps> = ({ governa
 
     try {
       const formData = new FormData(event.currentTarget);
-      const nftConfig: TokenConfig | null = nftTokenType === 'new'
-        ? { tokenType: { new: {} }, customMint: null }
-        : { tokenType: { existing: {} }, customMint: new PublicKey(formData.get('nftMintAddress') as string) };
+      const nftConfig: TokenConfig | undefined = nftTokenType === 'new'
+        ? { tokenType: { new: {} }, customMint: PublicKey.default }
+        : formData.get('nftMintAddress')
+          ? { tokenType: { existing: {} }, customMint: new PublicKey(formData.get('nftMintAddress') as string) }
+          : undefined;
 
-      const splConfig: TokenConfig | null = splTokenType === 'new'
-        ? { tokenType: { new: {} }, customMint: null }
-        : { tokenType: { existing: {} }, customMint: new PublicKey(formData.get('splMintAddress') as string) };
+      const splConfig: TokenConfig | undefined = splTokenType === 'new'
+        ? { tokenType: { new: {} }, customMint: PublicKey.default }
+        : formData.get('splMintAddress')
+          ? { tokenType: { existing: {} }, customMint: new PublicKey(formData.get('splMintAddress') as string) }
+          : undefined;
 
       const args: InitializeGovernanceArgs = {
         name: formData.get('name') as string,
@@ -74,13 +77,18 @@ const ConvictionCreationForm: React.FC<ConvictionCreationFormProps> = ({ governa
         collection_price: new BN(formData.get('collection_price') as string),
         nft_config: nftConfig,
         spl_config: splConfig,
-        primary_governance_token: formData.get('primary_governance_token') === 'nft' ? { nft: {} } : { spl: {} },
-        initialize_sbt: formData.get('initialize_sbt') === 'true',
+        primary_governance_token: formData.get('primary_governance_token') === 'NFT' ? { NFT: {} } : { SPL: {} },
       };
 
       const tx = await client.initializeConviction(args);
       console.log('Transaction successful:', tx);
-      router.push(`/pao/${tx}`);
+      const searchParams = new URLSearchParams(window.location.search);
+      const interfaceType = searchParams.get('interface');
+      if (interfaceType === 'chat') {
+        router.push(`/chat/${tx}`);
+      } else {
+        router.push(`/pao/${tx}`);
+      }
     } catch (error) {
       console.error('Error creating Conviction PAO:', error);
       alert(`Error creating Conviction PAO: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -197,13 +205,6 @@ const ConvictionCreationForm: React.FC<ConvictionCreationFormProps> = ({ governa
           <select id="primary_governance_token" name="primary_governance_token" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3">
             <option value="nft">NFT</option>
             <option value="spl">SPL</option>
-          </select>
-        </div>
-        <div>
-          <label htmlFor="initialize_sbt" className="block text-white mb-2">Initialize SBT</label>
-          <select id="initialize_sbt" name="initialize_sbt" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
           </select>
         </div>
       </div>

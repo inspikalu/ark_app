@@ -29,17 +29,16 @@ import { useMemo } from 'react';
   export interface CreateCircleArgs {
     name: string;
     description: string;
-    parent_circle: PublicKey | null;
+    parent_circle?: PublicKey;
     circle_type: CircleType;
-    nft_config: CircleTokenConfig | null;
-    spl_config: CircleTokenConfig | null;
+    nft_config?: CircleTokenConfig;
+    spl_config?: CircleTokenConfig;
     nft_symbol: string;
     spl_symbol: string;
     nft_supply: BN;
     spl_supply: BN;
     collection_price: BN;
     primary_governance_token: PrimaryGovernanceToken;
-    initialize_sbt: boolean;
   }
   
   export type CircleType = { General: {} } | { Project: {} } | { Department: {} };
@@ -69,23 +68,47 @@ import { useMemo } from 'react';
     }
   
     public async createSociocracyCircle(args: CreateCircleArgs): Promise<string> {
+      if (!this.wallet.publicKey) {
+        throw new Error("Wallet public key is null. Please connect your wallet.");
+      }
       const [circlePDA] = this.getCirclePDA(args.name);
   
-      try {
-        const tx = await this.program.methods
-          .createSociocracyCircle(args)
-          .accounts({
-            circle: circlePDA,
-            payer: this.wallet.publicKey,
-            parentCircle: args.parent_circle,
-            nftMint: args.nft_config?.token_mint || null,
-            splMint: args.spl_config?.token_mint || null,
-            sbtMint: null, // This might need to be adjusted based on your specific requirements
-            systemProgram: SystemProgram.programId,
-            rent: SYSVAR_RENT_PUBKEY,
-            clock: SYSVAR_CLOCK_PUBKEY,
-          })
-          .rpc();
+try {
+  const accounts: {
+    circle: PublicKey;
+    payer: PublicKey;
+    parentCircle?: PublicKey;
+    nftMint?: PublicKey;
+    splMint?: PublicKey;
+    systemProgram: PublicKey;
+    rent: PublicKey;
+    clock: PublicKey;
+  } = {
+    circle: circlePDA,
+    payer: this.wallet.publicKey,
+    systemProgram: SystemProgram.programId,
+    rent: SYSVAR_RENT_PUBKEY,
+    clock: SYSVAR_CLOCK_PUBKEY,
+  };
+
+  // Conditionally include optional accounts if they exist
+  if (args.parent_circle) {
+    accounts.parentCircle = args.parent_circle;
+  }
+
+  if (args.nft_config?.token_mint) {
+    accounts.nftMint = args.nft_config.token_mint;
+  }
+
+  if (args.spl_config?.token_mint) {
+    accounts.splMint = args.spl_config.token_mint;
+  }
+
+  // Pass the accounts object to the transaction
+  const tx = await this.program.methods
+    .createSociocracyCircle(args)
+    .accounts(accounts)
+    .rpc();
   
         return tx;
       } catch (error) {
