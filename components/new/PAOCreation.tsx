@@ -4,11 +4,11 @@ import { useRouter, useParams } from "next/navigation";
 import { motion } from "framer-motion";
 // import { FiUpload } from "react-icons/fi";
 import DidYouKnowModal from "./DidYouKnowModal";
-import { GovernanceType, InitializeKingdomArgs, TokenConfig } from '../create/DashboardSearch';
+import { GovernanceType } from '../create/DashboardSearch';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { BN } from '@coral-xyz/anchor';
 import { PublicKey } from '@solana/web3.js';
-import { AbsoluteMonarchyClient, useAbsoluteMonarchyClient } from '../../client/absolute/initializeAbsoluteMonarchy';
+import { AbsoluteMonarchyClient, InitializeAbsoluteMonarchyArgs, useAbsoluteMonarchyClient, TokenConfig } from '../../client/absolute/initializeAbsoluteMonarchy';
 import { CustomWallet } from './CustomWallet';  
 
 const PROGRAM_ID = new PublicKey('ADp9DgS9ZpsVDCXb4ysDjJoB1d8cL3CUmm4ErwVtqWzu');
@@ -120,16 +120,20 @@ const PaoCreationForm: React.FC<PaoCreationFormProps> = ({ governanceType }) => 
 
     try {
       const formData = new FormData(event.currentTarget);
-      const primaryTokenType = formData.get('primaryKingdomToken') as 'nft' | 'spl';
-      const nftConfig: TokenConfig | null = nftTokenType === 'new'
-        ? { tokenType: { new: {} }, customMint: null }
-        : { tokenType: { existing: {} }, customMint: new PublicKey(formData.get('nftMintAddress') as string) };
+      const primaryTokenType = formData.get('primaryKingdomToken') as 'NFT' | 'SPL';
+      const nftConfig: TokenConfig | undefined = nftTokenType === 'new'
+        ? { token_type: { new: {} }, custom_mint: PublicKey.default }
+        : formData.get('nftMintAddress')
+          ? { token_type: { existing: {} }, custom_mint: new PublicKey(formData.get('nftMintAddress') as string) }
+          : undefined;
 
-      const splConfig: TokenConfig | null = splTokenType === 'new'
-        ? { tokenType: { new: {} }, customMint: null }
-        : { tokenType: { existing: {} }, customMint: new PublicKey(formData.get('splMintAddress') as string) };
+      const splConfig: TokenConfig | undefined = splTokenType === 'new'
+        ? { token_type: { new: {} }, custom_mint: PublicKey.default }
+        : formData.get('splMintAddress')
+          ? { token_type: { existing: {} }, custom_mint: new PublicKey(formData.get('splMintAddress') as string) }
+          : undefined;
 
-      const args: InitializeKingdomArgs = {
+      const args: InitializeAbsoluteMonarchyArgs = {
         name: formData.get('name') as string,
         description: formData.get('description') as string,
         monarchName: formData.get('monarchName') as string,
@@ -141,10 +145,9 @@ const PaoCreationForm: React.FC<PaoCreationFormProps> = ({ governanceType }) => 
         minLoyaltyAmount: new BN(formData.get('minLoyaltyAmount') as string),
         membershipTokensThreshold: new BN(formData.get('membershipTokensThreshold') as string),
         knighthoodPrice: new BN(formData.get('knighthoodPrice') as string),
-        nftConfig,
-        splConfig,
-        primaryKingdomToken: primaryTokenType === 'nft' ? { nft: {} } : { spl: {} },
-        initializeSbt: formData.get('initializeSbt') === 'true',
+        nftConfig: nftConfig,
+        splConfig: splConfig,
+        primaryKingdomToken: primaryTokenType === 'NFT' ? { NFT: {} } : { SPL: {} },
       };
 
       let tx: string;
@@ -316,13 +319,6 @@ const PaoCreationForm: React.FC<PaoCreationFormProps> = ({ governanceType }) => 
           <select id="primaryKingdomToken" name="primaryKingdomToken" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3">
             <option value="nft">NFT</option>
             <option value="spl">SPL</option>
-          </select>
-        </div>
-        <div>
-          <label htmlFor="initializeSbt" className="block text-white mb-2">Initialize SBT</label>
-          <select id="initializeSbt" name="initializeSbt" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
           </select>
         </div>
       </div>

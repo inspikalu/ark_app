@@ -36,18 +36,18 @@ import { useMemo } from 'react';
     approval_threshold: BN;
     min_stake_amount: BN;
     collection_price: BN;
-    nft_config: TokenConfig | null;
-    spl_config: TokenConfig | null;
+    nft_config?: TokenConfig;
+    spl_config?: TokenConfig;
     primary_governance_token: PrimaryGovernanceToken;
-    initialize_sbt: boolean;
   }
   
-  interface TokenConfig {
+  export interface TokenConfig {
     tokenType: { new: {} } | { existing: {} };
-    customMint: PublicKey | null;
+    customMint: PublicKey;
   }
   
-  type PrimaryGovernanceToken = { nft: {} } | { spl: {} };
+  type PrimaryGovernanceToken = { NFT: {} } | { SPL: {} };
+
   
   export class ConvictionClient {
     private program: Program<ConvictionIDL>;
@@ -65,6 +65,9 @@ import { useMemo } from 'react';
     }
   
     private getGovernancePDA(): [PublicKey, number] {
+      if (!this.wallet.publicKey) {
+        throw new Error("Wallet public key is null. Please connect your wallet.");
+      }
       return PublicKey.findProgramAddressSync(
         [utils.bytes.utf8.encode('governance'), this.wallet.publicKey.toBuffer()],
         this.program.programId
@@ -72,21 +75,44 @@ import { useMemo } from 'react';
     }
   
     public async initializeConviction(args: InitializeGovernanceArgs): Promise<string> {
+      if (!this.wallet.publicKey) {
+        throw new Error("Wallet public key is null. Please connect your wallet.");
+      }
       const [governancePDA] = this.getGovernancePDA();
   
       try {
+        // Define the base accounts structure
+        const accounts: {
+          authority: PublicKey;
+          governance: PublicKey;
+          nftMint?: PublicKey;
+          splMint?: PublicKey;
+          systemProgram: PublicKey;
+          tokenProgram: PublicKey;
+          rent: PublicKey;
+        } = {
+          authority: this.wallet.publicKey,
+          governance: governancePDA,
+          systemProgram: SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          rent: SYSVAR_RENT_PUBKEY,
+        };
+  
+        // Conditionally include optional accounts if they exist in the args
+        if (args.nft_config?.customMint) {
+          accounts.nftMint = args.nft_config.customMint;
+        }
+  
+        if (args.spl_config?.customMint) {
+          accounts.splMint = args.spl_config.customMint;
+        }
+  
+        // Note: sbtMint is not included here as it wasn't in the original code
+        // If you need to include it, you can add similar conditional logic
+  
         const tx = await this.program.methods
           .newGovernance(args)
-          .accounts({
-            authority: this.wallet.publicKey,
-            governance: governancePDA,
-            nftMint: args.nft_config?.customMint || null,
-            splMint: args.spl_config?.customMint || null,
-            sbtMint: null, // This might need to be adjusted based on your specific requirements
-            systemProgram: SystemProgram.programId,
-            tokenProgram: TOKEN_PROGRAM_ID,
-            rent: SYSVAR_RENT_PUBKEY,
-          })
+          .accounts(accounts)
           .rpc();
   
         return tx;

@@ -7,7 +7,7 @@ import SortitionCreationForm from '@/components/new/SortitionCreationForm'
 import { GovernanceType } from '@/components/create/DashboardSearch'
 import ConvictionCreationForm from '@/components/new/ConvictionCreationForm'
 import MilJuntaCreationForm from '@/components/new/MilitaryCreationForm'
-// import PolycentricCreationForm from '@/components/new/PolycentricCreationForm'
+import PolycentricCreationForm from '@/components/new/PolycentricCreationForm'
 import SociocracyCreationForm from '@/components/new/SociocracyCreationForm'
 import FlatDaoCreationForm from '@/components/new/FlatCreationForm'
 
@@ -44,8 +44,8 @@ const PaoCreationPage: React.FC = () => {
         return <ConvictionCreationForm governanceType={governanceType} />
       case 'military-junta':
         return <MilJuntaCreationForm governanceType={governanceType} />
-      // case 'polycentric':
-      //   return <PolycentricCreationForm governanceType={governanceType} />
+      case 'polycentric':
+        return <PolycentricCreationForm governanceType={governanceType} />
       case 'sociocracy':
         return <SociocracyCreationForm governanceType={governanceType} />
       case 'flat-dao':

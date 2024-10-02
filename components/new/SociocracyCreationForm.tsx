@@ -18,6 +18,7 @@ const SociocracyCreationForm: React.FC<SociocracyCreationFormProps> = ({ governa
   const [client, setClient] = useState<SociocracyClient | null>(null);
   const [nftTokenType, setNftTokenType] = useState('new');
   const [splTokenType, setSplTokenType] = useState('new');
+  const [parentCircle, setParentCircle] = useState<string>('');
   const router = useRouter();
   const { connection } = useConnection();
   const wallet = useWallet();
@@ -53,18 +54,22 @@ const SociocracyCreationForm: React.FC<SociocracyCreationFormProps> = ({ governa
 
     try {
       const formData = new FormData(event.currentTarget);
-      const nftConfig: CircleTokenConfig | null = nftTokenType === 'new'
+      const nftConfig: CircleTokenConfig | undefined = nftTokenType === 'new'
         ? { token_type: { new: {} }, token_mint: PublicKey.default }
-        : { token_type: { existing: {} }, token_mint: new PublicKey(formData.get('nftMintAddress') as string) };
+        : formData.get('nftMintAddress')
+          ? { token_type: { existing: {} }, token_mint: new PublicKey(formData.get('nftMintAddress') as string) }
+          : undefined;
 
-      const splConfig: CircleTokenConfig | null = splTokenType === 'new'
+      const splConfig: CircleTokenConfig | undefined = splTokenType === 'new'
         ? { token_type: { new: {} }, token_mint: PublicKey.default }
-        : { token_type: { existing: {} }, token_mint: new PublicKey(formData.get('splMintAddress') as string) };
+        : formData.get('splMintAddress')
+          ? { token_type: { existing: {} }, token_mint: new PublicKey(formData.get('splMintAddress') as string) }
+          : undefined;
 
       const args: CreateCircleArgs = {
         name: formData.get('name') as string,
         description: formData.get('description') as string,
-        parent_circle: null, // You might want to add an option to specify a parent circle
+        parent_circle: parentCircle ? new PublicKey(parentCircle) : undefined, 
         circle_type: { [formData.get('circle_type') as string]: {} } as CircleType,
         nft_config: nftConfig,
         spl_config: splConfig,
@@ -74,7 +79,6 @@ const SociocracyCreationForm: React.FC<SociocracyCreationFormProps> = ({ governa
         spl_supply: new BN(formData.get('spl_supply') as string),
         collection_price: new BN(formData.get('collection_price') as string),
         primary_governance_token: formData.get('primary_governance_token') === 'NFT' ? { NFT: {} } : { SPL: {} },
-        initialize_sbt: formData.get('initialize_sbt') === 'true',
       };
 
       const tx = await client.createSociocracyCircle(args);
@@ -195,13 +199,6 @@ const SociocracyCreationForm: React.FC<SociocracyCreationFormProps> = ({ governa
           <select id="primary_governance_token" name="primary_governance_token" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3">
             <option value="NFT">NFT</option>
             <option value="SPL">SPL</option>
-          </select>
-        </div>
-        <div>
-          <label htmlFor="initialize_sbt" className="block text-white mb-2">Initialize SBT</label>
-          <select id="initialize_sbt" name="initialize_sbt" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3">
-            <option value="true">Yes</option>
-            <option value="false">No</option>
           </select>
         </div>
       </div>

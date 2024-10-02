@@ -72,6 +72,9 @@ import { useMemo } from 'react';
     }
   
     public async daoCreate(args: DaoCreateArgs, mint: PublicKey): Promise<string> {
+      if (!this.wallet.publicKey) {
+        throw new Error("Wallet public key is null. Please connect your wallet.");
+      }
       const [daoPDA] = this.getDaoPDA(this.wallet.publicKey!, mint);
       const [vaultPDA] = this.getVaultPDA(this.wallet.publicKey!, mint);
       const [analyticsPDA] = this.getAnalyticsPDA();
@@ -87,7 +90,7 @@ import { useMemo } from 'react';
             creator: this.wallet.publicKey,
             auth: authPDA,
             dao: daoPDA,
-            signerAta: await utils.token.associatedAddress({
+            signerAta: utils.token.associatedAddress({
               mint: mint,
               owner: this.wallet.publicKey
             }),

@@ -32,14 +32,13 @@ import { useMemo } from 'react';
     symbol: string;
     support_threshold: number;
     collection_price: BN;
-    nft_config: JuntaTokenConfig | null;
-    spl_config: JuntaTokenConfig | null;
+    nft_config?: JuntaTokenConfig;
+    spl_config?: JuntaTokenConfig;
     nft_symbol: string;
     spl_symbol: string;
     nft_supply: BN;
     spl_supply: BN;
     primary_junta_token: PrimaryJuntaToken;
-    initialize_sbt: boolean;
   }
   
   export interface JuntaTokenConfig {
@@ -72,22 +71,43 @@ import { useMemo } from 'react';
     }
   
     public async initializeMilJunta(args: InitializeJuntaArgs): Promise<string> {
+      if (!this.wallet.publicKey) {
+        throw new Error("Wallet public key is null. Please connect your wallet.");
+      }
       const [juntaPDA] = this.getJuntaPDA(args.name);
   
       try {
+        // Define the base accounts structure
+        const accounts: {
+          junta: PublicKey;
+          leader: PublicKey;
+          nftMint?: PublicKey;
+          splMint?: PublicKey;
+          tokenProgram: PublicKey;
+          associatedTokenProgram: PublicKey;
+          systemProgram: PublicKey;
+          rent: PublicKey;
+        } = {
+          junta: juntaPDA,
+          leader: this.wallet.publicKey,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+          systemProgram: SystemProgram.programId,
+          rent: SYSVAR_RENT_PUBKEY,
+        };
+  
+        // Conditionally include optional accounts if they exist in the args
+        if (args.nft_config?.token_mint) {
+          accounts.nftMint = args.nft_config.token_mint;
+        }
+  
+        if (args.spl_config?.token_mint) {
+          accounts.splMint = args.spl_config.token_mint;
+        }
+  
         const tx = await this.program.methods
           .initializeMilJunta(args)
-          .accounts({
-            junta: juntaPDA,
-            leader: this.wallet.publicKey,
-            nftMint: args.nft_config?.token_mint || null,
-            splMint: args.spl_config?.token_mint || null,
-            sbtMint: null, // This might need to be adjusted based on your specific requirements
-            tokenProgram: TOKEN_PROGRAM_ID,
-            associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-            systemProgram: SystemProgram.programId,
-            rent: SYSVAR_RENT_PUBKEY,
-          })
+          .accounts(accounts)
           .rpc();
   
         return tx;

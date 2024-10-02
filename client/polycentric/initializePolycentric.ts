@@ -27,11 +27,11 @@ import { useMemo } from 'react';
   
   type PolycentricIDL = typeof idl;
   
-  interface InitializeGovernmentArgs {
+  export interface InitializeGovernmentArgs {
     name: string;
     description: string;
-    nft_config: GovernanceTokenConfig | null;
-    spl_config: GovernanceTokenConfig | null;
+    nft_config?: GovernanceTokenConfig;
+    spl_config?: GovernanceTokenConfig;
     primary_governance_token: PrimaryGovernanceToken;
     initialize_sbt: boolean;
     nft_symbol: string;
@@ -39,9 +39,9 @@ import { useMemo } from 'react';
     collection_price: BN;
   }
   
-  interface GovernanceTokenConfig {
+  export interface GovernanceTokenConfig {
     token_type: { new: {} } | { existing: {} };
-    token_mint: PublicKey | null;
+    token_mint: PublicKey;
   }
   
   type PrimaryGovernanceToken = { NFT: {} } | { SPL: {} };
@@ -62,29 +62,61 @@ import { useMemo } from 'react';
     }
   
     private getGovernancePoolPDA(): [PublicKey, number] {
+      if (!this.wallet.publicKey) {
+        throw new Error("Wallet public key is null. Please connect your wallet.");
+      }
       return PublicKey.findProgramAddressSync(
         [utils.bytes.utf8.encode('governance_pool'), this.wallet.publicKey.toBuffer()],
         this.program.programId
       );
     }
+
+    private getAnalyticsPDA(): [PublicKey, number] {
+      return PublicKey.findProgramAddressSync(
+        [utils.bytes.utf8.encode('analytics')],
+        this.program.programId
+      );
+    }
   
     public async initializePolycentric(args: InitializeGovernmentArgs): Promise<string> {
+      if (!this.wallet.publicKey) {
+        throw new Error("Wallet public key is null. Please connect your wallet.");
+      }
       const [governancePoolPDA] = this.getGovernancePoolPDA();
+      const [analyticsPDA] = this.getAnalyticsPDA();
   
       try {
+        // Define the base accounts structure
+        const accounts: {
+          governancePool: PublicKey;
+          admin: PublicKey;
+          analytics: PublicKey;
+          nftMint?: PublicKey;
+          splMint?: PublicKey;
+          systemProgram: PublicKey;
+          rent: PublicKey;
+          clock: PublicKey;
+        } = {
+          governancePool: governancePoolPDA,
+          analytics: analyticsPDA,
+          admin: this.wallet.publicKey,
+          systemProgram: SystemProgram.programId,
+          rent: SYSVAR_RENT_PUBKEY,
+          clock: SYSVAR_CLOCK_PUBKEY,
+        };
+  
+        // Conditionally include optional accounts if they exist in the args
+        if (args.nft_config?.token_mint) {
+          accounts.nftMint = args.nft_config.token_mint;
+        }
+  
+        if (args.spl_config?.token_mint) {
+          accounts.splMint = args.spl_config.token_mint;
+        }
+  
         const tx = await this.program.methods
           .initializeGovernment(args)
-          .accounts({
-            governancePool: governancePoolPDA,
-            admin: this.wallet.publicKey,
-            analytics: null, // This will be created by the program
-            nftMint: args.nft_config?.token_mint || null,
-            splMint: args.spl_config?.token_mint || null,
-            sbtMint: null, // This might need to be adjusted based on your specific requirements
-            systemProgram: SystemProgram.programId,
-            rent: SYSVAR_RENT_PUBKEY,
-            clock: SYSVAR_CLOCK_PUBKEY,
-          })
+          .accounts(accounts)
           .rpc();
   
         return tx;
