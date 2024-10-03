@@ -1,5 +1,5 @@
 // activityData.ts
-
+'use client'
 export interface ActivityItem {
     id: string;
     daoId: string;
