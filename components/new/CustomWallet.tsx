@@ -1,3 +1,38 @@
+"use client";
+import { PublicKey, Transaction, VersionedTransaction } from "@solana/web3.js";
+import { WalletContextState } from "@solana/wallet-adapter-react";
+
+export class CustomWallet {
+  constructor(private walletContextState: WalletContextState) {}
+
+  async getPublicKey(): Promise<PublicKey> {
+    if (!this.walletContextState.publicKey) {
+      throw new Error("Wallet is not connected");
+    }
+    return this.walletContextState.publicKey;
+  }
+
+  private async signSingleTransaction<T extends Transaction | VersionedTransaction>(tx: T): Promise<T> {
+    if (!this.walletContextState.signTransaction) {
+      throw new Error("signTransaction is not available in this wallet");
+    }
+    if (tx instanceof Transaction) {
+      return await this.walletContextState.signTransaction(tx) as T;
+    }
+    throw new Error("Versioned transactions are not currently supported");
+  }
+
+  async signTransaction<T extends Transaction | VersionedTransaction>(tx: T): Promise<T> {
+    return this.signSingleTransaction(tx);
+  }
+
+  async signAllTransactions<T extends Transaction | VersionedTransaction>(txs: T[]): Promise<T[]> {
+    return Promise.all(txs.map(tx => this.signSingleTransaction(tx)));
+  }
+}
+
+/*
+//Old code
 'use client'
 import { PublicKey, Transaction, VersionedTransaction } from '@solana/web3.js';
 import { WalletContextState } from '@solana/wallet-adapter-react';
@@ -47,7 +82,7 @@ export class CustomWallet {
       return signedTxs;
     }
   }
-
+*/
 
 // UNUSED CODE  
 // Create a wrapper for the wallet that satisfies the Wallet interface
