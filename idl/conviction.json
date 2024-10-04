@@ -523,6 +523,72 @@
       "args": []
     },
     {
+      "name": "create_conviction_invite",
+      "discriminator": [
+        58,
+        78,
+        138,
+        187,
+        117,
+        145,
+        44,
+        240
+      ],
+      "accounts": [
+        {
+          "name": "governance",
+          "writable": true
+        },
+        {
+          "name": "invite",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  118,
+                  105,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance"
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              },
+              {
+                "kind": "account",
+                "path": "governance.total_members",
+                "account": "Governance"
+              }
+            ]
+          }
+        },
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "expiration_days",
+          "type": "u64"
+        }
+      ]
+    },
+    {
       "name": "create_stake_account",
       "discriminator": [
         105,
@@ -1344,11 +1410,6 @@
         },
         {
           "name": "spl_mint",
-          "writable": true,
-          "optional": true
-        },
-        {
-          "name": "sbt_mint",
           "writable": true,
           "optional": true
         },
@@ -2364,6 +2425,303 @@
           "type": "u64"
         }
       ]
+    },
+    {
+      "name": "use_conviction_invite",
+      "discriminator": [
+        254,
+        57,
+        151,
+        170,
+        105,
+        25,
+        165,
+        74
+      ],
+      "accounts": [
+        {
+          "name": "governance",
+          "writable": true
+        },
+        {
+          "name": "invite",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  118,
+                  105,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance"
+              },
+              {
+                "kind": "account",
+                "path": "invite.creator",
+                "account": "ConvictionInvite"
+              },
+              {
+                "kind": "account",
+                "path": "invite.created_at",
+                "account": "ConvictionInvite"
+              }
+            ]
+          }
+        },
+        {
+          "name": "stake_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  116,
+                  97,
+                  107,
+                  101,
+                  95,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance"
+              },
+              {
+                "kind": "account",
+                "path": "new_member"
+              }
+            ]
+          }
+        },
+        {
+          "name": "new_member",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "member_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "new_member"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance_token_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "governance_token_mint",
+          "writable": true
+        },
+        {
+          "name": "member_nft_account",
+          "writable": true,
+          "optional": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "new_member"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance_nft_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "governance_nft_mint",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -2378,6 +2736,19 @@
         77,
         25,
         117
+      ]
+    },
+    {
+      "name": "ConvictionInvite",
+      "discriminator": [
+        201,
+        37,
+        200,
+        26,
+        243,
+        2,
+        93,
+        30
       ]
     },
     {
@@ -2448,19 +2819,6 @@
   ],
   "events": [
     {
-      "name": "MemberAdded",
-      "discriminator": [
-        198,
-        220,
-        228,
-        196,
-        92,
-        235,
-        240,
-        79
-      ]
-    },
-    {
       "name": "MintEvent",
       "discriminator": [
         197,
@@ -2510,6 +2868,32 @@
         220,
         83,
         135
+      ]
+    },
+    {
+      "name": "conviction::contexts::add::MemberAdded",
+      "discriminator": [
+        198,
+        220,
+        228,
+        196,
+        92,
+        235,
+        240,
+        79
+      ]
+    },
+    {
+      "name": "conviction::contexts::create_invite::MemberAdded",
+      "discriminator": [
+        198,
+        220,
+        228,
+        196,
+        92,
+        235,
+        240,
+        79
       ]
     }
   ],
@@ -2628,6 +3012,21 @@
       "code": 6022,
       "name": "SplMintNotSet",
       "msg": "SPL mint not set"
+    },
+    {
+      "code": 6023,
+      "name": "InviteExpired",
+      "msg": "Invite expired"
+    },
+    {
+      "code": 6024,
+      "name": "InviteAlreadyUsed",
+      "msg": "Invite used"
+    },
+    {
+      "code": 6025,
+      "name": "InvalidInvite",
+      "msg": "Invite invalid"
     }
   ],
   "types": [
@@ -2673,6 +3072,40 @@
           {
             "name": "state_bump",
             "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ConvictionInvite",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "governance",
+            "type": "pubkey"
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "expires_at",
+            "type": "i64"
+          },
+          {
+            "name": "is_used",
+            "type": "bool"
+          },
+          {
+            "name": "used_by",
+            "type": {
+              "option": "pubkey"
+            }
           }
         ]
       }
@@ -2945,10 +3378,6 @@
                 "name": "PrimaryGovernanceToken"
               }
             }
-          },
-          {
-            "name": "initialize_sbt",
-            "type": "bool"
           }
         ]
       }
@@ -2977,30 +3406,6 @@
           {
             "name": "uri",
             "type": "string"
-          }
-        ]
-      }
-    },
-    {
-      "name": "MemberAdded",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "governance",
-            "type": "pubkey"
-          },
-          {
-            "name": "member",
-            "type": "pubkey"
-          },
-          {
-            "name": "staked_amount",
-            "type": "u64"
-          },
-          {
-            "name": "staked_nft_amount",
-            "type": "u64"
           }
         ]
       }
@@ -3403,9 +3808,7 @@
           },
           {
             "name": "custom_mint",
-            "type": {
-              "option": "pubkey"
-            }
+            "type": "pubkey"
           }
         ]
       }
@@ -3456,6 +3859,54 @@
           {
             "name": "bump",
             "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "conviction::contexts::add::MemberAdded",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "governance",
+            "type": "pubkey"
+          },
+          {
+            "name": "member",
+            "type": "pubkey"
+          },
+          {
+            "name": "staked_amount",
+            "type": "u64"
+          },
+          {
+            "name": "staked_nft_amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "conviction::contexts::create_invite::MemberAdded",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "governance",
+            "type": "pubkey"
+          },
+          {
+            "name": "member",
+            "type": "pubkey"
+          },
+          {
+            "name": "staked_amount",
+            "type": "u64"
+          },
+          {
+            "name": "staked_nft_amount",
+            "type": "u64"
           }
         ]
       }
