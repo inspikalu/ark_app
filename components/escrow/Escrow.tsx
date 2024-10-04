@@ -1,8 +1,24 @@
-'use client'
+import React, { useState, useEffect } from 'react';
+import { Connection, PublicKey } from '@solana/web3.js';
+import { AnchorProvider, Program, web3, Idl, BN } from '@coral-xyz/anchor';
+import { useAnchorWallet } from '@solana/wallet-adapter-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiDollarSign, FiUser, FiCalendar, FiCheckCircle, FiBook, FiX } from 'react-icons/fi';
 
-import React, { useState } from 'react';
-import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { FiDollarSign, FiUser, FiCalendar, FiCheckCircle, FiArrowUpCircle, FiArrowDownCircle, FiBook, FiX } from 'react-icons/fi';
+// Import your IDL
+import idl from '../../idl/standard.json';
+import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+
+const programID = new PublicKey("7aQvq1fEiDXqK36H7mW8MSTGdnHn6XAHDd9pauZwZXGQ");
+
+type StandardIDL = Idl & {
+  accounts: {
+    escrow: any;
+    market: any;
+  };
+};
+
+const typedIdl = idl as StandardIDL;
 
 type EscrowType = 'conditional' | 'orderbook' | null;
 
@@ -20,46 +36,11 @@ interface OrderBookData {
   price: string;
 }
 
-const fadeInUp: Variants = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -20 },
-};
-
-const transition = { duration: 0.3 };
-
-const BackgroundAnimation: React.FC = () => {
-  return (
-    <div className="absolute inset-0 z-0 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-teal-800 to-teal-200" />
-      {[...Array(20)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute bg-white rounded-full"
-          style={{
-            width: Math.random() * 20 + 10,
-            height: Math.random() * 20 + 10,
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-          }}
-          animate={{
-            y: [0, Math.random() * 100 - 50],
-            x: [0, Math.random() * 100 - 50],
-            scale: [1, Math.random() + 0.5, 1],
-            opacity: [0, 1, 0],
-          }}
-          transition={{
-            duration: Math.random() * 10 + 10,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-
 const EscrowUI: React.FC = () => {
+  const wallet = useAnchorWallet();
+  const [provider, setProvider] = useState<AnchorProvider | null>(null);
+  const [program, setProgram] = useState<Program<StandardIDL> | null>(null);
+  const [transactionSignature, setTransactionSignature] = useState<string | null>(null);
   const [escrowType, setEscrowType] = useState<EscrowType>(null);
   const [conditionalData, setConditionalData] = useState<ConditionalEscrowData>({
     amount: '',
@@ -74,6 +55,16 @@ const EscrowUI: React.FC = () => {
     price: '',
   });
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (wallet) {
+      const connection = new Connection("https://api.devnet.solana.com");
+      const provider = new AnchorProvider(connection, wallet, {});
+      setProvider(provider);
+      setProgram(new Program<StandardIDL>(typedIdl, provider));
+    }
+  }, [wallet]);
 
   const handleConditionalInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -88,41 +79,103 @@ const EscrowUI: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(null);
     try {
       if (escrowType === 'conditional') {
-        // Call to Solana program to create conditional escrow
-        console.log('Creating conditional escrow:', conditionalData);
+        await createConditionalEscrow();
       } else if (escrowType === 'orderbook') {
-        // Call to Solana program to place order
-        console.log('Placing order:', orderBookData);
+        await placeOrder();
       }
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      // Reset form
       setEscrowType(null);
-    } catch (error) {
-      console.error('Error:', error);
+    } catch (err) {
+      setError(`Error: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const createConditionalEscrow = async (): Promise<void> => {
+    if (!program || !wallet) return;
+
+    const escrowAccount = web3.Keypair.generate();
+    const mint = new PublicKey("So11111111111111111111111111111111111111112"); // Example: SOL mint
+    const recipientKey = new PublicKey(conditionalData.recipient);
+
+    const [escrowTokenAccount] = await PublicKey.findProgramAddressSync(
+      [escrowAccount.publicKey.toBuffer(), mint.toBuffer()],
+      program.programId
+    );
+
+    const tx = await program.methods.createConditionalEscrow(
+      new BN(parseFloat(conditionalData.amount) * 1e9), // Convert to lamports
+      conditionalData.condition,
+      new BN(Date.parse(conditionalData.expiryTime) / 1000)
+    )
+    .accounts({
+      escrow: escrowAccount.publicKey,
+      sender: wallet.publicKey,
+      recipient: recipientKey,
+      mint: mint,
+      senderTokenAccount: await getAssociatedTokenAddress(
+        mint,
+        wallet.publicKey,
+      ),
+      escrowTokenAccount: escrowTokenAccount,
+      systemProgram: web3.SystemProgram.programId,
+      tokenProgram: TOKEN_PROGRAM_ID,
+      rent: web3.SYSVAR_RENT_PUBKEY,
+    })
+    .signers([escrowAccount])
+    .rpc();
+
+    setTransactionSignature(tx);
+    console.log("Conditional escrow created successfully. Transaction signature:", tx);
+  };
+
+  const placeOrder = async (): Promise<void> => {
+    if (!program || !wallet) return;
+
+    const marketKey = new PublicKey(orderBookData.market);
+
+   const tx = await program.methods.placeOrder(
+      { [orderBookData.side]: {} },
+      new BN(parseFloat(orderBookData.amount) * 1e9), // Convert to lamports
+      new BN(parseFloat(orderBookData.price) * 1e9) // Convert to lamports
+    )
+    .accounts({
+      market: marketKey,
+      owner: wallet.publicKey,
+      ownerTokenAccount: await getAssociatedTokenAddress(
+        marketKey,
+        wallet.publicKey
+      ),
+      escrowTokenAccount: await getAssociatedTokenAddress(
+        marketKey,
+        program.programId,
+        true
+      ),
+      tokenProgram: TOKEN_PROGRAM_ID,
+    })
+    .rpc();
+
+    setTransactionSignature(tx);
+    console.log("Order placed successfully. Transaction signature:", tx);
+  };
+
   return (
-    <div className="min-h-screen relative overflow-hidden flex flex-col items-center justify-center p-4 sm:p-8">
-      <BackgroundAnimation />
-      
+    <div className="min-h-screen bg-gradient-to-br from-teal-800 to-teal-300 p-8 text-white">
       <motion.h1 
-        className="text-4xl sm:text-6xl font-bold text-white mb-6 sm:mb-12 text-center z-10"
+        className="text-4xl font-bold mb-8 text-center"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
+        transition={{ duration: 0.5 }}
       >
-        Welcome to ARK Escrow
+        ARK Escrow
       </motion.h1>
 
       {!escrowType && (
         <motion.div
-          className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 z-10"
+          className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 justify-center"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
@@ -156,11 +209,9 @@ const EscrowUI: React.FC = () => {
           >
             <motion.div
               className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl max-w-md w-full relative"
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              variants={fadeInUp}
-              transition={transition}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
             >
               <motion.button
                 className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
@@ -172,13 +223,9 @@ const EscrowUI: React.FC = () => {
               </motion.button>
 
               <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-                <motion.h2 
-                  className="text-2xl sm:text-3xl font-bold text-center mb-4 sm:mb-6"
-                  variants={fadeInUp}
-                  transition={transition}
-                >
+                <h2 className="text-2xl sm:text-3xl font-bold text-center mb-4 sm:mb-6 text-gray-800">
                   {escrowType === 'conditional' ? 'Create Conditional Escrow' : 'Place Order'}
-                </motion.h2>
+                </h2>
 
                 {escrowType === 'conditional' ? (
                   <>
@@ -272,27 +319,16 @@ const EscrowUI: React.FC = () => {
         )}
       </AnimatePresence>
 
-      <motion.div 
-        className="fixed bottom-4 sm:bottom-8 right-4 sm:right-8 flex space-x-4 z-10"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.7 }}
-      >
-        <motion.div
-          className="bg-white text-purple-500 p-3 sm:p-4 rounded-full shadow-lg"
-          whileHover={{ scale: 1.1, rotate: 360 }}
-          transition={{ type: "spring", stiffness: 260, damping: 20 }}
+      {error && (
+        <motion.div 
+          className="mt-4 p-4 bg-red-100 text-red-700 rounded flex items-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
         >
-          <FiArrowUpCircle className="h-5 w-5 sm:h-6 sm:w-6" />
+          <FiX className="mr-2" /> {error}
         </motion.div>
-        <motion.div
-          className="bg-white text-blue-500 p-3 sm:p-4 rounded-full shadow-lg"
-          whileHover={{ scale: 1.1, rotate: -360 }}
-          transition={{ type: "spring", stiffness: 260, damping: 20 }}
-        >
-          <FiArrowDownCircle className="h-5 w-5 sm:h-6 sm:w-6" />
-        </motion.div>
-      </motion.div>
+      )}
     </div>
   );
 };
@@ -305,7 +341,7 @@ const InputField: React.FC<{
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   icon: React.ReactNode;
 }> = ({ label, name, type, value, onChange, icon }) => (
-  <motion.div variants={fadeInUp} transition={transition}>
+  <div>
     <label className="block text-sm font-medium text-gray-700 mb-2">{label}</label>
     <div className="relative">
       <div className="absolute top-3 left-3 text-gray-400">
@@ -320,7 +356,7 @@ const InputField: React.FC<{
         required
       />
     </div>
-  </motion.div>
+  </div>
 );
 
 export default EscrowUI;
