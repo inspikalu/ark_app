@@ -223,6 +223,72 @@
       "args": []
     },
     {
+      "name": "create_flatdao_invite",
+      "discriminator": [
+        44,
+        6,
+        253,
+        153,
+        76,
+        225,
+        140,
+        32
+      ],
+      "accounts": [
+        {
+          "name": "dao",
+          "writable": true
+        },
+        {
+          "name": "invite",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  105,
+                  110,
+                  118,
+                  105,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "dao"
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              },
+              {
+                "kind": "account",
+                "path": "dao.total_members",
+                "account": "DAO"
+              }
+            ]
+          }
+        },
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "expiration_days",
+          "type": "u64"
+        }
+      ]
+    },
+    {
       "name": "create_treasury",
       "discriminator": [
         254,
@@ -1309,6 +1375,35 @@
       ]
     },
     {
+      "name": "use_flatdao_invite",
+      "discriminator": [
+        140,
+        115,
+        13,
+        60,
+        227,
+        241,
+        189,
+        178
+      ],
+      "accounts": [
+        {
+          "name": "dao",
+          "writable": true
+        },
+        {
+          "name": "invite",
+          "writable": true
+        },
+        {
+          "name": "new_member",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "vote_new",
       "discriminator": [
         44,
@@ -1433,6 +1528,19 @@
         48,
         173,
         129
+      ]
+    },
+    {
+      "name": "DAOInvite",
+      "discriminator": [
+        249,
+        122,
+        138,
+        255,
+        52,
+        62,
+        68,
+        56
       ]
     },
     {
@@ -1567,6 +1675,26 @@
       "code": 6017,
       "name": "ArithmeticError",
       "msg": "Arithmetic Error"
+    },
+    {
+      "code": 6018,
+      "name": "Unauthorized",
+      "msg": "Unauthorized"
+    },
+    {
+      "code": 6019,
+      "name": "InviteExpired",
+      "msg": "Invite expired"
+    },
+    {
+      "code": 6020,
+      "name": "InviteAlreadyUsed",
+      "msg": "Invite used"
+    },
+    {
+      "code": 6021,
+      "name": "InvalidInvite",
+      "msg": "Invite invalid"
     }
   ],
   "types": [
@@ -1746,6 +1874,40 @@
           {
             "name": "total_members",
             "type": "u32"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DAOInvite",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "dao",
+            "type": "pubkey"
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "expires_at",
+            "type": "i64"
+          },
+          {
+            "name": "is_used",
+            "type": "bool"
+          },
+          {
+            "name": "used_by",
+            "type": {
+              "option": "pubkey"
+            }
           }
         ]
       }

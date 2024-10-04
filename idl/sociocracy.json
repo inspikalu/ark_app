@@ -125,6 +125,79 @@
       "args": []
     },
     {
+      "name": "create_circle_invite",
+      "discriminator": [
+        95,
+        91,
+        142,
+        111,
+        102,
+        198,
+        7,
+        56
+      ],
+      "accounts": [
+        {
+          "name": "circle",
+          "writable": true
+        },
+        {
+          "name": "invite",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  105,
+                  114,
+                  99,
+                  108,
+                  101,
+                  95,
+                  105,
+                  110,
+                  118,
+                  105,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "circle"
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              },
+              {
+                "kind": "account",
+                "path": "circle.members",
+                "account": "Circle"
+              }
+            ]
+          }
+        },
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "expiration_days",
+          "type": "u64"
+        }
+      ]
+    },
+    {
       "name": "create_sociocracy_circle",
       "discriminator": [
         194,
@@ -176,11 +249,6 @@
         },
         {
           "name": "spl_mint",
-          "writable": true,
-          "optional": true
-        },
-        {
-          "name": "sbt_mint",
           "writable": true,
           "optional": true
         },
@@ -977,6 +1045,101 @@
       ]
     },
     {
+      "name": "use_circle_invite",
+      "discriminator": [
+        238,
+        146,
+        125,
+        189,
+        183,
+        4,
+        69,
+        147
+      ],
+      "accounts": [
+        {
+          "name": "circle",
+          "writable": true
+        },
+        {
+          "name": "invite",
+          "writable": true
+        },
+        {
+          "name": "member",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  109,
+                  101,
+                  109,
+                  98,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "new_member"
+              }
+            ]
+          }
+        },
+        {
+          "name": "circle_member_record",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  105,
+                  114,
+                  99,
+                  108,
+                  101,
+                  95,
+                  109,
+                  101,
+                  109,
+                  98,
+                  101,
+                  114
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "circle"
+              },
+              {
+                "kind": "account",
+                "path": "new_member"
+              }
+            ]
+          }
+        },
+        {
+          "name": "new_member",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ]
+    },
+    {
       "name": "vote_on_sociocracy_proposal",
       "discriminator": [
         111,
@@ -1039,6 +1202,19 @@
       ]
     },
     {
+      "name": "CircleInvite",
+      "discriminator": [
+        177,
+        229,
+        141,
+        125,
+        164,
+        149,
+        173,
+        133
+      ]
+    },
+    {
       "name": "CircleMemberRecord",
       "discriminator": [
         2,
@@ -1080,16 +1256,16 @@
   ],
   "events": [
     {
-      "name": "MemberAddedToCircle",
+      "name": "CircleInviteCreated",
       "discriminator": [
-        238,
-        222,
-        129,
-        146,
-        4,
-        219,
-        218,
-        211
+        193,
+        110,
+        187,
+        53,
+        117,
+        64,
+        93,
+        107
       ]
     },
     {
@@ -1129,6 +1305,32 @@
         55,
         225,
         206
+      ]
+    },
+    {
+      "name": "sociocracy::contexts::add_member::MemberAddedToCircle",
+      "discriminator": [
+        238,
+        222,
+        129,
+        146,
+        4,
+        219,
+        218,
+        211
+      ]
+    },
+    {
+      "name": "sociocracy::contexts::use_invite::MemberAddedToCircle",
+      "discriminator": [
+        238,
+        222,
+        129,
+        146,
+        4,
+        219,
+        218,
+        211
       ]
     }
   ],
@@ -1242,6 +1444,21 @@
       "code": 6021,
       "name": "CircleFullyBanner",
       "msg": "Circle is full"
+    },
+    {
+      "code": 6022,
+      "name": "InviteExpired",
+      "msg": "Invite expired"
+    },
+    {
+      "code": 6023,
+      "name": "InviteAlreadyUsed",
+      "msg": "Invite used"
+    },
+    {
+      "code": 6024,
+      "name": "InvalidInvite",
+      "msg": "Invite invalid"
     }
   ],
   "types": [
@@ -1408,6 +1625,68 @@
       }
     },
     {
+      "name": "CircleInvite",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "circle",
+            "type": "pubkey"
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "expires_at",
+            "type": "i64"
+          },
+          {
+            "name": "is_used",
+            "type": "bool"
+          },
+          {
+            "name": "used_by",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CircleInviteCreated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "circle",
+            "type": "pubkey"
+          },
+          {
+            "name": "invite",
+            "type": "pubkey"
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "expires_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
       "name": "CircleMemberRecord",
       "type": {
         "kind": "struct",
@@ -1556,10 +1835,6 @@
                 "name": "PrimaryGovernanceToken"
               }
             }
-          },
-          {
-            "name": "initialize_sbt",
-            "type": "bool"
           }
         ]
       }
@@ -1672,26 +1947,6 @@
           {
             "name": "bump",
             "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "MemberAddedToCircle",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "circle",
-            "type": "pubkey"
-          },
-          {
-            "name": "member",
-            "type": "pubkey"
-          },
-          {
-            "name": "timestamp",
-            "type": "i64"
           }
         ]
       }
@@ -1850,6 +2105,46 @@
           {
             "name": "program_id",
             "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "sociocracy::contexts::add_member::MemberAddedToCircle",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "circle",
+            "type": "pubkey"
+          },
+          {
+            "name": "member",
+            "type": "pubkey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "sociocracy::contexts::use_invite::MemberAddedToCircle",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "circle",
+            "type": "pubkey"
+          },
+          {
+            "name": "member",
+            "type": "pubkey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
           }
         ]
       }

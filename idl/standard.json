@@ -669,52 +669,17 @@
     {
       "code": 6000,
       "name": "TooManyGovernments",
-      "msg": "Too many governments registered."
+      "msg": "Too many governments registered"
     },
     {
       "code": 6001,
-      "name": "DecisionRejected",
-      "msg": "Decision was rejected by the government."
+      "name": "GovernmentNotFound",
+      "msg": "Government not found"
     },
     {
       "code": 6002,
-      "name": "GovernmentNotFound",
-      "msg": "Government not found."
-    },
-    {
-      "code": 6003,
-      "name": "AlreadyFulfilled",
-      "msg": "The escrow condition has already been fulfilled"
-    },
-    {
-      "code": 6004,
-      "name": "ConditionNotFulfilled",
-      "msg": "The escrow condition has not been fulfilled"
-    },
-    {
-      "code": 6005,
-      "name": "Expired",
-      "msg": "The escrow has expired"
-    },
-    {
-      "code": 6006,
-      "name": "NotExpired",
-      "msg": "The escrow has not yet expired"
-    },
-    {
-      "code": 6007,
-      "name": "VerificationFailed",
-      "msg": "Verification failed"
-    },
-    {
-      "code": 6008,
-      "name": "Unauthorized",
-      "msg": "Unauthorized to perform this action"
-    },
-    {
-      "code": 6009,
-      "name": "AlreadyRevoked",
-      "msg": "Verification has already been revoked"
+      "name": "DecisionRejected",
+      "msg": "Decision rejected by the government"
     }
   ],
   "types": [
