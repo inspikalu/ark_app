@@ -300,36 +300,6 @@
           }
         }
       ]
-    },
-    {
-      "name": "update_analytics",
-      "discriminator": [
-        154,
-        189,
-        52,
-        60,
-        128,
-        104,
-        116,
-        143
-      ],
-      "accounts": [
-        {
-          "name": "ark_analytics",
-          "writable": true
-        },
-        {
-          "name": "signer",
-          "writable": true,
-          "signer": true
-        }
-      ],
-      "args": [
-        {
-          "name": "approved",
-          "type": "bool"
-        }
-      ]
     }
   ],
   "accounts": [
@@ -422,32 +392,8 @@
             }
           },
           {
-            "name": "polls",
-            "type": "u64"
-          },
-          {
-            "name": "approved",
-            "type": "u64"
-          },
-          {
-            "name": "rejected",
-            "type": "u64"
-          },
-          {
-            "name": "points",
-            "type": "u64"
-          },
-          {
-            "name": "created_at",
+            "name": "initialized_at",
             "type": "i64"
-          },
-          {
-            "name": "auth_bump",
-            "type": "u8"
-          },
-          {
-            "name": "state_bump",
-            "type": "u8"
           }
         ]
       }
