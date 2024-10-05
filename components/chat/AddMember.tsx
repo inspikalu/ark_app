@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { Connection, PublicKey, Transaction, Keypair } from '@solana/web3.js';
+import { Connection, PublicKey, Transaction } from '@solana/web3.js';
 import * as multisig from "@sqds/multisig";
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';

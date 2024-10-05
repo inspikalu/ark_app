@@ -3,6 +3,8 @@ import * as multisig from '@sqds/multisig';
 import { toast } from 'react-toastify';
 
 const { Permission, Permissions } = multisig.types;
+console.log(Permission);
+
 
 interface CreateMultisigParams {
   publicKey: PublicKey;

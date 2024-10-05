@@ -27,6 +27,9 @@ const ProposalSection: React.FC = () => {
   const { publicKey, sendTransaction } = useWallet();
   const connection = new Connection("https://api.devnet.solana.com");
 
+  console.log(setMultisigPda);
+
+
   useEffect(() => {
     // Fetch existing proposals here
     // This is a placeholder and should be replaced with actual fetching logic

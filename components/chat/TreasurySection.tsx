@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection, PublicKey} from '@solana/web3.js';
-import { Program, AnchorProvider, web3 } from '@coral-xyz/anchor';
+import { Program, AnchorProvider } from '@coral-xyz/anchor';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiX, FiPlus } from 'react-icons/fi';
+import { FiX } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import CreateMultisig from './Multisig';
 import idl from '../../idl/the_ark_program.json';
 
 
-const PROGRAM_ID = new PublicKey('48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V');
+// const PROGRAM_ID = new PublicKey('48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V');
 
 interface Treasury {
   name: string;
@@ -24,6 +24,9 @@ const TreasurySection: React.FC = () => {
   const [arkTreasuryName, setArkTreasuryName] = useState('');
   const { publicKey, sendTransaction } = useWallet();
   const connection = new Connection("https://api.devnet.solana.com");
+
+  console.log(sendTransaction);
+
 
   useEffect(() => {
     // Fetch existing treasuries here
@@ -55,6 +58,7 @@ const TreasurySection: React.FC = () => {
       );
 
       const createTx: ReturnType<typeof program.methods.createGovernmentTreasury> = program.methods.createGovernmentTreasury(arkTreasuryName, publicKey);
+      console.log(createTx);
 
       // const tx = createTx.accounts({
       //   treasury: treasuryPda,

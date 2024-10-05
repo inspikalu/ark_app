@@ -78,6 +78,8 @@ const PAOChatInterface: React.FC<PAOChatInterfaceProps> = ({ initialPAO, allPAOs
   }, [selectedPAO]);
 
   const [chatKey, setChatKey] = useState(0);
+  console.log(chatKey);
+
 
   const renderMainContent = () => {
     if (!selectedPAO) {

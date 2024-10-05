@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 
 const { Permission, Permissions } = multisig.types;
+console.log(Permission);
 
 interface CreateMultisigProps {
   onMultisigCreated: (multisigPda: PublicKey, name: string) => void;
