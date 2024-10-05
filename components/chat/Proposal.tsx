@@ -15,7 +15,7 @@ const CreateProposal: React.FC<CreateProposalProps> = ({ multisigPda }) => {
   const { publicKey, sendTransaction } = useWallet();
   const connection = new Connection("https://api.devnet.solana.com");
 
-  const createProposal = useCallback(async () => {
+  export const createProposal = useCallback(async () => {
     if (!publicKey || !multisigPda) {
       toast.error('Please connect your wallet and create a multisig first');
       return;
