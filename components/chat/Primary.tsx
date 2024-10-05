@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiSearch, FiMenu, FiMessageSquare, FiUsers, FiFileText, FiChevronLeft, FiDollarSign, FiPlusCircle, FiInfo, FiCheckCircle, FiLock } from 'react-icons/fi';
 import { useWallet } from '@solana/wallet-adapter-react';
@@ -12,6 +12,7 @@ import { PAO } from './Mock';
 import ErrorBoundary from './ErrorBoundary';
 import TreasurySection from './TreasurySection';
 import ProposalSection from './ProposalSection';
+import ChatMessages from './ChatMessages';
 
 interface Tab {
   id: string;
@@ -57,6 +58,27 @@ const PAOChatInterface: React.FC<PAOChatInterfaceProps> = ({ initialPAO, allPAOs
     { icon: FiDollarSign, label: "Treasury", route: "/multisig" },
   ];
 
+  const handleSendMessage = useCallback((message: string) => {
+    if (!selectedPAO) return;
+
+    const newMessage = {
+      id: Date.now().toString(),
+      text: message,
+      sender: 'You', 
+      timestamp: Date.now(),
+    };
+
+    const storedMessages = localStorage.getItem(`chat_messages_${selectedPAO.id}`);
+    const messages = storedMessages ? JSON.parse(storedMessages) : [];
+    messages.push(newMessage);
+    localStorage.setItem(`chat_messages_${selectedPAO.id}`, JSON.stringify(messages));
+
+    // Force a re-render of the ChatMessages component
+    setChatKey(prevKey => prevKey + 1);
+  }, [selectedPAO]);
+
+  const [chatKey, setChatKey] = useState(0);
+
   const renderMainContent = () => {
     if (!selectedPAO) {
       return (
@@ -100,7 +122,7 @@ const PAOChatInterface: React.FC<PAOChatInterfaceProps> = ({ initialPAO, allPAOs
               <p className="text-center text-gray-500">
                 This is the beginning of your conversation in {selectedPAO.name}
               </p>
-              {/* Add chat messages here */}
+              <ChatMessages paoId={selectedPAO.id.toString()} />
             </div>
           )}
           {activeTab === 'proposals' && (
@@ -122,7 +144,9 @@ const PAOChatInterface: React.FC<PAOChatInterfaceProps> = ({ initialPAO, allPAOs
             </div>
           )}
         </div>
-        {activeTab === 'chat' && selectedPAO && <MessageInput />}
+        {activeTab === 'chat' && selectedPAO && (
+          <MessageInput onSendMessage={handleSendMessage} />
+        )}
       </>
     );
   };

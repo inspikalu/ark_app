@@ -9,7 +9,11 @@ const ReactMediaRecorder = dynamic(() => import('react-media-recorder').then(mod
   ssr: false
 });
 
-const MessageInput: React.FC = () => {
+interface MessageInputProps {
+  onSendMessage: (message: string) => void;
+}
+
+const MessageInput: React.FC<MessageInputProps> = ({ onSendMessage }) => {
   const [message, setMessage] = useState<string>('');
   const [showEmojiPicker, setShowEmojiPicker] = useState<boolean>(false);
   const [showActionButtons, setShowActionButtons] = useState<boolean>(false);
@@ -21,7 +25,7 @@ const MessageInput: React.FC = () => {
 
   const handleSendMessage = () => {
     if (message.trim()) {
-      console.log('Sending message:', message);
+      onSendMessage(message);
       setMessage('');
     }
   };
@@ -54,6 +58,11 @@ const MessageInput: React.FC = () => {
           type="text"
           value={message}
           onChange={(e: ChangeEvent<HTMLInputElement>) => setMessage(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              handleSendMessage();
+            }
+          }}
           placeholder="Type a message..."
           className="flex-1 p-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-500"
           aria-label="Message input"
@@ -104,7 +113,7 @@ const MessageInput: React.FC = () => {
           exit={{ opacity: 0, y: 10 }}
           className="absolute bottom-full mb-2 bg-white rounded-lg shadow-lg p-2 flex space-x-2"
         >
-        <motion.button
+          <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => fileInputRef.current?.click()}
