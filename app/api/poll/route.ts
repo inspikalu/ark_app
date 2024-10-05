@@ -17,7 +17,7 @@ export async function GET(req: Request) {
     type: "action",
     description: "Create a new poll",
     title: "Poll Creation",
-    icon: new URL("/images/poll-icon.jpg", new URL(req.url).origin).toString(),
+    icon: new URL("/images/ark.jpg", new URL(req.url).origin).toString(),
     links: {
       actions: [
         {
