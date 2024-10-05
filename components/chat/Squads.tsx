@@ -21,6 +21,14 @@ import AddSpendingLimit from './SpendingLimit';
 import RemoveSpendingLimit from './RemoveSpendingLimit';
 import SetRentCollector from './SetRentCollector';
 
+interface Proposal {
+  id: string;
+  name: string;
+  description: string;
+  status: 'Active' | 'Approved' | 'Rejected';
+  type: 'Squads' | 'ARK';
+  transactionIndex: number;
+}
 
 interface DataPoint {
   month: string;
@@ -60,6 +68,7 @@ const Dashboard: React.FC = () => {
   const [recipient, setRecipient] = useState<string>('');
   const [amount, setAmount] = useState<string>('');
   const [data, setData] = useState<DataPoint[]>(generateData());
+  const [proposals, setProposals] = useState<Proposal[]>([]);
   const [multisigPda, setMultisigPda] = useState<PublicKey | null>(null);
   const { publicKey, sendTransaction } = useWallet();
   const connection = new Connection("https://api.devnet.solana.com");
@@ -76,6 +85,15 @@ const Dashboard: React.FC = () => {
       setBalance(balance / LAMPORTS_PER_SOL);
     }
   }, [publicKey, connection]);
+
+  const handleProposalCreated = useCallback((newProposal: { name: string; description: string; transactionIndex: number }) => {
+    setProposals(prev => [...prev, {
+      ...newProposal,
+      id: String(prev.length + 1),
+      status: 'Active',
+      type: 'Squads'
+    }]);
+  }, []);
 
   const handleSend = useCallback(async () => {
     if (!publicKey) {
@@ -172,7 +190,31 @@ const Dashboard: React.FC = () => {
       </motion.div>
       <CreateMultisig onMultisigCreated={handleMultisigCreated} />
       <CreateVaultTransaction multisigPda={multisigPda} />
-      <CreateProposal multisigPda={multisigPda} />
+      <CreateProposal 
+        multisigPda={multisigPda} 
+        onProposalCreated={handleProposalCreated}
+      />
+
+    <div className="mt-8">
+        <h2 className="text-2xl font-semibold mb-4 text-teal-800">Proposals</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {proposals.map((proposal) => (
+            <motion.div
+              key={proposal.id}
+              className="bg-white p-4 rounded-lg shadow"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <h3 className="text-lg font-semibold">{proposal.name}</h3>
+              <p className="text-sm text-gray-600">{proposal.description}</p>
+              <p className={`text-sm ${proposal.status === 'Active' ? 'text-yellow-500' : proposal.status === 'Approved' ? 'text-green-500' : 'text-red-500'}`}>
+                {proposal.status}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <ApproveProposal multisigPda={multisigPda} />
         <RejectProposal multisigPda={multisigPda} />

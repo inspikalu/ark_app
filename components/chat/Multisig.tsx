@@ -1,6 +1,4 @@
-"use client"
-
-import React, { useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection, PublicKey, Transaction, Keypair } from '@solana/web3.js';
 import * as multisig from "@sqds/multisig";
@@ -10,14 +8,20 @@ import { motion } from 'framer-motion';
 const { Permission, Permissions } = multisig.types;
 
 interface CreateMultisigProps {
-  onMultisigCreated: (multisigPda: PublicKey) => void;
+  onMultisigCreated: (multisigPda: PublicKey, name: string) => void;
 }
 
 const CreateMultisig: React.FC<CreateMultisigProps> = ({ onMultisigCreated }) => {
   const { publicKey, sendTransaction } = useWallet();
   const connection = new Connection("https://api.devnet.solana.com");
 
-  const createMultisig = useCallback(async () => {
+  const [name, setName] = useState('');
+  const [memberCount, setMemberCount] = useState(2);
+  const [members, setMembers] = useState(['', '']);
+  const [threshold, setThreshold] = useState(2);
+
+  const createMultisig = useCallback(async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!publicKey) {
       toast.error('Please connect your wallet first');
       return;
@@ -35,23 +39,19 @@ const CreateMultisig: React.FC<CreateMultisigProps> = ({ onMultisigCreated }) =>
 
       const configTreasury = programConfig.treasury;
 
+      const membersList = members.map(member => ({
+        key: new PublicKey(member),
+        permissions: Permissions.all(),
+      }));
+
       const ix = await multisig.instructions.multisigCreateV2({
         createKey: createKey,
         creator: publicKey,
         multisigPda,
         configAuthority: null,
         timeLock: 0,
-        members: [
-          {
-            key: publicKey,
-            permissions: Permissions.all(),
-          },
-          {
-            key: Keypair.generate().publicKey, // Placeholder for second member
-            permissions: Permissions.fromPermissions([Permission.Vote]),
-          },
-        ],
-        threshold: 2,
+        members: membersList,
+        threshold,
         treasury: configTreasury,
         rentCollector: null
       });
@@ -59,13 +59,19 @@ const CreateMultisig: React.FC<CreateMultisigProps> = ({ onMultisigCreated }) =>
       const transaction = new Transaction().add(ix);
       const signature = await sendTransaction(transaction, connection);
       await connection.confirmTransaction(signature, 'confirmed');
-      onMultisigCreated(multisigPda);
+      onMultisigCreated(multisigPda, name);
       toast.success('Multisig created successfully!');
     } catch (error) {
       toast.error('Error creating multisig');
       console.error('Error:', error instanceof Error ? error.message : String(error));
     }
-  }, [publicKey, connection, sendTransaction, onMultisigCreated]);
+  }, [publicKey, connection, sendTransaction, onMultisigCreated, name, members, threshold]);
+
+  const handleMemberChange = (index: number, value: string) => {
+    const newMembers = [...members];
+    newMembers[index] = value;
+    setMembers(newMembers);
+  };
 
   return (
     <motion.div
@@ -75,14 +81,58 @@ const CreateMultisig: React.FC<CreateMultisigProps> = ({ onMultisigCreated }) =>
       transition={{ duration: 0.5 }}
     >
       <h2 className="text-2xl font-semibold mb-4 text-teal-800">Create Multisig</h2>
-      <motion.button
-        onClick={createMultisig}
-        className="bg-teal-600 text-white px-4 py-2 rounded"
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        Create Multisig
-      </motion.button>
+      <form onSubmit={createMultisig}>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Multisig Name"
+          className="w-full p-2 mb-4 border rounded"
+          required
+        />
+        <input
+          type="number"
+          value={memberCount}
+          onChange={(e) => {
+            const count = parseInt(e.target.value);
+            setMemberCount(count);
+            setMembers(Array(count).fill(''));
+          }}
+          min="2"
+          placeholder="Number of Members"
+          className="w-full p-2 mb-4 border rounded"
+          required
+        />
+        {members.map((member, index) => (
+          <input
+            key={index}
+            type="text"
+            value={member}
+            onChange={(e) => handleMemberChange(index, e.target.value)}
+            placeholder={`Member ${index + 1} Public Key`}
+            className="w-full p-2 mb-4 border rounded"
+            required
+          />
+        ))}
+        <input
+          type="number"
+          value={threshold}
+          onChange={(e) => setThreshold(parseInt(e.target.value))}
+          min="1"
+          max={memberCount}
+          placeholder="Threshold"
+          className="w-full p-2 mb-4 border rounded"
+          required
+        />
+        <motion.button
+          type="submit"
+          className="bg-teal-600 text-white px-4 py-2 rounded w-full"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Create Multisig
+        </motion.button>
+      </form>
     </motion.div>
   );
 };
