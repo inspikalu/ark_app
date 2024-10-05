@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiSearch, FiMenu, FiMessageSquare, FiUsers, FiFileText, FiChevronLeft, FiDollarSign, FiPlusCircle, FiInfo } from 'react-icons/fi';
+import { FiSearch, FiMenu, FiMessageSquare, FiUsers, FiFileText, FiChevronLeft, FiDollarSign, FiPlusCircle, FiInfo, FiCheckCircle, FiLock } from 'react-icons/fi';
 import { useWallet } from '@solana/wallet-adapter-react';
 import CreatePAOModal from './PAOModal';
 import MessageInput from './MessageInput';
@@ -10,6 +10,8 @@ import { IconType } from 'react-icons';
 import { useRouter } from 'next/navigation';
 import { PAO } from './Mock';
 import ErrorBoundary from './ErrorBoundary';
+import TreasurySection from './TreasurySection';
+import ProposalSection from './ProposalSection';
 
 interface Tab {
   id: string;
@@ -48,6 +50,12 @@ const PAOChatInterface: React.FC<PAOChatInterfaceProps> = ({ initialPAO, allPAOs
       router.push('/chat');
     }
   }, [selectedPAO, router]);
+
+  const appStoreIcons = [
+    { icon: FiCheckCircle, label: "Verify", route: "/verify" },
+    { icon: FiLock, label: "Escrow", route: "/escrow" },
+    { icon: FiDollarSign, label: "Treasury", route: "/multisig" },
+  ];
 
   const renderMainContent = () => {
     if (!selectedPAO) {
@@ -98,7 +106,7 @@ const PAOChatInterface: React.FC<PAOChatInterfaceProps> = ({ initialPAO, allPAOs
           {activeTab === 'proposals' && (
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Active Proposals</h3>
-              {/* Add proposal list here */}
+              <ProposalSection />
             </div>
           )}
           {activeTab === 'members' && (
@@ -110,7 +118,7 @@ const PAOChatInterface: React.FC<PAOChatInterfaceProps> = ({ initialPAO, allPAOs
           {activeTab === 'treasuries' && (
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">PAO Treasuries</h3>
-              {/* Add treasuries information here */}
+              <TreasurySection />
             </div>
           )}
         </div>
@@ -122,6 +130,21 @@ const PAOChatInterface: React.FC<PAOChatInterfaceProps> = ({ initialPAO, allPAOs
   return (
     <ErrorBoundary>
       <div className="flex h-screen bg-gradient-to-br from-teal-100 to-blue-100">
+          {/* App Store Icons */}
+          <div className="w-16 bg-white shadow-lg flex flex-col items-center py-4">
+          {appStoreIcons.map((icon, index) => (
+            <motion.div
+              key={index}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => router.push(icon.route)}
+              className="cursor-pointer mb-4"
+            >
+              {React.createElement(icon.icon, { size: 24, className: "text-teal-600" })}
+              <span className="text-xs text-center mt-1">{icon.label}</span>
+            </motion.div>
+          ))}
+        </div>
         {/* Left Sidebar (Chat List) */}
         <motion.div 
           className="bg-white shadow-lg"

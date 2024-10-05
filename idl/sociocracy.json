@@ -239,10 +239,6 @@
           "signer": true
         },
         {
-          "name": "parent_circle",
-          "optional": true
-        },
-        {
           "name": "nft_mint",
           "writable": true,
           "optional": true
@@ -1478,32 +1474,8 @@
             }
           },
           {
-            "name": "polls",
-            "type": "u64"
-          },
-          {
-            "name": "approved",
-            "type": "u64"
-          },
-          {
-            "name": "rejected",
-            "type": "u64"
-          },
-          {
-            "name": "points",
-            "type": "u64"
-          },
-          {
-            "name": "created_at",
+            "name": "initialized_at",
             "type": "i64"
-          },
-          {
-            "name": "auth_bump",
-            "type": "u8"
-          },
-          {
-            "name": "state_bump",
-            "type": "u8"
           }
         ]
       }
@@ -1516,12 +1488,6 @@
           {
             "name": "name",
             "type": "string"
-          },
-          {
-            "name": "parent_circle",
-            "type": {
-              "option": "pubkey"
-            }
           },
           {
             "name": "members",
@@ -1773,12 +1739,6 @@
           {
             "name": "description",
             "type": "string"
-          },
-          {
-            "name": "parent_circle",
-            "type": {
-              "option": "pubkey"
-            }
           },
           {
             "name": "circle_type",

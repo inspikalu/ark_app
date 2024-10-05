@@ -113,7 +113,6 @@ const SociocracyCreationForm: React.FC<SociocracyCreationFormProps> = ({ governa
       const tx = await program.methods.createSociocracyCircle({
         name: circleForm.name,
         description: circleForm.description,
-        parentCircle: circleForm.parent_circle ? new PublicKey(circleForm.parent_circle) : null,
         circleType: { [circleForm.circle_type]: {} },
         nftConfig,
         splConfig,
@@ -127,8 +126,6 @@ const SociocracyCreationForm: React.FC<SociocracyCreationFormProps> = ({ governa
       .accounts({
         circle: circlePda,
         payer: wallet.publicKey,
-        ...(circleForm.parent_circle ? { parentCircle: new PublicKey(circleForm.parent_circle) } : {}),
-        // parentCircle: circleForm.parent_circle ? new PublicKey(circleForm.parent_circle) : null,
         nftMint: nftConfig.tokenMint,
         splMint: splConfig.tokenMint,
         systemProgram: web3.SystemProgram.programId,
@@ -202,10 +199,10 @@ const SociocracyCreationForm: React.FC<SociocracyCreationFormProps> = ({ governa
               <option value="Department">Department</option>
             </select>
           </div>
-          <div>
+          {/* <div>
             <label htmlFor="parent_circle" className="block text-gray-700 mb-2">Parent Circle (optional)</label>
             <input type="text" id="parent_circle" name="parent_circle" value={circleForm.parent_circle} onChange={handleInputChange} className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3" placeholder="Parent Circle Public Key" />
-          </div>
+          </div> */}
           <div>
             <label htmlFor="nft_symbol" className="block text-gray-700 mb-2">NFT Symbol</label>
             <input type="text" id="nft_symbol" name="nft_symbol" required value={circleForm.nft_symbol} onChange={handleInputChange} className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3" />
