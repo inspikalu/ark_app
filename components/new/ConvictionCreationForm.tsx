@@ -10,7 +10,7 @@ import { FiCheck, FiX } from 'react-icons/fi';
 // Import your IDL
 import idl from '../../idl/conviction.json';
 
-const PROGRAM_ID = new PublicKey('ATsZoBzoVyPF97HLn9kt2ffNSGcnYwUApbNxfsVknNVr');
+// const PROGRAM_ID = new PublicKey('ATsZoBzoVyPF97HLn9kt2ffNSGcnYwUApbNxfsVknNVr');
 
 interface ConvictionCreationFormProps {
   governanceType: 'conviction';
@@ -26,6 +26,8 @@ const ConvictionCreationForm: React.FC<ConvictionCreationFormProps> = ({ governa
   const router = useRouter();
   const { connection } = useConnection();
   const wallet = useWallet();
+  console.log(governanceType);
+
 
   const [daoForm, setDaoForm] = useState({
     name: '',

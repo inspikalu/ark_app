@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection, PublicKey} from '@solana/web3.js';
-import { Program, AnchorProvider, web3 } from '@coral-xyz/anchor';
+import { Program, AnchorProvider } from '@coral-xyz/anchor';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiX, FiPlus } from 'react-icons/fi';
+import { FiX } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import CreateMultisig from './Multisig';
 import idl from '../../idl/the_ark_program.json';
-import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
 
-const PROGRAM_ID = new PublicKey('48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V');
+// const PROGRAM_ID = new PublicKey('48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V');
 
 interface Treasury {
   name: string;
@@ -25,6 +24,9 @@ const TreasurySection: React.FC = () => {
   const [arkTreasuryName, setArkTreasuryName] = useState('');
   const { publicKey, sendTransaction } = useWallet();
   const connection = new Connection("https://api.devnet.solana.com");
+
+  console.log(sendTransaction);
+
 
   useEffect(() => {
     // Fetch existing treasuries here
@@ -56,22 +58,23 @@ const TreasurySection: React.FC = () => {
       );
 
       const createTx: ReturnType<typeof program.methods.createGovernmentTreasury> = program.methods.createGovernmentTreasury(arkTreasuryName, publicKey);
+      console.log(createTx);
 
-      const tx = createTx.accounts({
-        treasury: treasuryPda,
-        owner: publicKey,
-        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        systemProgram: web3.SystemProgram.programId,
-        rent: web3.SYSVAR_RENT_PUBKEY,
-      });
+      // const tx = createTx.accounts({
+      //   treasury: treasuryPda,
+      //   owner: publicKey,
+      //   associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+      //   tokenProgram: TOKEN_PROGRAM_ID,
+      //   systemProgram: web3.SystemProgram.programId,
+      //   rent: web3.SYSVAR_RENT_PUBKEY,
+      // });
       
-      const signature = await tx.rpc();
+      // const signature = await tx.rpc();
 
       setTreasuries(prev => [...prev, { name: arkTreasuryName, address: treasuryPda.toBase58(), type: 'ARK' }]);
       setIsArkModalOpen(false);
       setArkTreasuryName('');
-      console.log("ARK Treasury created successfully!. Transaction signature", signature);
+      // console.log("ARK Treasury created successfully!. Transaction signature", signature);
       toast.success('ARK Treasury created successfully!');
     } catch (error) {
       toast.error('Error creating ARK Treasury');

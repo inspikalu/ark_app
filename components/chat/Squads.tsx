@@ -73,6 +73,9 @@ const Dashboard: React.FC = () => {
   const { publicKey, sendTransaction } = useWallet();
   const connection = new Connection("https://api.devnet.solana.com");
 
+  console.log(setData);
+
+
   useEffect(() => {
     if (publicKey) {
       updateBalance();

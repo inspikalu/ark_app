@@ -27,7 +27,7 @@ const CancelProposal: React.FC<CancelProposalProps> = ({ multisigPda }) => {
         connection,
         multisigPda
       );
-
+      console.log(multisigInfo);
       const currentTransactionIndex = BigInt(transactionIndex);
 
       const ix = await multisig.instructions.proposalCancel({

@@ -9,12 +9,12 @@ import { FiDollarSign, FiUser, FiCalendar, FiCheckCircle, FiBook, FiX } from 're
 import idl from '../../idl/standard.json';
 import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
-const programID = new PublicKey("7aQvq1fEiDXqK36H7mW8MSTGdnHn6XAHDd9pauZwZXGQ");
+// const programID = new PublicKey("7aQvq1fEiDXqK36H7mW8MSTGdnHn6XAHDd9pauZwZXGQ");
 
 type StandardIDL = Idl & {
   accounts: {
-    escrow: any;
-    market: any;
+    escrow: PublicKey;
+    market: PublicKey;
   };
 };
 
@@ -40,8 +40,13 @@ const EscrowUI: React.FC = () => {
   const wallet = useAnchorWallet();
   const [provider, setProvider] = useState<AnchorProvider | null>(null);
   const [program, setProgram] = useState<Program<StandardIDL> | null>(null);
+  console.log(provider);
+
   const [transactionSignature, setTransactionSignature] = useState<string | null>(null);
+  console.log(transactionSignature);
+
   const [escrowType, setEscrowType] = useState<EscrowType>(null);
+  
   const [conditionalData, setConditionalData] = useState<ConditionalEscrowData>({
     amount: '',
     recipient: '',

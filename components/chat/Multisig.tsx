@@ -1,11 +1,12 @@
 import React, { useState, useCallback } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { Connection, PublicKey, Transaction, Keypair } from '@solana/web3.js';
+import { Connection, PublicKey, Transaction } from '@solana/web3.js';
 import * as multisig from "@sqds/multisig";
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 
 const { Permission, Permissions } = multisig.types;
+console.log(Permission);
 
 interface CreateMultisigProps {
   onMultisigCreated: (multisigPda: PublicKey, name: string) => void;
@@ -28,8 +29,7 @@ const CreateMultisig: React.FC<CreateMultisigProps> = ({ onMultisigCreated }) =>
     }
 
     try {
-      const createKey = Keypair.generate().publicKey;
-      const [multisigPda] = multisig.getMultisigPda({ createKey });
+      const [multisigPda] = multisig.getMultisigPda({ createKey: publicKey });
       const [programConfigPda] = multisig.getProgramConfigPda({});
 
       const programConfig = await multisig.accounts.ProgramConfig.fromAccountAddress(
@@ -45,7 +45,7 @@ const CreateMultisig: React.FC<CreateMultisigProps> = ({ onMultisigCreated }) =>
       }));
 
       const ix = await multisig.instructions.multisigCreateV2({
-        createKey: createKey,
+        createKey: publicKey,
         creator: publicKey,
         multisigPda,
         configAuthority: null,

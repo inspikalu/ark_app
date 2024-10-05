@@ -21,6 +21,9 @@ const AddSpendingLimit: React.FC<AddSpendingLimitProps> = ({ multisigPda }) => {
   const { publicKey, sendTransaction } = useWallet();
   const connection = new Connection("https://api.devnet.solana.com");
 
+  console.log(setPeriod);
+
+
   const addSpendingLimit = useCallback(async () => {
     if (!publicKey || !multisigPda) {
       toast.error('Please connect your wallet and create a multisig first');
@@ -34,6 +37,9 @@ const AddSpendingLimit: React.FC<AddSpendingLimitProps> = ({ multisigPda }) => {
         multisigPda,
         createKey: spendingLimitCreateKey,
       });
+
+      console.log(spendingLimitPda);
+
 
       // Get deserialized multisig account info
       const multisigInfo = await multisig.accounts.Multisig.fromAccountAddress(

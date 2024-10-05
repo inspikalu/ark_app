@@ -26,6 +26,7 @@ const ExecuteVaultTransaction: React.FC<ExecuteVaultTransactionProps> = ({ multi
         connection,
         multisigPda
       );
+      console.log(multisigInfo);
 
     try {
     const currentTransactionIndex = BigInt(transactionIndex);
@@ -36,6 +37,7 @@ const ExecuteVaultTransaction: React.FC<ExecuteVaultTransactionProps> = ({ multi
         transactionIndex: currentTransactionIndex,
         member: publicKey,
       });
+      console.log(lookupTableAccounts);
 
       const transaction = new Transaction().add(instruction);
       const signature = await sendTransaction(transaction, connection);
@@ -46,6 +48,7 @@ const ExecuteVaultTransaction: React.FC<ExecuteVaultTransactionProps> = ({ multi
       console.error('Error:', error instanceof Error ? error.message : String(error));
     }
   }, [publicKey, multisigPda, connection, sendTransaction, transactionIndex]);
+
 
   return (
     <motion.div
