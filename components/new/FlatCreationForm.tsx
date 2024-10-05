@@ -6,6 +6,7 @@ import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
 import { AnchorProvider, Program, web3, BN } from '@coral-xyz/anchor';
 import { FiCheck, FiX } from 'react-icons/fi';
+import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
 // Import your IDL
 import idl from '../../idl/flat_dao.json';
@@ -86,6 +87,28 @@ const FlatDaoCreationForm: React.FC<FlatDaoCreationFormProps> = ({ governanceTyp
 
     try {
       const mint = new PublicKey(daoForm.mintAddress);
+      const [analyticsPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("analytics")],
+        program.programId
+      );
+      
+      const [authPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("auth"), analyticsPda.toBuffer()],
+        program.programId
+      );
+
+      const [daoPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("dao"), wallet.publicKey.toBuffer(), mint.toBuffer()],
+        program.programId
+      );
+
+      const [vaultPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("vault"), wallet.publicKey.toBuffer(), mint.toBuffer()],
+        program.programId
+      );
+
+      const signerAta = await getAssociatedTokenAddress(mint, wallet.publicKey)
+
       const tx = await program.methods.daoCreate({
         time: { [daoForm.time]: {} },
         threshold: Number(daoForm.threshold),
@@ -94,14 +117,14 @@ const FlatDaoCreationForm: React.FC<FlatDaoCreationFormProps> = ({ governanceTyp
       })
       .accounts({
         creator: wallet.publicKey,
-        auth: PublicKey.findProgramAddressSync([Buffer.from("auth"), program.programId.toBuffer()], program.programId)[0],
-        dao: PublicKey.findProgramAddressSync([Buffer.from("dao"), wallet.publicKey.toBuffer(), mint.toBuffer()], program.programId)[0],
-        signerAta: PublicKey.findProgramAddressSync([wallet.publicKey.toBuffer(), new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA").toBuffer(), mint.toBuffer()], new PublicKey("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"))[0],
+        auth: authPda,
+        dao: daoPda,
+        signerAta: signerAta,
         mint: mint,
-        vault: PublicKey.findProgramAddressSync([Buffer.from("vault"), wallet.publicKey.toBuffer(), mint.toBuffer()], program.programId)[0],
-        analytics: PublicKey.findProgramAddressSync([Buffer.from("analytics")], program.programId)[0],
-        tokenProgram: new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"),
-        associatedTokenProgram: new PublicKey("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"),
+        vault: vaultPda,
+        analytics: analyticsPda,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         systemProgram: web3.SystemProgram.programId,
       })
       .rpc();

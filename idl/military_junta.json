@@ -320,6 +320,78 @@
       ]
     },
     {
+      "name": "create_junta_invite",
+      "discriminator": [
+        67,
+        88,
+        250,
+        44,
+        156,
+        238,
+        169,
+        147
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "invite",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  106,
+                  117,
+                  110,
+                  116,
+                  97,
+                  95,
+                  105,
+                  110,
+                  118,
+                  105,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "junta"
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              },
+              {
+                "kind": "account",
+                "path": "junta.total_subjects",
+                "account": "Junta"
+              }
+            ]
+          }
+        },
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "expiration_days",
+          "type": "u64"
+        }
+      ]
+    },
+    {
       "name": "create_treasury",
       "discriminator": [
         254,
@@ -1052,11 +1124,6 @@
         },
         {
           "name": "spl_mint",
-          "writable": true,
-          "optional": true
-        },
-        {
-          "name": "sbt_mint",
           "writable": true,
           "optional": true
         },
@@ -2194,6 +2261,163 @@
           "type": "pubkey"
         }
       ]
+    },
+    {
+      "name": "use_junta_invite",
+      "discriminator": [
+        42,
+        174,
+        76,
+        11,
+        218,
+        216,
+        174,
+        239
+      ],
+      "accounts": [
+        {
+          "name": "junta",
+          "writable": true
+        },
+        {
+          "name": "invite",
+          "writable": true
+        },
+        {
+          "name": "citizen",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  105,
+                  116,
+                  105,
+                  122,
+                  101,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "junta"
+              },
+              {
+                "kind": "account",
+                "path": "new_member"
+              }
+            ]
+          }
+        },
+        {
+          "name": "new_member",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "member_token_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "new_member"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance_token_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "governance_token_mint"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -2250,6 +2474,19 @@
       ]
     },
     {
+      "name": "JuntaInvite",
+      "discriminator": [
+        225,
+        130,
+        161,
+        12,
+        83,
+        123,
+        45,
+        170
+      ]
+    },
+    {
       "name": "Officer",
       "discriminator": [
         89,
@@ -2290,6 +2527,32 @@
     }
   ],
   "events": [
+    {
+      "name": "CitizenAddedToJunta",
+      "discriminator": [
+        56,
+        41,
+        26,
+        246,
+        49,
+        138,
+        58,
+        85
+      ]
+    },
+    {
+      "name": "JuntaInviteCreated",
+      "discriminator": [
+        15,
+        126,
+        110,
+        135,
+        69,
+        42,
+        61,
+        191
+      ]
+    },
     {
       "name": "MemberAdded",
       "discriminator": [
@@ -2385,158 +2648,173 @@
   "errors": [
     {
       "code": 6000,
-      "name": "Unauthorized",
-      "msg": "Invalid authority."
-    },
-    {
-      "code": 6001,
       "name": "TooManyOfficers",
       "msg": "Too many officers. Maximum number is 10."
     },
     {
-      "code": 6002,
+      "code": 6001,
       "name": "MaxRebelsReached",
       "msg": "The maximum amount of 10 rebels have been reached."
     },
     {
-      "code": 6003,
+      "code": 6002,
       "name": "MaxSupportersReached",
       "msg": "The maximum amount of 100 rebels have been reached."
     },
     {
-      "code": 6004,
+      "code": 6003,
       "name": "RebelNotFound",
       "msg": "This rebel does not exist."
     },
     {
-      "code": 6005,
+      "code": 6004,
       "name": "InvalidTarget",
       "msg": "e started specified is invalid."
     },
     {
-      "code": 6006,
+      "code": 6005,
       "name": "NotEnoughRebels",
       "msg": "More rebels are needed for a rebellion to start."
     },
     {
-      "code": 6007,
+      "code": 6006,
       "name": "InsufficientResources",
       "msg": "Not enough resources."
     },
     {
-      "code": 6008,
+      "code": 6007,
       "name": "InvalidSupporter",
       "msg": "Not a valid supporter."
     },
     {
-      "code": 6009,
+      "code": 6008,
       "name": "InsufficientSupporters",
       "msg": "Not enough supporters."
     },
     {
-      "code": 6010,
+      "code": 6009,
       "name": "SupporterIsDissident",
       "msg": "The supporter is a dissident."
     },
     {
-      "code": 6011,
+      "code": 6010,
       "name": "TooManyDecrees",
       "msg": "Too many decrees. Maximum number is 100."
     },
     {
-      "code": 6012,
+      "code": 6011,
       "name": "InvalidLeader",
       "msg": "Not the valid new leader"
     },
     {
-      "code": 6013,
+      "code": 6012,
       "name": "MintFailed",
       "msg": "Failed to mint NFT"
     },
     {
-      "code": 6014,
+      "code": 6013,
       "name": "SupplyReached",
       "msg": "Supply has reached the maximum limit"
     },
     {
-      "code": 6015,
+      "code": 6014,
       "name": "UnauthorizedSigner",
       "msg": "Unauthorized Signer"
     },
     {
-      "code": 6016,
+      "code": 6015,
       "name": "SameUserAccounts",
       "msg": "Same user accounts "
     },
     {
-      "code": 6017,
+      "code": 6016,
       "name": "Overflow",
       "msg": "Overflow error"
     },
     {
-      "code": 6018,
+      "code": 6017,
       "name": "Underflow",
       "msg": "Underflow error"
     },
     {
-      "code": 6019,
+      "code": 6018,
       "name": "ExceedsSupply",
       "msg": "Exceeeds maximum supply "
     },
     {
-      "code": 6020,
+      "code": 6019,
       "name": "InvalidJuntaVault",
       "msg": "Invalid Junta Vault "
     },
     {
-      "code": 6021,
+      "code": 6020,
       "name": "SupportAmountsArrayFull",
       "msg": "The maximum size of support has been met"
     },
     {
-      "code": 6022,
+      "code": 6021,
       "name": "MissingAccount",
       "msg": "Account is missing"
     },
     {
-      "code": 6023,
+      "code": 6022,
       "name": "MissingRequiredAccount",
       "msg": "Account required is missing"
     },
     {
-      "code": 6024,
+      "code": 6023,
       "name": "InvalidMint",
       "msg": "Mint is not valid"
     },
     {
-      "code": 6025,
+      "code": 6024,
       "name": "MissingNFTConfig",
       "msg": "Miissing NFT config"
     },
     {
-      "code": 6026,
+      "code": 6025,
       "name": "MissingSPLConfig",
       "msg": "Missing spl config"
     },
     {
-      "code": 6027,
+      "code": 6026,
       "name": "NoJuntaTokenSpecified",
       "msg": "No Junta token specified"
     },
     {
-      "code": 6028,
+      "code": 6027,
       "name": "InsufficientTokens",
       "msg": "Insufficient tokens to join junta"
     },
     {
-      "code": 6029,
+      "code": 6028,
       "name": "AlreadyMember",
       "msg": "Already a member of this junta"
     },
     {
+      "code": 6029,
+      "name": "InviteAlreadyUsed",
+      "msg": "This invite has already been used"
+    },
+    {
       "code": 6030,
+      "name": "InviteExpired",
+      "msg": "This invite has expired"
+    },
+    {
+      "code": 6031,
+      "name": "InvalidInvite",
+      "msg": "Invalid invite for this Junta"
+    },
+    {
+      "code": 6032,
+      "name": "Unauthorized",
+      "msg": "Unauthorized to perform this action"
+    },
+    {
+      "code": 6033,
       "name": "ArithmeticError",
-      "msg": "Arithmetic Error"
+      "msg": "Arithmetic error occurred"
     }
   ],
   "types": [
@@ -2624,6 +2902,30 @@
           {
             "name": "bump",
             "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CitizenAddedToJunta",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "junta",
+            "type": "pubkey"
+          },
+          {
+            "name": "citizen",
+            "type": "pubkey"
+          },
+          {
+            "name": "governance_power",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
           }
         ]
       }
@@ -2782,10 +3084,6 @@
                 "name": "PrimaryJuntaToken"
               }
             }
-          },
-          {
-            "name": "initialize_sbt",
-            "type": "bool"
           }
         ]
       }
@@ -2936,6 +3234,68 @@
           {
             "name": "bump",
             "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "JuntaInvite",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "junta",
+            "type": "pubkey"
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "expires_at",
+            "type": "i64"
+          },
+          {
+            "name": "is_used",
+            "type": "bool"
+          },
+          {
+            "name": "used_by",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "JuntaInviteCreated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "junta",
+            "type": "pubkey"
+          },
+          {
+            "name": "invite",
+            "type": "pubkey"
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "expires_at",
+            "type": "i64"
           }
         ]
       }

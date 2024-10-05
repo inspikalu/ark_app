@@ -221,36 +221,6 @@
       ]
     },
     {
-      "name": "init_escrow",
-      "discriminator": [
-        70,
-        46,
-        40,
-        23,
-        6,
-        11,
-        81,
-        139
-      ],
-      "accounts": [
-        {
-          "name": "escrow_info",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "signer",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "system_program",
-          "address": "11111111111111111111111111111111"
-        }
-      ],
-      "args": []
-    },
-    {
       "name": "initialize_ark",
       "discriminator": [
         105,
@@ -332,79 +302,6 @@
       ]
     },
     {
-      "name": "register_services",
-      "discriminator": [
-        87,
-        91,
-        196,
-        20,
-        32,
-        98,
-        178,
-        243
-      ],
-      "accounts": [
-        {
-          "name": "escrow_info",
-          "writable": true
-        },
-        {
-          "name": "service_provider",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "token_program",
-          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
-        }
-      ],
-      "args": [
-        {
-          "name": "services_address",
-          "type": "pubkey"
-        }
-      ]
-    },
-    {
-      "name": "register_trades",
-      "discriminator": [
-        158,
-        158,
-        136,
-        195,
-        59,
-        51,
-        214,
-        18
-      ],
-      "accounts": [
-        {
-          "name": "escrow_info",
-          "writable": true
-        },
-        {
-          "name": "party_a",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "party_b",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "token_program",
-          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
-        }
-      ],
-      "args": [
-        {
-          "name": "trade_address",
-          "type": "pubkey"
-        }
-      ]
-    },
-    {
       "name": "update_analytics",
       "discriminator": [
         154,
@@ -447,19 +344,6 @@
         77,
         25,
         117
-      ]
-    },
-    {
-      "name": "EscrowInfo",
-      "discriminator": [
-        137,
-        170,
-        26,
-        57,
-        81,
-        19,
-        181,
-        233
       ]
     },
     {
@@ -564,42 +448,6 @@
           {
             "name": "state_bump",
             "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "EscrowInfo",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "total_trades",
-            "type": "u64"
-          },
-          {
-            "name": "trades",
-            "type": {
-              "vec": "pubkey"
-            }
-          },
-          {
-            "name": "services",
-            "type": {
-              "vec": "pubkey"
-            }
-          },
-          {
-            "name": "total_services",
-            "type": "u64"
-          },
-          {
-            "name": "total_fees_collected",
-            "type": "u64"
-          },
-          {
-            "name": "total_amount_transferred",
-            "type": "u64"
           }
         ]
       }

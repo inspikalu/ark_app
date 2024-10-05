@@ -542,6 +542,83 @@
       ]
     },
     {
+      "name": "create_polycentric_governance_invite",
+      "discriminator": [
+        39,
+        227,
+        223,
+        193,
+        185,
+        91,
+        120,
+        158
+      ],
+      "accounts": [
+        {
+          "name": "governance_pool",
+          "writable": true
+        },
+        {
+          "name": "invite",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  103,
+                  111,
+                  118,
+                  101,
+                  114,
+                  110,
+                  97,
+                  110,
+                  99,
+                  101,
+                  95,
+                  105,
+                  110,
+                  118,
+                  105,
+                  116,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance_pool"
+              },
+              {
+                "kind": "account",
+                "path": "creator"
+              },
+              {
+                "kind": "account",
+                "path": "governance_pool.total_participants",
+                "account": "GovernancePool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "creator",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "expiration_days",
+          "type": "u64"
+        }
+      ]
+    },
+    {
       "name": "create_proposal",
       "discriminator": [
         132,
@@ -1200,11 +1277,6 @@
         },
         {
           "name": "spl_mint",
-          "writable": true,
-          "optional": true
-        },
-        {
-          "name": "sbt_mint",
           "writable": true,
           "optional": true
         },
@@ -1926,6 +1998,172 @@
           }
         }
       ]
+    },
+    {
+      "name": "use_polycentric_governance_invite",
+      "discriminator": [
+        211,
+        178,
+        155,
+        41,
+        210,
+        220,
+        238,
+        222
+      ],
+      "accounts": [
+        {
+          "name": "governance_pool",
+          "writable": true
+        },
+        {
+          "name": "invite",
+          "writable": true
+        },
+        {
+          "name": "citizen",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  105,
+                  116,
+                  105,
+                  122,
+                  101,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance_pool"
+              },
+              {
+                "kind": "account",
+                "path": "new_member"
+              }
+            ]
+          }
+        },
+        {
+          "name": "new_member",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "governance_token_mint"
+        },
+        {
+          "name": "member_governance_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "new_member"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance_token_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "rent",
+          "address": "SysvarRent111111111111111111111111111111111"
+        }
+      ],
+      "args": []
     }
   ],
   "accounts": [
@@ -1979,6 +2217,19 @@
         115,
         110,
         93
+      ]
+    },
+    {
+      "name": "GovernanceInvite",
+      "discriminator": [
+        114,
+        109,
+        238,
+        125,
+        174,
+        4,
+        24,
+        196
       ]
     },
     {
@@ -2072,6 +2323,32 @@
         133,
         217,
         248
+      ]
+    },
+    {
+      "name": "CitizenAddedToGovernancePool",
+      "discriminator": [
+        113,
+        70,
+        47,
+        80,
+        195,
+        52,
+        96,
+        245
+      ]
+    },
+    {
+      "name": "GovernanceInviteCreated",
+      "discriminator": [
+        154,
+        30,
+        107,
+        253,
+        162,
+        165,
+        101,
+        148
       ]
     },
     {
@@ -2287,6 +2564,26 @@
       "code": 6031,
       "name": "InsufficientTokens",
       "msg": "Insufficient tokens"
+    },
+    {
+      "code": 6032,
+      "name": "InviteExpired",
+      "msg": "Invite expired"
+    },
+    {
+      "code": 6033,
+      "name": "InviteAlreadyUsed",
+      "msg": "Invite used"
+    },
+    {
+      "code": 6034,
+      "name": "InvalidInvite",
+      "msg": "Invite invalid"
+    },
+    {
+      "code": 6035,
+      "name": "Unauthorized",
+      "msg": "Unauthorized"
     }
   ],
   "types": [
@@ -2505,6 +2802,88 @@
       }
     },
     {
+      "name": "CitizenAddedToGovernancePool",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "governance_pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "citizen",
+            "type": "pubkey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GovernanceInvite",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "governance_pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "expires_at",
+            "type": "i64"
+          },
+          {
+            "name": "is_used",
+            "type": "bool"
+          },
+          {
+            "name": "used_by",
+            "type": {
+              "option": "pubkey"
+            }
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "GovernanceInviteCreated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "governance_pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "invite",
+            "type": "pubkey"
+          },
+          {
+            "name": "creator",
+            "type": "pubkey"
+          },
+          {
+            "name": "expires_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
       "name": "GovernancePool",
       "type": {
         "kind": "struct",
@@ -2646,6 +3025,10 @@
                 "name": "GovernanceTokenType"
               }
             }
+          },
+          {
+            "name": "token_mint",
+            "type": "pubkey"
           }
         ]
       }
@@ -2766,10 +3149,6 @@
                 "name": "PrimaryGovernanceToken"
               }
             }
-          },
-          {
-            "name": "initialize_sbt",
-            "type": "bool"
           },
           {
             "name": "nft_symbol",

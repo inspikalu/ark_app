@@ -1,15 +1,16 @@
 "use client";
-import React, { useState, useEffect, useMemo } from "react";
-import { useRouter, useParams } from "next/navigation";
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-// import { FiUpload } from "react-icons/fi";
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { PublicKey } from '@solana/web3.js';
+import { AnchorProvider, Program, web3, BN } from '@coral-xyz/anchor';
+import { FiCheck, FiX } from 'react-icons/fi';
 import DidYouKnowModal from "./DidYouKnowModal";
 import { GovernanceType } from '../create/DashboardSearch';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
-import { BN } from '@coral-xyz/anchor';
-import { PublicKey } from '@solana/web3.js';
-import { AbsoluteMonarchyClient, InitializeAbsoluteMonarchyArgs, useAbsoluteMonarchyClient, TokenConfig } from '../../client/absolute/initializeAbsoluteMonarchy';
-import { CustomWallet } from './CustomWallet';  
+
+// Import your IDL
+import idl from '../../idl/absolute_monarchy.json';
 
 const PROGRAM_ID = new PublicKey('ADp9DgS9ZpsVDCXb4ysDjJoB1d8cL3CUmm4ErwVtqWzu');
 
@@ -19,156 +20,150 @@ interface PaoCreationFormProps {
 
 const PaoCreationForm: React.FC<PaoCreationFormProps> = ({ governanceType }) => {
   const [loading, setLoading] = useState(true);
-  const [, setShowModal] = useState(true);
-  // State for different types (NFT, SPL, Decree)
+  const [program, setProgram] = useState<Program | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [nftTokenType, setNftTokenType] = useState('new');
   const [splTokenType, setSplTokenType] = useState('new');
-  // const [decreeType, setDecreeType] = useState<DecreeType>({ Law: {} });
-  const [client, setClient] = useState<AbsoluteMonarchyClient | null>(null);
   const router = useRouter();
-  const params = useParams();
-  // Wallet and connection
   const { connection } = useConnection();
   const wallet = useWallet();
 
-  // Check if wallet is connected before creating the client
-  // if (!wallet.publicKey || !wallet.signTransaction) {
-  //   console.log("Please connect your wallet.");
-  //   return null; // Alternatively, you can show a message to connect the wallet
-  // }
-  // Pass wallet adapter into CustomWallet instead of a Keypair
-  // const client = useAbsoluteMonarchyClient(connection, new CustomWallet(wallet), PROGRAM_ID);
+  const [monarchyForm, setMonarchyForm] = useState({
+    name: '',
+    description: '',
+    monarchName: '',
+    divineMandate: '',
+    collectionPrice: '',
+    nftSupply: '',
+    splSupply: '',
+    royalDecreeThreshold: '',
+    minLoyaltyAmount: '',
+    membershipTokensThreshold: '',
+    knighthoodPrice: '',
+    nftMintAddress: '',
+    splMintAddress: '',
+    nftSymbol: '',
+    splSymbol: '',
+    primaryKingdomToken: 'NFT',
+  });
 
-  // useEffect(() => {
-  //   if (wallet && wallet.publicKey) {
-  //     // Wallet is connected; proceed with creating the client
-  //     const newClient = useAbsoluteMonarchyClient(connection, new CustomWallet(wallet), PROGRAM_ID);
-  //     setClient(newClient);
-  //   } else {
-  //     // Reset client if wallet is not connected
-  //     setClient(null);
-  //   }
-  // }, [wallet, connection]); // Dependencies
-
-    // Directly use the hook to get the client
-    const absoluteMonarchyClient = useAbsoluteMonarchyClient(connection, new CustomWallet(wallet), PROGRAM_ID);
-
-    // Effect to check if the client is available
-    // useEffect(() => {
-    //   if (wallet && wallet.publicKey) {
-    //     // Wallet is connected; set the client
-    //     setClient(absoluteMonarchyClient);
-    //   } else {
-    //     // Reset client if wallet is not connected
-    //     setClient(null);
-    //   }
-    // }, [wallet, absoluteMonarchyClient]); // Use the derived client as a dependency
-    const customWallet = new CustomWallet(wallet);
-    const newClient = useAbsoluteMonarchyClient(connection, customWallet, PROGRAM_ID);
-    useEffect(() => {
-      if (wallet.connected && wallet.publicKey) {
-        setClient(newClient);
-        setLoading(false);
-      } else {
-        setClient(null);
-      }
-    }, [wallet.connected, wallet.publicKey, connection]);
-  
-    // ... rest of the component code ...
-  
-    if (!wallet.connected) {
-      return <div>Please connect your wallet to create a PAO.</div>;
-    }
-  
-    if (!client) {
-      return <div>Initializing client...</div>;
-    }
-
-  // const provider = useMemo(() => {
-  //   if (wallet.publicKey) {
-  //     return new CustomAnchorProvider(connection, wallet, AnchorProvider.defaultOptions());
-  //   }
-  //   return null;
-  // }, [connection, wallet]);
-  
-  // // Use the custom provider to create the client
-  // const client = useMemo(() => {
-  //   if (provider) {
-  //     return new Program(idl as AbsoluteMonarchy, provider);
-  //   }
-  //   return null;
-  // }, [provider]);
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setLoading(false); 
-  //     setShowModal(false);
-  //   }, 7000);
-
-  //   return () => clearTimeout(timer);
-  // }, []);
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setLoading(true);
-
-    if (!client || !wallet.publicKey) {
-      alert("Wallet not connected or client not initialized");
+  useEffect(() => {
+    if (wallet.connected && wallet.publicKey) {
+      const provider = new AnchorProvider(connection, wallet as any, {});
+      const program = new Program(idl as any, provider);
+      setProgram(program);
       setLoading(false);
-      return;
     }
+  }, [wallet.connected, wallet.publicKey, connection]);
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setMonarchyForm(prev => ({ ...prev, [name]: value }));
+  };
+
+  const initializeAndRegisterGovernment = async () => {
+    if (!program || !wallet.publicKey) return;
+    setLoading(true);
+    setError(null);
     try {
-      const formData = new FormData(event.currentTarget);
-      const primaryTokenType = formData.get('primaryKingdomToken') as 'NFT' | 'SPL';
-      const nftConfig: TokenConfig | undefined = nftTokenType === 'new'
-        ? { token_type: { new: {} }, custom_mint: PublicKey.default }
-        : formData.get('nftMintAddress')
-          ? { token_type: { existing: {} }, custom_mint: new PublicKey(formData.get('nftMintAddress') as string) }
-          : undefined;
+      const [arkAnalyticsPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("ark_analytics")],
+        program.programId
+      );
+      
+      const [stateInfoPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("state_info")],
+        program.programId
+      );
 
-      const splConfig: TokenConfig | undefined = splTokenType === 'new'
-        ? { token_type: { new: {} }, custom_mint: PublicKey.default }
-        : formData.get('splMintAddress')
-          ? { token_type: { existing: {} }, custom_mint: new PublicKey(formData.get('splMintAddress') as string) }
-          : undefined;
-
-      const args: InitializeAbsoluteMonarchyArgs = {
-        name: formData.get('name') as string,
-        description: formData.get('description') as string,
-        monarchName: formData.get('monarchName') as string,
-        divineMandate: formData.get('divineMandate') as string,
-        collectionPrice: new BN(formData.get('collectionPrice') as string),
-        nftSupply: new BN(formData.get('nftSupply') as string),
-        splSupply: new BN(formData.get('splSupply') as string),
-        royalDecreeThreshold: new BN(formData.get('royalDecreeThreshold') as string),
-        minLoyaltyAmount: new BN(formData.get('minLoyaltyAmount') as string),
-        membershipTokensThreshold: new BN(formData.get('membershipTokensThreshold') as string),
-        knighthoodPrice: new BN(formData.get('knighthoodPrice') as string),
-        nftConfig: nftConfig,
-        splConfig: splConfig,
-        primaryKingdomToken: primaryTokenType === 'NFT' ? { NFT: {} } : { SPL: {} },
-      };
-
-      let tx: string;
-      switch (governanceType) {
-        case 'absolute-monarchy':
-          tx = await client.initializeAbsoluteMonarchy(args);
-          break;
-        // Add cases for other governance types
-        default:
-          throw new Error(`Unsupported governance type: ${governanceType}`);
-      }
-
-      console.log('Transaction successful:', tx);
-      router.push(`/pao/${tx}`);
-    } catch (error) {
-      console.error('Error creating PAO:', error);
-      alert(`Error creating PAO: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      const tx = await program.methods.initializeAndRegisterGovernment(monarchyForm.name)
+        .accounts({
+          creator: wallet.publicKey,
+          arkAnalytics: arkAnalyticsPda,
+          stateInfo: stateInfoPda,
+          governmentProgram: program.programId,
+          arkProgram: new PublicKey("48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"),
+          systemProgram: web3.SystemProgram.programId,
+        })
+        .rpc();
+      console.log("Government initialized and registered. Transaction signature", tx);
+      setSuccess("Government initialized and registered successfully");
+    } catch (err) {
+      console.error("Error in initializeAndRegisterGovernment:", err);
+      setError(`Failed to initialize and register government: ${err instanceof Error ? err.message : String(err)}`);
     } finally {
       setLoading(false);
     }
   };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!program || !wallet.publicKey) return;
+    setLoading(true);
+    setError(null);
+
+    try {
+      const nftConfig = nftTokenType === 'new'
+        ? { tokenType: { new: {} }, customMint: PublicKey.default }
+        : { tokenType: { existing: {} }, customMint: new PublicKey(monarchyForm.nftMintAddress) };
+
+      const splConfig = splTokenType === 'new'
+        ? { tokenType: { new: {} }, customMint: PublicKey.default }
+        : { tokenType: { existing: {} }, customMint: new PublicKey(monarchyForm.splMintAddress) };
+
+      const [kingdomPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("kingdom"), wallet.publicKey.toBuffer()],
+        program.programId
+      );
+
+      const [monarchPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("monarch"), kingdomPda.toBuffer()],
+        program.programId
+      );
+
+      const tx = await program.methods.initializeAbsoluteMonarchy({
+        name: monarchyForm.name,
+        description: monarchyForm.description,
+        monarchName: monarchyForm.monarchName,
+        divineMandate: monarchyForm.divineMandate,
+        collectionPrice: new BN(monarchyForm.collectionPrice),
+        nftSupply: new BN(monarchyForm.nftSupply),
+        splSupply: new BN(monarchyForm.splSupply),
+        royalDecreeThreshold: new BN(monarchyForm.royalDecreeThreshold),
+        minLoyaltyAmount: new BN(monarchyForm.minLoyaltyAmount),
+        membershipTokensThreshold: new BN(monarchyForm.membershipTokensThreshold),
+        knighthoodPrice: new BN(monarchyForm.knighthoodPrice),
+        nftConfig,
+        splConfig,
+        primaryKingdomToken: { [monarchyForm.primaryKingdomToken]: {} },
+      })
+      .accounts({
+        kingdom: kingdomPda,
+        monarch: monarchPda,
+        authority: wallet.publicKey,
+        nftMint: nftConfig.customMint,
+        splMint: splConfig.customMint,
+        systemProgram: web3.SystemProgram.programId,
+        tokenProgram: new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"),
+        associatedTokenProgram: new PublicKey("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"),
+        rent: web3.SYSVAR_RENT_PUBKEY,
+      })
+      .rpc();
+      console.log('Transaction successful:', tx);
+      setSuccess("Absolute Monarchy created successfully");
+      router.push(`/pao/${tx}`);
+    } catch (error) {
+      console.error('Error creating Absolute Monarchy:', error);
+      setError(`Error creating Absolute Monarchy: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!wallet.connected) {
+    return <div>Please connect your wallet to create an Absolute Monarchy PAO.</div>;
+  }
 
   if (loading) {
     return (
@@ -186,13 +181,36 @@ const PaoCreationForm: React.FC<PaoCreationFormProps> = ({ governanceType }) => 
   }
 
   return (
-    <motion.form
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      onSubmit={handleSubmit}
       className="bg-black bg-opacity-50 p-6 rounded-lg space-y-6"
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <motion.div 
+        className="bg-white rounded-lg p-6 mb-8 text-gray-800"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <h2 className="text-2xl font-semibold mb-4"><FiCheck className="inline-block mr-2" /> Initialize and Register Government</h2>
+        <button
+          onClick={initializeAndRegisterGovernment}
+          disabled={loading}
+          className="w-full bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 rounded flex items-center justify-center"
+        >
+          {loading ? 'Initializing...' : <><FiCheck className="mr-2" /> Initialize and Register Government</>}
+        </button>
+      </motion.div>
+
+      <motion.form
+        onSubmit={handleSubmit}
+        className="bg-white rounded-lg p-6 text-gray-800"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        <h2 className="text-2xl font-semibold mb-4"><FiCheck className="inline-block mr-2" /> Create Absolute Monarchy</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label htmlFor="name" className="block text-white mb-2">Name</label>
           <input type="text" id="name" name="name" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3" />
@@ -296,24 +314,6 @@ const PaoCreationForm: React.FC<PaoCreationFormProps> = ({ governanceType }) => 
             </div>
           )}
         </div>
-        {/* <div>
-          <label htmlFor="decreeType" className="block text-white mb-2">Decree Type</label>
-          <select 
-            id="decreeType" 
-            name="decreeType" 
-            className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3"
-            value={Object.keys(decreeType)[0]}
-            onChange={(e) => {
-              const value = e.target.value as keyof DecreeType;
-              setDecreeType({ [value]: {} } as DecreeType);
-            }}
-          >
-            <option value="law">Law</option>
-            <option value="economicPolicy">Economic Policy</option>
-            <option value="militaryOrder">Military Order</option>
-            <option value="royalProclamation">Royal Proclamation</option>
-          </select>
-        </div> */}
         <div>
           <label htmlFor="primaryKingdomToken" className="block text-white mb-2">Primary Kingdom Token</label>
           <select id="primaryKingdomToken" name="primaryKingdomToken" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3">
@@ -321,18 +321,43 @@ const PaoCreationForm: React.FC<PaoCreationFormProps> = ({ governanceType }) => 
             <option value="spl">SPL</option>
           </select>
         </div>
-      </div>
-      <motion.button
-        whileHover={{ scale: 0.98 }}
-        whileTap={{ scale: 0.95 }}
-        type="submit"
-        className="w-full bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 rounded"
-        disabled={loading}
-      >
-        {loading ? 'Creating...' : 'Create PAO'}
-      </motion.button>
-    </motion.form>
+        </div>
+        <motion.button
+          whileHover={{ scale: 0.98 }}
+          whileTap={{ scale: 0.95 }}
+          type="submit"
+          className="w-full bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 rounded mt-6"
+          disabled={loading}
+        >
+          {loading ? 'Creating...' : 'Create Absolute Monarchy'}
+        </motion.button>
+      </motion.form>
+
+      {error && (
+        <motion.div 
+          className="mt-4 p-4 bg-red-100 text-red-700 rounded flex items-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <FiX className="mr-2" /> {error}
+        </motion.div>
+      )}
+
+      {success && (
+        <motion.div 
+          className="mt-4 p-4 bg-green-100 text-green-700 rounded flex items-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <FiCheck className="mr-2" /> {success}
+        </motion.div>
+      )}
+    </motion.div>
   );
 };
 
 export default PaoCreationForm;
+
+
