@@ -35,8 +35,8 @@ const TreasurySection: React.FC = () => {
     ]);
   }, []);
 
-  const handleMultisigCreated = useCallback((multisigPda: PublicKey) => {
-    setTreasuries(prev => [...prev, { name: 'New Squads Treasury', address: multisigPda.toBase58(), type: 'Squads' }]);
+  const handleMultisigCreated = useCallback((multisigPda: PublicKey, name: string) => {
+    setTreasuries(prev => [...prev, { name, address: multisigPda.toBase58(), type: 'Squads' }]);
     setIsSquadsModalOpen(false);
   }, []);
 
@@ -55,7 +55,8 @@ const TreasurySection: React.FC = () => {
         program.programId
       );
 
-      const createTx = await program.methods.createGovernmentTreasury(arkTreasuryName, publicKey);
+      const createTx: ReturnType<typeof program.methods.createGovernmentTreasury> = program.methods.createGovernmentTreasury(arkTreasuryName, publicKey);
+
       const tx = createTx.accounts({
         treasury: treasuryPda,
         owner: publicKey,
@@ -64,11 +65,13 @@ const TreasurySection: React.FC = () => {
         systemProgram: web3.SystemProgram.programId,
         rent: web3.SYSVAR_RENT_PUBKEY,
       });
+      
       const signature = await tx.rpc();
 
       setTreasuries(prev => [...prev, { name: arkTreasuryName, address: treasuryPda.toBase58(), type: 'ARK' }]);
       setIsArkModalOpen(false);
       setArkTreasuryName('');
+      console.log("ARK Treasury created successfully!. Transaction signature", signature);
       toast.success('ARK Treasury created successfully!');
     } catch (error) {
       toast.error('Error creating ARK Treasury');

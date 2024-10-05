@@ -278,7 +278,7 @@ const EscrowUI: React.FC = () => {
                         name="side"
                         value={orderBookData.side}
                         onChange={handleOrderBookInputChange}
-                        className="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-200"
+                        className="w-full text-black rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-200"
                         required
                       >
                         <option value="buy">Buy</option>
@@ -352,7 +352,7 @@ const InputField: React.FC<{
         name={name}
         value={value}
         onChange={onChange}
-        className="pl-10 w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-200"
+        className="pl-10 w-full text-black rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition duration-200"
         required
       />
     </div>
