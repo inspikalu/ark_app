@@ -1,23 +1,23 @@
 {
-  "address": "9M7mVM8xbsM3K1f3VqTCwgmoANXtRzvKAEJCCDV32Fdu",
+  "address": "7naXQjiC6W4Vz28Z4cPjBqjWVFVbRipVrZ9VQsuUAPcg",
   "metadata": {
-    "name": "polycentric",
+    "name": "sortition",
     "version": "0.1.0",
     "spec": "0.1.0",
     "description": "Created with Anchor"
   },
   "instructions": [
     {
-      "name": "add_member",
+      "name": "add_new_governance_member",
       "discriminator": [
-        13,
-        116,
-        123,
-        130,
-        126,
-        198,
-        57,
-        34
+        141,
+        79,
+        70,
+        255,
+        5,
+        36,
+        173,
+        38
       ],
       "accounts": [
         {
@@ -25,11 +25,7 @@
           "writable": true
         },
         {
-          "name": "assembly",
-          "writable": true
-        },
-        {
-          "name": "citizen",
+          "name": "citizen_account",
           "writable": true,
           "pda": {
             "seeds": [
@@ -58,23 +54,15 @@
         },
         {
           "name": "new_member",
-          "docs": [
-            "The account of the member being added"
-          ],
           "writable": true,
           "signer": true
         },
         {
-          "name": "governance_token_mint",
-          "docs": [
-            "The mint of the governance token"
-          ]
+          "name": "citizen_index",
+          "writable": true
         },
         {
-          "name": "member_governance_token_account",
-          "docs": [
-            "The token account of the new member for the governance token"
-          ],
+          "name": "member_token_account",
           "pda": {
             "seeds": [
               {
@@ -163,6 +151,9 @@
           }
         },
         {
+          "name": "governance_token_mint"
+        },
+        {
           "name": "system_program",
           "address": "11111111111111111111111111111111"
         },
@@ -171,7 +162,24 @@
           "address": "SysvarRent111111111111111111111111111111111"
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "region",
+          "type": "u8"
+        },
+        {
+          "name": "age_group",
+          "type": "u8"
+        },
+        {
+          "name": "other_demographic",
+          "type": "u8"
+        }
+      ]
     },
     {
       "name": "add_token_to_treasury",
@@ -206,7 +214,7 @@
         },
         {
           "name": "treasury_program",
-          "address": "9rkxTYZH7uF5kd3xt9yrbvMEUFbeJCkfwFzSeqhmkN76"
+          "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"
         },
         {
           "name": "associated_token_program",
@@ -228,330 +236,16 @@
       "args": []
     },
     {
-      "name": "cast_vote",
+      "name": "create_governance_invite",
       "discriminator": [
-        20,
-        212,
-        15,
-        189,
-        69,
-        180,
-        69,
-        151
-      ],
-      "accounts": [
-        {
-          "name": "governance_pool",
-          "writable": true
-        },
-        {
-          "name": "policy_area",
-          "writable": true
-        },
-        {
-          "name": "proposal",
-          "writable": true
-        },
-        {
-          "name": "vote",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  118,
-                  111,
-                  116,
-                  101
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "proposal"
-              },
-              {
-                "kind": "account",
-                "path": "voter"
-              }
-            ]
-          }
-        },
-        {
-          "name": "voter",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "assembly",
-          "writable": true
-        },
-        {
-          "name": "citizen",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  99,
-                  105,
-                  116,
-                  105,
-                  122,
-                  101,
-                  110
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "governance_pool"
-              },
-              {
-                "kind": "account",
-                "path": "voter"
-              }
-            ]
-          }
-        },
-        {
-          "name": "system_program",
-          "address": "11111111111111111111111111111111"
-        },
-        {
-          "name": "clock",
-          "address": "SysvarC1ock11111111111111111111111111111111"
-        }
-      ],
-      "args": [
-        {
-          "name": "decision",
-          "type": {
-            "defined": {
-              "name": "VoteDecision"
-            }
-          }
-        },
-        {
-          "name": "voting_power_to_use",
-          "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "create_assembly",
-      "discriminator": [
-        157,
-        202,
-        179,
-        150,
-        134,
-        52,
-        163,
-        114
-      ],
-      "accounts": [
-        {
-          "name": "governance_pool",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  103,
-                  111,
-                  118,
-                  101,
-                  114,
-                  110,
-                  97,
-                  110,
-                  99,
-                  101,
-                  95,
-                  112,
-                  111,
-                  111,
-                  108
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "admin"
-              }
-            ]
-          }
-        },
-        {
-          "name": "assembly",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  97,
-                  115,
-                  115,
-                  101,
-                  109,
-                  98,
-                  108,
-                  121
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "governance_pool"
-              },
-              {
-                "kind": "account",
-                "path": "governance_pool.assemblies",
-                "account": "GovernancePool"
-              }
-            ]
-          }
-        },
-        {
-          "name": "admin",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "system_program",
-          "address": "11111111111111111111111111111111"
-        },
-        {
-          "name": "rent",
-          "address": "SysvarRent111111111111111111111111111111111"
-        }
-      ],
-      "args": [
-        {
-          "name": "name",
-          "type": "string"
-        },
-        {
-          "name": "description",
-          "type": "string"
-        }
-      ]
-    },
-    {
-      "name": "create_policy_area",
-      "discriminator": [
-        47,
-        60,
-        139,
-        150,
-        131,
-        54,
-        229,
-        249
-      ],
-      "accounts": [
-        {
-          "name": "governance_pool",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  103,
-                  111,
-                  118,
-                  101,
-                  114,
-                  110,
-                  97,
-                  110,
-                  99,
-                  101,
-                  95,
-                  112,
-                  111,
-                  111,
-                  108
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "admin"
-              }
-            ]
-          }
-        },
-        {
-          "name": "policy_area",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  112,
-                  111,
-                  108,
-                  105,
-                  99,
-                  121,
-                  95,
-                  97,
-                  114,
-                  101,
-                  97
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "governance_pool"
-              },
-              {
-                "kind": "account",
-                "path": "governance_pool.policy_areas",
-                "account": "GovernancePool"
-              }
-            ]
-          }
-        },
-        {
-          "name": "admin",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "system_program",
-          "address": "11111111111111111111111111111111"
-        },
-        {
-          "name": "rent",
-          "address": "SysvarRent111111111111111111111111111111111"
-        }
-      ],
-      "args": [
-        {
-          "name": "name",
-          "type": "string"
-        },
-        {
-          "name": "description",
-          "type": "string"
-        }
-      ]
-    },
-    {
-      "name": "create_polycentric_governance_invite",
-      "discriminator": [
-        39,
-        227,
-        223,
-        193,
-        185,
-        91,
-        120,
-        158
+        36,
+        158,
+        14,
+        222,
+        196,
+        78,
+        174,
+        143
       ],
       "accounts": [
         {
@@ -595,7 +289,7 @@
               },
               {
                 "kind": "account",
-                "path": "governance_pool.total_participants",
+                "path": "governance_pool.total_citizens",
                 "account": "GovernancePool"
               }
             ]
@@ -619,52 +313,20 @@
       ]
     },
     {
-      "name": "create_proposal",
+      "name": "create_new_proposal",
       "discriminator": [
-        132,
-        116,
-        68,
-        174,
-        216,
-        160,
+        29,
+        76,
+        177,
         198,
-        22
+        183,
+        126,
+        153,
+        223
       ],
       "accounts": [
         {
-          "name": "governance_pool",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  103,
-                  111,
-                  118,
-                  101,
-                  114,
-                  110,
-                  97,
-                  110,
-                  99,
-                  101,
-                  95,
-                  112,
-                  111,
-                  111,
-                  108
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "admin"
-              }
-            ]
-          }
-        },
-        {
-          "name": "policy_area",
+          "name": "assembly",
           "writable": true
         },
         {
@@ -687,58 +349,23 @@
               },
               {
                 "kind": "account",
-                "path": "policy_area"
+                "path": "assembly"
               },
               {
-                "kind": "account",
-                "path": "policy_area.proposals",
-                "account": "PolicyArea"
+                "kind": "arg",
+                "path": "description"
               }
             ]
           }
         },
         {
-          "name": "admin",
+          "name": "proposer",
           "writable": true,
           "signer": true
         },
         {
-          "name": "assembly",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  97,
-                  115,
-                  115,
-                  101,
-                  109,
-                  98,
-                  108,
-                  121
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "governance_pool"
-              },
-              {
-                "kind": "account",
-                "path": "governance_pool.assemblies",
-                "account": "GovernancePool"
-              }
-            ]
-          }
-        },
-        {
           "name": "system_program",
           "address": "11111111111111111111111111111111"
-        },
-        {
-          "name": "clock",
-          "address": "SysvarC1ock11111111111111111111111111111111"
         },
         {
           "name": "rent",
@@ -747,82 +374,16 @@
       ],
       "args": [
         {
-          "name": "title",
+          "name": "name",
           "type": "string"
         },
         {
           "name": "description",
           "type": "string"
-        }
-      ]
-    },
-    {
-      "name": "create_task",
-      "discriminator": [
-        194,
-        80,
-        6,
-        180,
-        232,
-        127,
-        48,
-        171
-      ],
-      "accounts": [
-        {
-          "name": "governance_pool",
-          "writable": true
         },
         {
-          "name": "task",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  116,
-                  97,
-                  115,
-                  107
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "governance_pool"
-              },
-              {
-                "kind": "arg",
-                "path": "task_id"
-              }
-            ]
-          }
-        },
-        {
-          "name": "admin",
-          "writable": true,
-          "signer": true,
-          "relations": [
-            "governance_pool"
-          ]
-        },
-        {
-          "name": "system_program",
-          "address": "11111111111111111111111111111111"
-        }
-      ],
-      "args": [
-        {
-          "name": "task_id",
-          "type": "u64"
-        },
-        {
-          "name": "description",
-          "type": "string"
-        },
-        {
-          "name": "reward",
-          "type": "u64"
+          "name": "end_time",
+          "type": "i64"
         }
       ]
     },
@@ -853,11 +414,7 @@
         },
         {
           "name": "treasury_program",
-          "address": "9rkxTYZH7uF5kd3xt9yrbvMEUFbeJCkfwFzSeqhmkN76"
-        },
-        {
-          "name": "system_program",
-          "address": "11111111111111111111111111111111"
+          "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"
         },
         {
           "name": "associated_token_program",
@@ -866,6 +423,10 @@
         {
           "name": "token_program",
           "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         },
         {
           "name": "rent",
@@ -880,69 +441,51 @@
       ]
     },
     {
-      "name": "execute_proposal",
+      "name": "finalize_sortition_assembly_selection",
       "discriminator": [
-        186,
-        60,
-        116,
-        133,
-        108,
-        128,
-        111,
-        28
+        109,
+        141,
+        71,
+        214,
+        207,
+        196,
+        27,
+        107
       ],
       "accounts": [
         {
           "name": "governance_pool",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  103,
-                  111,
-                  118,
-                  101,
-                  114,
-                  110,
-                  97,
-                  110,
-                  99,
-                  101,
-                  95,
-                  112,
-                  111,
-                  111,
-                  108
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "admin"
-              }
-            ]
-          }
+          "writable": true
         },
         {
-          "name": "policy_area",
+          "name": "assembly",
+          "writable": true
+        },
+        {
+          "name": "pagination_state",
+          "writable": true
+        },
+        {
+          "name": "citizen_index",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "const",
                 "value": [
-                  112,
-                  111,
-                  108,
-                  105,
                   99,
-                  121,
-                  95,
-                  97,
-                  114,
+                  105,
+                  116,
+                  105,
+                  122,
                   101,
-                  97
+                  110,
+                  95,
+                  105,
+                  110,
+                  100,
+                  101,
+                  120
                 ]
               },
               {
@@ -951,38 +494,8 @@
               },
               {
                 "kind": "account",
-                "path": "governance_pool.policy_areas",
-                "account": "GovernancePool"
-              }
-            ]
-          }
-        },
-        {
-          "name": "proposal",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  112,
-                  114,
-                  111,
-                  112,
-                  111,
-                  115,
-                  97,
-                  108
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "policy_area"
-              },
-              {
-                "kind": "account",
-                "path": "policy_area.proposals",
-                "account": "PolicyArea"
+                "path": "pagination_state.current_index",
+                "account": "PaginationState"
               }
             ]
           }
@@ -990,17 +503,79 @@
         {
           "name": "admin",
           "writable": true,
-          "signer": true,
-          "relations": [
-            "governance_pool"
-          ]
+          "signer": true
         },
         {
-          "name": "assembly"
+          "name": "recent_blockhashes",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  114,
+                  101,
+                  99,
+                  101,
+                  110,
+                  116,
+                  45,
+                  98,
+                  108,
+                  111,
+                  99,
+                  107,
+                  104,
+                  97,
+                  115,
+                  104,
+                  101,
+                  115
+                ]
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                6,
+                167,
+                213,
+                23,
+                25,
+                44,
+                86,
+                142,
+                224,
+                138,
+                132,
+                95,
+                115,
+                210,
+                151,
+                136,
+                207,
+                3,
+                92,
+                49,
+                69,
+                178,
+                26,
+                179,
+                68,
+                216,
+                6,
+                46,
+                169,
+                64,
+                0,
+                0
+              ]
+            }
+          }
         },
         {
-          "name": "clock",
-          "address": "SysvarC1ock11111111111111111111111111111111"
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": []
@@ -1036,7 +611,7 @@
         },
         {
           "name": "ark_program",
-          "address": "9rkxTYZH7uF5kd3xt9yrbvMEUFbeJCkfwFzSeqhmkN76"
+          "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"
         },
         {
           "name": "system_program",
@@ -1051,178 +626,16 @@
       ]
     },
     {
-      "name": "initialize_citizen",
+      "name": "initialize_sortition_governance",
       "discriminator": [
-        92,
-        221,
-        0,
-        186,
-        50,
-        89,
-        80,
-        111
-      ],
-      "accounts": [
-        {
-          "name": "governance_pool",
-          "writable": true
-        },
-        {
-          "name": "citizen",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  99,
-                  105,
-                  116,
-                  105,
-                  122,
-                  101,
-                  110
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "governance_pool"
-              },
-              {
-                "kind": "account",
-                "path": "user"
-              }
-            ]
-          }
-        },
-        {
-          "name": "user",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "mint"
-        },
-        {
-          "name": "user_ata",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "path": "user"
-              },
-              {
-                "kind": "const",
-                "value": [
-                  6,
-                  221,
-                  246,
-                  225,
-                  215,
-                  101,
-                  161,
-                  147,
-                  217,
-                  203,
-                  225,
-                  70,
-                  206,
-                  235,
-                  121,
-                  172,
-                  28,
-                  180,
-                  133,
-                  237,
-                  95,
-                  91,
-                  55,
-                  145,
-                  58,
-                  140,
-                  245,
-                  133,
-                  126,
-                  255,
-                  0,
-                  169
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "mint"
-              }
-            ],
-            "program": {
-              "kind": "const",
-              "value": [
-                140,
-                151,
-                37,
-                143,
-                78,
-                36,
-                137,
-                241,
-                187,
-                61,
-                16,
-                41,
-                20,
-                142,
-                13,
-                131,
-                11,
-                90,
-                19,
-                153,
-                218,
-                255,
-                16,
-                132,
-                4,
-                142,
-                123,
-                216,
-                219,
-                233,
-                248,
-                89
-              ]
-            }
-          }
-        },
-        {
-          "name": "token_program",
-          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
-        },
-        {
-          "name": "associated_token_program",
-          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
-        },
-        {
-          "name": "system_program",
-          "address": "11111111111111111111111111111111"
-        },
-        {
-          "name": "rent",
-          "address": "SysvarRent111111111111111111111111111111111"
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "initialize_government",
-      "discriminator": [
-        44,
-        85,
-        219,
+        32,
+        203,
+        86,
+        144,
+        143,
         121,
-        126,
-        154,
-        77,
-        5
+        241,
+        94
       ],
       "accounts": [
         {
@@ -1258,17 +671,9 @@
           }
         },
         {
-          "name": "mint",
-          "writable": true
-        },
-        {
           "name": "admin",
           "writable": true,
           "signer": true
-        },
-        {
-          "name": "analytics",
-          "writable": true
         },
         {
           "name": "nft_mint",
@@ -1287,10 +692,6 @@
         {
           "name": "rent",
           "address": "SysvarRent111111111111111111111111111111111"
-        },
-        {
-          "name": "clock",
-          "address": "SysvarC1ock11111111111111111111111111111111"
         }
       ],
       "args": [
@@ -1926,16 +1327,16 @@
       ]
     },
     {
-      "name": "obtain_voting_power",
+      "name": "register_sortition_citizen",
       "discriminator": [
-        20,
-        189,
-        126,
-        49,
-        94,
-        118,
-        244,
-        244
+        98,
+        218,
+        220,
+        200,
+        27,
+        233,
+        172,
+        107
       ],
       "accounts": [
         {
@@ -1943,73 +1344,173 @@
           "writable": true
         },
         {
-          "name": "citizen",
-          "writable": true
+          "name": "citizen_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  105,
+                  116,
+                  105,
+                  122,
+                  101,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance_pool"
+              },
+              {
+                "kind": "account",
+                "path": "citizen"
+              }
+            ]
+          }
         },
         {
-          "name": "user",
+          "name": "citizen",
           "writable": true,
           "signer": true
         },
         {
-          "name": "assembly",
-          "optional": true
-        },
-        {
-          "name": "task",
-          "optional": true
-        },
-        {
-          "name": "user_token_account",
-          "writable": true,
-          "optional": true
-        },
-        {
-          "name": "pool_token_account",
-          "writable": true,
-          "optional": true
-        },
-        {
-          "name": "to_citizen",
-          "writable": true,
-          "optional": true
-        },
-        {
-          "name": "token_program",
-          "optional": true,
-          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+          "name": "citizen_index",
+          "writable": true
         },
         {
           "name": "system_program",
           "address": "11111111111111111111111111111111"
-        },
-        {
-          "name": "clock",
-          "address": "SysvarC1ock11111111111111111111111111111111"
         }
       ],
       "args": [
         {
-          "name": "action",
-          "type": {
-            "defined": {
-              "name": "VotingPowerAction"
-            }
-          }
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "region",
+          "type": "u8"
+        },
+        {
+          "name": "age_group",
+          "type": "u8"
+        },
+        {
+          "name": "other_demographic",
+          "type": "u8"
         }
       ]
     },
     {
-      "name": "use_polycentric_governance_invite",
+      "name": "select_sortition_assembly",
       "discriminator": [
-        211,
-        178,
-        155,
-        41,
-        210,
-        220,
-        238,
-        222
+        49,
+        55,
+        28,
+        175,
+        167,
+        154,
+        83,
+        42
+      ],
+      "accounts": [
+        {
+          "name": "governance_pool",
+          "writable": true
+        },
+        {
+          "name": "assembly",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  115,
+                  115,
+                  101,
+                  109,
+                  98,
+                  108,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance_pool"
+              },
+              {
+                "kind": "account",
+                "path": "governance_pool.total_citizens",
+                "account": "GovernancePool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "pagination_state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  97,
+                  103,
+                  105,
+                  110,
+                  97,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "governance_pool"
+              },
+              {
+                "kind": "account",
+                "path": "governance_pool.total_citizens",
+                "account": "GovernancePool"
+              }
+            ]
+          }
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "term_length",
+          "type": "i64"
+        }
+      ]
+    },
+    {
+      "name": "use_governance_invite",
+      "discriminator": [
+        124,
+        147,
+        142,
+        156,
+        193,
+        219,
+        137,
+        173
       ],
       "accounts": [
         {
@@ -2021,7 +1522,7 @@
           "writable": true
         },
         {
-          "name": "citizen",
+          "name": "citizen_account",
           "writable": true,
           "pda": {
             "seeds": [
@@ -2054,11 +1555,11 @@
           "signer": true
         },
         {
-          "name": "governance_token_mint"
+          "name": "citizen_index",
+          "writable": true
         },
         {
-          "name": "member_governance_token_account",
-          "writable": true,
+          "name": "member_token_account",
           "pda": {
             "seeds": [
               {
@@ -2147,12 +1648,7 @@
           }
         },
         {
-          "name": "token_program",
-          "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
-        },
-        {
-          "name": "associated_token_program",
-          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+          "name": "governance_token_mint"
         },
         {
           "name": "system_program",
@@ -2163,23 +1659,65 @@
           "address": "SysvarRent111111111111111111111111111111111"
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "region",
+          "type": "u8"
+        },
+        {
+          "name": "age_group",
+          "type": "u8"
+        },
+        {
+          "name": "other_demographic",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "vote_on_sortition_proposal",
+      "discriminator": [
+        12,
+        202,
+        112,
+        96,
+        254,
+        164,
+        180,
+        16
+      ],
+      "accounts": [
+        {
+          "name": "assembly",
+          "writable": true
+        },
+        {
+          "name": "proposal",
+          "writable": true
+        },
+        {
+          "name": "member",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "clock",
+          "address": "SysvarC1ock11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "approve",
+          "type": "bool"
+        }
+      ]
     }
   ],
   "accounts": [
-    {
-      "name": "Analytics",
-      "discriminator": [
-        135,
-        28,
-        189,
-        27,
-        51,
-        143,
-        253,
-        88
-      ]
-    },
     {
       "name": "ArkAnalytics",
       "discriminator": [
@@ -2220,6 +1758,19 @@
       ]
     },
     {
+      "name": "CitizenIndex",
+      "discriminator": [
+        45,
+        158,
+        235,
+        192,
+        133,
+        194,
+        25,
+        57
+      ]
+    },
+    {
       "name": "GovernanceInvite",
       "discriminator": [
         114,
@@ -2246,29 +1797,16 @@
       ]
     },
     {
-      "name": "PolicyArea",
+      "name": "PaginationState",
       "discriminator": [
+        47,
+        180,
+        50,
         40,
-        85,
-        5,
-        40,
-        107,
-        24,
-        143,
-        190
-      ]
-    },
-    {
-      "name": "Proposal",
-      "discriminator": [
-        26,
-        94,
-        189,
-        187,
-        116,
-        136,
-        53,
-        33
+        125,
+        237,
+        66,
+        170
       ]
     },
     {
@@ -2283,59 +1821,33 @@
         94,
         185
       ]
-    },
-    {
-      "name": "Task",
-      "discriminator": [
-        79,
-        34,
-        229,
-        55,
-        88,
-        90,
-        55,
-        84
-      ]
-    },
-    {
-      "name": "Vote",
-      "discriminator": [
-        96,
-        91,
-        104,
-        57,
-        145,
-        35,
-        172,
-        155
-      ]
     }
   ],
   "events": [
     {
-      "name": "AnalyticsUpdated",
+      "name": "AssemblySelected",
       "discriminator": [
-        83,
-        25,
-        9,
-        129,
-        241,
-        133,
-        217,
-        248
+        163,
+        102,
+        229,
+        0,
+        227,
+        193,
+        99,
+        4
       ]
     },
     {
-      "name": "CitizenAddedToGovernancePool",
+      "name": "CitizenAddedToGovernance",
       "discriminator": [
-        113,
-        70,
-        47,
-        80,
-        195,
-        52,
+        251,
+        157,
+        6,
+        41,
+        220,
         96,
-        245
+        241,
+        204
       ]
     },
     {
@@ -2391,124 +1903,124 @@
       ]
     },
     {
-      "name": "ProposalExecuted",
+      "name": "VoteEvent",
       "discriminator": [
-        92,
-        213,
-        189,
-        201,
-        101,
-        83,
-        111,
-        83
+        195,
+        71,
+        250,
+        105,
+        120,
+        119,
+        234,
+        134
       ]
     }
   ],
   "errors": [
     {
       "code": 6000,
-      "name": "MaxAssembliesReached",
-      "msg": "Maximum number of assemblies reached"
+      "name": "CitizenAlreadyRegistered",
+      "msg": "Citizen already registered"
     },
     {
       "code": 6001,
-      "name": "MaxPolicyAreasReached",
-      "msg": "Maximum number of policy areas reached"
+      "name": "AssemblyAlreadyActive",
+      "msg": "Assembly already active"
     },
     {
       "code": 6002,
-      "name": "MaxAssemblyMembersReached",
-      "msg": "Maximum number of assembly members reached"
+      "name": "NotEnoughCitizens",
+      "msg": "Not enough citizens for selection"
     },
     {
       "code": 6003,
-      "name": "MaxPolicyAreasPerAssemblyReached",
-      "msg": "Maximum number of policy areas per assembly reached"
+      "name": "NotAssemblyMember",
+      "msg": "Not a member of the current assembly"
     },
     {
       "code": 6004,
-      "name": "MaxAssembliesPerPolicyAreaReached",
-      "msg": "Maximum number of assemblies per policy area reached"
+      "name": "ProposalAlreadyExists",
+      "msg": "Proposal already exists"
     },
     {
       "code": 6005,
-      "name": "MaxProposalsPerPolicyAreaReached",
-      "msg": "Maximum number of proposals per policy area reached"
+      "name": "InvalidVote",
+      "msg": "Invalid vote"
     },
     {
       "code": 6006,
       "name": "ProposalNotActive",
-      "msg": "Proposal is not in active state"
+      "msg": "Proposal not active"
     },
     {
       "code": 6007,
-      "name": "ProposalVotingEnded",
-      "msg": "Proposal voting period has ended"
+      "name": "AssemblyTermEnded",
+      "msg": "Assembly term has ended"
     },
     {
       "code": 6008,
-      "name": "AlreadyVoted",
-      "msg": "User has already voted on this proposal"
+      "name": "CitizenNotEligible",
+      "msg": "Citizen not eligible"
     },
     {
       "code": 6009,
-      "name": "NotAssemblyMember",
-      "msg": "User is not a member of the required assembly"
+      "name": "InvalidAssemblySize",
+      "msg": "Invalid assembly size"
     },
     {
       "code": 6010,
-      "name": "ProposalNotApproved",
-      "msg": "Proposal is not approved"
+      "name": "InvalidTermLength",
+      "msg": "Invalid term length"
     },
     {
       "code": 6011,
-      "name": "InsufficientPermissions",
-      "msg": "Insufficient permissions to perform this action"
+      "name": "RandomSelectionInProgress",
+      "msg": "Random selection in progress"
     },
     {
       "code": 6012,
-      "name": "InvalidGovernancePool",
-      "msg": "Invalid governance pool"
+      "name": "InvalidQuotas",
+      "msg": "Invalid demographic quotas"
     },
     {
       "code": 6013,
-      "name": "InvalidAssembly",
-      "msg": "Invalid assembly"
+      "name": "InvalidDemographic",
+      "msg": "Invalid demographic information"
     },
     {
       "code": 6014,
-      "name": "InvalidPolicyArea",
-      "msg": "Invalid policy area"
+      "name": "CitizenIndexFull",
+      "msg": "Citizen index is full"
     },
     {
       "code": 6015,
+      "name": "InvalidInput",
+      "msg": "Invalid data"
+    },
+    {
+      "code": 6016,
+      "name": "VotingNotStarted",
+      "msg": "Voting has not yet started"
+    },
+    {
+      "code": 6017,
+      "name": "VotingEnded",
+      "msg": "Voting has not ended"
+    },
+    {
+      "code": 6018,
       "name": "InvalidProposal",
       "msg": "Invalid proposal"
     },
     {
-      "code": 6016,
-      "name": "MaxTreasuriesReached",
-      "msg": "Maximum treasuries reached"
-    },
-    {
-      "code": 6017,
-      "name": "InsufficientVotingPower",
-      "msg": "Not enough voting power"
-    },
-    {
-      "code": 6018,
-      "name": "AlreadyMember",
-      "msg": "Already a member"
-    },
-    {
       "code": 6019,
-      "name": "TaskAlreadyCompleted",
-      "msg": "Task has been completed"
+      "name": "Overflow",
+      "msg": "Overflow error"
     },
     {
       "code": 6020,
-      "name": "TaskNotFound",
-      "msg": "Task Not Found"
+      "name": "ExceedsSupply",
+      "msg": "Supply has been exceeded"
     },
     {
       "code": 6021,
@@ -2522,149 +2034,61 @@
     },
     {
       "code": 6023,
-      "name": "InvalidSPLMint",
-      "msg": "SPL Mint is not valid"
+      "name": "InvalidMint",
+      "msg": "Mint is not valid"
     },
     {
       "code": 6024,
-      "name": "InvalidNFTMint",
-      "msg": "NFT Mint is not valid"
+      "name": "MissingNFTConfig",
+      "msg": "Miissing NFT config"
     },
     {
       "code": 6025,
-      "name": "InvalidTask",
-      "msg": "Task is not valid"
+      "name": "MissingSPLConfig",
+      "msg": "Missing spl config"
     },
     {
       "code": 6026,
-      "name": "Overflow",
-      "msg": "Overflow error"
+      "name": "NoTokenSpecified",
+      "msg": "No Junta token specified"
     },
     {
       "code": 6027,
-      "name": "ExceedsSupply",
-      "msg": "Supply has been exceeded"
+      "name": "InsufficientTokens",
+      "msg": "Insufficient tokens to join junta"
     },
     {
       "code": 6028,
-      "name": "NoGovernanceTokenSpecified",
-      "msg": "No governance token"
+      "name": "AlreadyMember",
+      "msg": "Already a member of this junta"
     },
     {
       "code": 6029,
-      "name": "MissingNFTConfig",
-      "msg": "Missing NFT config"
+      "name": "ArithmeticError",
+      "msg": "Arithmetic Error"
     },
     {
       "code": 6030,
-      "name": "MissingSPLConfig",
-      "msg": "Missing SPL config"
-    },
-    {
-      "code": 6031,
-      "name": "InsufficientTokens",
-      "msg": "Insufficient tokens"
-    },
-    {
-      "code": 6032,
       "name": "InviteExpired",
       "msg": "Invite expired"
     },
     {
-      "code": 6033,
+      "code": 6031,
       "name": "InviteAlreadyUsed",
       "msg": "Invite used"
     },
     {
-      "code": 6034,
+      "code": 6032,
       "name": "InvalidInvite",
       "msg": "Invite invalid"
     },
     {
-      "code": 6035,
+      "code": 6033,
       "name": "Unauthorized",
-      "msg": "Unauthorized"
+      "msg": "Invalid authority"
     }
   ],
   "types": [
-    {
-      "name": "Analytics",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "total_governance_pools",
-            "type": "u64"
-          },
-          {
-            "name": "total_assemblies",
-            "type": "u64"
-          },
-          {
-            "name": "total_policy_areas",
-            "type": "u64"
-          },
-          {
-            "name": "total_proposals",
-            "type": "u64"
-          },
-          {
-            "name": "total_votes",
-            "type": "u64"
-          },
-          {
-            "name": "last_updated",
-            "type": "i64"
-          },
-          {
-            "name": "counted_pools",
-            "type": {
-              "vec": "pubkey"
-            }
-          },
-          {
-            "name": "bump",
-            "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "AnalyticsUpdated",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "governance_pool",
-            "type": "pubkey"
-          },
-          {
-            "name": "total_governance_pools",
-            "type": "u64"
-          },
-          {
-            "name": "total_assemblies",
-            "type": "u64"
-          },
-          {
-            "name": "total_policy_areas",
-            "type": "u64"
-          },
-          {
-            "name": "total_proposals",
-            "type": "u64"
-          },
-          {
-            "name": "total_votes",
-            "type": "u64"
-          },
-          {
-            "name": "timestamp",
-            "type": "i64"
-          }
-        ]
-      }
-    },
     {
       "name": "ArkAnalytics",
       "type": {
@@ -2681,11 +2105,31 @@
             }
           },
           {
-            "name": "initialized_at",
+            "name": "polls",
+            "type": "u64"
+          },
+          {
+            "name": "approved",
+            "type": "u64"
+          },
+          {
+            "name": "rejected",
+            "type": "u64"
+          },
+          {
+            "name": "points",
+            "type": "u64"
+          },
+          {
+            "name": "created_at",
             "type": "i64"
           },
           {
-            "name": "bump",
+            "name": "auth_bump",
+            "type": "u8"
+          },
+          {
+            "name": "state_bump",
             "type": "u8"
           }
         ]
@@ -2701,36 +2145,48 @@
             "type": "pubkey"
           },
           {
-            "name": "name",
-            "type": "string"
-          },
-          {
-            "name": "description",
-            "type": "string"
-          },
-          {
             "name": "members",
             "type": {
               "vec": "pubkey"
             }
           },
           {
-            "name": "policy_areas",
+            "name": "term_start",
+            "type": "i64"
+          },
+          {
+            "name": "term_end",
+            "type": "i64"
+          },
+          {
+            "name": "proposals",
             "type": {
               "vec": "pubkey"
             }
           },
           {
-            "name": "total_proposals",
-            "type": "u64"
-          },
-          {
-            "name": "total_votes",
-            "type": "u64"
-          },
-          {
             "name": "bump",
             "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AssemblySelected",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "governance_pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "assembly",
+            "type": "pubkey"
+          },
+          {
+            "name": "member_count",
+            "type": "u32"
           }
         ]
       }
@@ -2741,38 +2197,36 @@
         "kind": "struct",
         "fields": [
           {
+            "name": "name",
+            "type": "string"
+          },
+          {
             "name": "governance_pool",
             "type": "pubkey"
           },
           {
-            "name": "user",
-            "type": "pubkey"
+            "name": "is_eligible",
+            "type": "bool"
           },
           {
-            "name": "assemblies",
-            "type": {
-              "vec": "pubkey"
-            }
-          },
-          {
-            "name": "staked_tokens",
-            "type": "u64"
-          },
-          {
-            "name": "completed_tasks",
-            "type": "u64"
-          },
-          {
-            "name": "voting_power",
-            "type": "u64"
-          },
-          {
-            "name": "delegated_power",
-            "type": "u64"
-          },
-          {
-            "name": "joined_at",
+            "name": "last_participation",
             "type": "i64"
+          },
+          {
+            "name": "region",
+            "type": "u8"
+          },
+          {
+            "name": "age_group",
+            "type": "u8"
+          },
+          {
+            "name": "other_demographic",
+            "type": "u8"
+          },
+          {
+            "name": "is_initialized",
+            "type": "bool"
           },
           {
             "name": "bump",
@@ -2782,7 +2236,7 @@
       }
     },
     {
-      "name": "CitizenAddedToGovernancePool",
+      "name": "CitizenAddedToGovernance",
       "type": {
         "kind": "struct",
         "fields": [
@@ -2795,8 +2249,69 @@
             "type": "pubkey"
           },
           {
-            "name": "timestamp",
-            "type": "i64"
+            "name": "token_amount",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "CitizenIndex",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "governance_pool",
+            "type": "pubkey"
+          },
+          {
+            "name": "citizens",
+            "type": {
+              "vec": "pubkey"
+            }
+          },
+          {
+            "name": "count",
+            "type": "u32"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "DemographicQuotas",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "regions",
+            "type": {
+              "array": [
+                "u32",
+                10
+              ]
+            }
+          },
+          {
+            "name": "age_groups",
+            "type": {
+              "array": [
+                "u32",
+                5
+              ]
+            }
+          },
+          {
+            "name": "other_demographic",
+            "type": {
+              "array": [
+                "u32",
+                3
+              ]
+            }
           }
         ]
       }
@@ -2869,56 +2384,49 @@
         "kind": "struct",
         "fields": [
           {
-            "name": "name",
-            "type": "string"
-          },
-          {
-            "name": "description",
-            "type": "string"
-          },
-          {
             "name": "admin",
             "type": "pubkey"
           },
           {
-            "name": "assemblies",
+            "name": "total_citizens",
+            "type": "u32"
+          },
+          {
+            "name": "assembly_size",
+            "type": "u8"
+          },
+          {
+            "name": "assembly_term",
+            "type": "i64"
+          },
+          {
+            "name": "current_assembly",
+            "type": "pubkey"
+          },
+          {
+            "name": "last_random_seed",
             "type": {
-              "vec": "pubkey"
+              "array": [
+                "u8",
+                32
+              ]
             }
           },
           {
-            "name": "policy_areas",
+            "name": "selection_in_progress",
+            "type": "bool"
+          },
+          {
+            "name": "total_citizen_indices",
+            "type": "u32"
+          },
+          {
+            "name": "demographic_quotas",
             "type": {
-              "vec": "pubkey"
+              "defined": {
+                "name": "DemographicQuotas"
+              }
             }
-          },
-          {
-            "name": "treasuries",
-            "type": {
-              "vec": "pubkey"
-            }
-          },
-          {
-            "name": "total_participants",
-            "type": "u64"
-          },
-          {
-            "name": "total_proposals",
-            "type": "u64"
-          },
-          {
-            "name": "total_votes",
-            "type": "u64"
-          },
-          {
-            "name": "tasks",
-            "type": {
-              "vec": "pubkey"
-            }
-          },
-          {
-            "name": "total_tasks",
-            "type": "u64"
           },
           {
             "name": "nft_symbol",
@@ -2981,10 +2489,6 @@
           {
             "name": "governance_token_mint",
             "type": "pubkey"
-          },
-          {
-            "name": "membership_token_threshold",
-            "type": "u64"
           },
           {
             "name": "bump",
@@ -3103,6 +2607,37 @@
             "type": "string"
           },
           {
+            "name": "assembly_size",
+            "type": "u8"
+          },
+          {
+            "name": "regions",
+            "type": {
+              "array": [
+                "u32",
+                10
+              ]
+            }
+          },
+          {
+            "name": "age_groups",
+            "type": {
+              "array": [
+                "u32",
+                5
+              ]
+            }
+          },
+          {
+            "name": "other_demographic",
+            "type": {
+              "array": [
+                "u32",
+                3
+              ]
+            }
+          },
+          {
             "name": "nft_config",
             "type": {
               "option": {
@@ -3123,14 +2658,6 @@
             }
           },
           {
-            "name": "primary_governance_token",
-            "type": {
-              "defined": {
-                "name": "PrimaryGovernanceToken"
-              }
-            }
-          },
-          {
             "name": "nft_symbol",
             "type": "string"
           },
@@ -3139,8 +2666,24 @@
             "type": "string"
           },
           {
+            "name": "nft_supply",
+            "type": "u64"
+          },
+          {
+            "name": "spl_supply",
+            "type": "u64"
+          },
+          {
             "name": "collection_price",
             "type": "u64"
+          },
+          {
+            "name": "primary_governance_token",
+            "type": {
+              "defined": {
+                "name": "PrimaryGovernanceToken"
+              }
+            }
           }
         ]
       }
@@ -3183,15 +2726,11 @@
             "type": "pubkey"
           },
           {
-            "name": "assembly",
-            "type": "pubkey"
-          },
-          {
             "name": "member",
             "type": "pubkey"
           },
           {
-            "name": "token_count",
+            "name": "token_amount",
             "type": "u64"
           }
         ]
@@ -3278,7 +2817,7 @@
       }
     },
     {
-      "name": "PolicyArea",
+      "name": "PaginationState",
       "type": {
         "kind": "struct",
         "fields": [
@@ -3287,28 +2826,26 @@
             "type": "pubkey"
           },
           {
-            "name": "name",
-            "type": "string"
+            "name": "current_index",
+            "type": "u32"
           },
           {
-            "name": "description",
-            "type": "string"
+            "name": "current_citizen_in_index",
+            "type": "u32"
           },
           {
-            "name": "assemblies",
+            "name": "selected_citizens",
             "type": {
               "vec": "pubkey"
             }
           },
           {
-            "name": "proposals",
+            "name": "demographic_counts",
             "type": {
-              "vec": "pubkey"
+              "defined": {
+                "name": "DemographicQuotas"
+              }
             }
-          },
-          {
-            "name": "total_votes",
-            "type": "u64"
           },
           {
             "name": "bump",
@@ -3327,118 +2864,6 @@
           },
           {
             "name": "SPL"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Proposal",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "governance_pool",
-            "type": "pubkey"
-          },
-          {
-            "name": "policy_area",
-            "type": "pubkey"
-          },
-          {
-            "name": "creator",
-            "type": "pubkey"
-          },
-          {
-            "name": "title",
-            "type": "string"
-          },
-          {
-            "name": "description",
-            "type": "string"
-          },
-          {
-            "name": "status",
-            "type": {
-              "defined": {
-                "name": "ProposalStatus"
-              }
-            }
-          },
-          {
-            "name": "yes_votes",
-            "type": "u64"
-          },
-          {
-            "name": "no_votes",
-            "type": "u64"
-          },
-          {
-            "name": "abstain_votes",
-            "type": "u64"
-          },
-          {
-            "name": "quorum_threshold",
-            "type": "u64"
-          },
-          {
-            "name": "approval_threshold",
-            "type": "u8"
-          },
-          {
-            "name": "start_time",
-            "type": "i64"
-          },
-          {
-            "name": "end_time",
-            "type": "i64"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "ProposalExecuted",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "governance_pool",
-            "type": "pubkey"
-          },
-          {
-            "name": "policy_area",
-            "type": "pubkey"
-          },
-          {
-            "name": "proposal",
-            "type": "pubkey"
-          },
-          {
-            "name": "executor",
-            "type": "pubkey"
-          }
-        ]
-      }
-    },
-    {
-      "name": "ProposalStatus",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Active"
-          },
-          {
-            "name": "Approved"
-          },
-          {
-            "name": "Rejected"
-          },
-          {
-            "name": "Executed"
           }
         ]
       }
@@ -3471,57 +2896,15 @@
           {
             "name": "program_id",
             "type": "pubkey"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
           }
         ]
       }
     },
     {
-      "name": "Task",
+      "name": "VoteEvent",
       "type": {
         "kind": "struct",
         "fields": [
-          {
-            "name": "id",
-            "type": "u64"
-          },
-          {
-            "name": "governance_pool",
-            "type": "pubkey"
-          },
-          {
-            "name": "description",
-            "type": "string"
-          },
-          {
-            "name": "reward",
-            "type": "u64"
-          },
-          {
-            "name": "completed_by",
-            "type": {
-              "option": "pubkey"
-            }
-          },
-          {
-            "name": "bump",
-            "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "Vote",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "governance_pool",
-            "type": "pubkey"
-          },
           {
             "name": "proposal",
             "type": "pubkey"
@@ -3531,79 +2914,12 @@
             "type": "pubkey"
           },
           {
-            "name": "decision",
-            "type": {
-              "defined": {
-                "name": "VoteDecision"
-              }
-            }
-          },
-          {
-            "name": "voting_power",
-            "type": "u64"
+            "name": "approve",
+            "type": "bool"
           },
           {
             "name": "timestamp",
             "type": "i64"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "VoteDecision",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "Approve"
-          },
-          {
-            "name": "Reject"
-          },
-          {
-            "name": "Abstain"
-          }
-        ]
-      }
-    },
-    {
-      "name": "VotingPowerAction",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "JoinAssembly"
-          },
-          {
-            "name": "CompleteTask",
-            "fields": [
-              {
-                "name": "task_id",
-                "type": "u64"
-              }
-            ]
-          },
-          {
-            "name": "StakeTokens",
-            "fields": [
-              {
-                "name": "amount",
-                "type": "u64"
-              }
-            ]
-          },
-          {
-            "name": "DelegatePower",
-            "fields": [
-              {
-                "name": "amount",
-                "type": "u64"
-              }
-            ]
           }
         ]
       }

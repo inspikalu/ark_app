@@ -3,20 +3,32 @@ import { Connection, PublicKey } from '@solana/web3.js';
 import { AnchorProvider, Program, web3, Idl, BN } from '@coral-xyz/anchor';
 import { useAnchorWallet } from '@solana/wallet-adapter-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiDollarSign, FiUser, FiCalendar, FiCheckCircle, FiBook, FiX } from 'react-icons/fi';
+import { FiDollarSign, FiUser, FiCalendar, FiCheckCircle, FiBook, FiX, FiList, FiCreditCard } from 'react-icons/fi';
 
 // Import your IDL
 import idl from '../../idl/standard.json';
-import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
-// const programID = new PublicKey("7aQvq1fEiDXqK36H7mW8MSTGdnHn6XAHDd9pauZwZXGQ");
+const programID = new PublicKey("2eTVXGSKCaTaivadMawTEz3h14FLwhyGTY64UBYLyZ6p");
 
 type StandardIDL = Idl & {
   accounts: {
     escrow: PublicKey;
     market: PublicKey;
+    escrowList: EscrowList;
+    paymentList: PaymentList;
   };
-};
+}
+
+interface EscrowList {
+  escrows: EscrowData[];
+  bump: number;
+}
+
+interface PaymentList {
+  payments: Payment[];
+  bump: number;
+}
 
 const typedIdl = idl as StandardIDL;
 
@@ -36,17 +48,30 @@ interface OrderBookData {
   price: string;
 }
 
+interface EscrowData {
+  sender: PublicKey;
+  recipient: PublicKey;
+  mint: PublicKey;
+  amount: BN;
+  condition: string;
+  is_fulfilled: boolean;
+  expiry_time: BN;
+}
+
+interface Payment {
+  amount: BN;
+  recipient: PublicKey;
+  timestamp: BN;
+}
+
+;
+
 const EscrowUI: React.FC = () => {
   const wallet = useAnchorWallet();
   const [provider, setProvider] = useState<AnchorProvider | null>(null);
   const [program, setProgram] = useState<Program<StandardIDL> | null>(null);
-  console.log(provider);
-
   const [transactionSignature, setTransactionSignature] = useState<string | null>(null);
-  console.log(transactionSignature);
-
   const [escrowType, setEscrowType] = useState<EscrowType>(null);
-  
   const [conditionalData, setConditionalData] = useState<ConditionalEscrowData>({
     amount: '',
     recipient: '',
@@ -59,6 +84,8 @@ const EscrowUI: React.FC = () => {
     amount: '',
     price: '',
   });
+  const [escrows, setEscrows] = useState<EscrowData[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -70,6 +97,13 @@ const EscrowUI: React.FC = () => {
       setProgram(new Program<StandardIDL>(typedIdl, provider));
     }
   }, [wallet]);
+
+  useEffect(() => {
+    if (program && wallet) {
+      fetchEscrows();
+      fetchPayments();
+    }
+  }, [program, wallet]);
 
   const handleConditionalInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -102,12 +136,23 @@ const EscrowUI: React.FC = () => {
   const createConditionalEscrow = async (): Promise<void> => {
     if (!program || !wallet) return;
 
-    const escrowAccount = web3.Keypair.generate();
-    const mint = new PublicKey("So11111111111111111111111111111111111111112"); // Example: SOL mint
-    const recipientKey = new PublicKey(conditionalData.recipient);
+    const [escrowPDA] = await PublicKey.findProgramAddressSync(
+      [
+        Buffer.from("escrow"),
+        wallet.publicKey.toBuffer(),
+        new PublicKey(conditionalData.recipient).toBuffer(),
+        new PublicKey("So11111111111111111111111111111111111111112").toBuffer() // Example: SOL mint
+      ],
+      program.programId
+    );
 
-    const [escrowTokenAccount] = await PublicKey.findProgramAddressSync(
-      [escrowAccount.publicKey.toBuffer(), mint.toBuffer()],
+    const [escrowTokenAccountPDA] = await PublicKey.findProgramAddressSync(
+      [escrowPDA.toBuffer(), new PublicKey("So11111111111111111111111111111111111111112").toBuffer()],
+      TOKEN_PROGRAM_ID
+    );
+
+    const [escrowListPDA] = await PublicKey.findProgramAddressSync(
+      [Buffer.from("escrow_list")],
       program.programId
     );
 
@@ -117,24 +162,26 @@ const EscrowUI: React.FC = () => {
       new BN(Date.parse(conditionalData.expiryTime) / 1000)
     )
     .accounts({
-      escrow: escrowAccount.publicKey,
+      escrow: escrowPDA,
       sender: wallet.publicKey,
-      recipient: recipientKey,
-      mint: mint,
+      recipient: new PublicKey(conditionalData.recipient),
+      mint: new PublicKey("So11111111111111111111111111111111111111112"),
       senderTokenAccount: await getAssociatedTokenAddress(
-        mint,
+        new PublicKey("So11111111111111111111111111111111111111112"),
         wallet.publicKey,
       ),
-      escrowTokenAccount: escrowTokenAccount,
+      escrowTokenAccount: escrowTokenAccountPDA,
+      escrowList: escrowListPDA,
       systemProgram: web3.SystemProgram.programId,
+      associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
       tokenProgram: TOKEN_PROGRAM_ID,
       rent: web3.SYSVAR_RENT_PUBKEY,
     })
-    .signers([escrowAccount])
     .rpc();
 
     setTransactionSignature(tx);
     console.log("Conditional escrow created successfully. Transaction signature:", tx);
+    await fetchEscrows();
   };
 
   const placeOrder = async (): Promise<void> => {
@@ -142,7 +189,12 @@ const EscrowUI: React.FC = () => {
 
     const marketKey = new PublicKey(orderBookData.market);
 
-   const tx = await program.methods.placeOrder(
+    const [escrowTokenAccountPDA] = await PublicKey.findProgramAddressSync(
+      [marketKey.toBuffer(), program.programId.toBuffer()],
+      TOKEN_PROGRAM_ID
+    );
+
+    const tx = await program.methods.placeOrder(
       { [orderBookData.side]: {} },
       new BN(parseFloat(orderBookData.amount) * 1e9), // Convert to lamports
       new BN(parseFloat(orderBookData.price) * 1e9) // Convert to lamports
@@ -154,17 +206,70 @@ const EscrowUI: React.FC = () => {
         marketKey,
         wallet.publicKey
       ),
-      escrowTokenAccount: await getAssociatedTokenAddress(
-        marketKey,
-        program.programId,
-        true
-      ),
+      escrowTokenAccount: escrowTokenAccountPDA,
       tokenProgram: TOKEN_PROGRAM_ID,
     })
     .rpc();
 
     setTransactionSignature(tx);
     console.log("Order placed successfully. Transaction signature:", tx);
+  };
+
+  const fetchEscrows = async (): Promise<void> => {
+    if (!program || !wallet) return;
+
+    const [escrowListPDA] = await PublicKey.findProgramAddressSync(
+      [Buffer.from("escrow_list")],
+      program.programId
+    );
+
+    try {
+      
+      const tx = await program.methods.listConditionalEscrows()
+        .accounts({
+          authority: wallet.publicKey,
+          escrowList: escrowListPDA,
+        })
+        .rpc();
+        const escrowListAccount = await (program as any).account.escrowList.fetch(escrowListPDA);
+
+        if (escrowListAccount && escrowListAccount.escrows) {
+          setEscrows(escrowListAccount.escrows);
+        }
+    } catch (error) {
+      console.error("Error fetching escrows:", error);
+      setError("Failed to fetch escrows");
+    }
+  };
+
+  const fetchPayments = async (): Promise<void> => {
+    if (!program || !wallet) return;
+
+    const [paymentListPDA] = await PublicKey.findProgramAddressSync(
+      [Buffer.from("payment_list")],
+      program.programId
+    );
+
+    try {
+      const tx = await program.methods.listReleasedPayments()
+        .accounts({
+          authority: wallet.publicKey,
+          paymentList: paymentListPDA,
+        })
+        .rpc();
+
+        const paymentListAccount = await (program as any).account.paymentList.fetch(paymentListPDA);
+
+        if (paymentListAccount && paymentListAccount.payments) {
+          // Set the payments into state
+          setPayments(paymentListAccount.payments);
+        }
+
+      setPayments(paymentListAccount);
+    } catch (error) {
+      console.error("Error fetching payments:", error);
+      setError("Failed to fetch payments");
+    }
   };
 
   return (
@@ -203,6 +308,73 @@ const EscrowUI: React.FC = () => {
           </motion.button>
         </motion.div>
       )}
+
+            {/* New sections for displaying escrows and payments */}
+            <motion.div
+        className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
+        {/* Escrows Section */}
+        <motion.div
+          className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow-xl"
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.2 }}
+        >
+          <h2 className="text-2xl font-bold mb-4 flex items-center">
+            <FiList className="mr-2" /> Escrows
+          </h2>
+          <ul className="space-y-4">
+            <AnimatePresence>
+              {escrows.map((escrow, index) => (
+                <motion.li
+                  key={index}
+                  className="bg-white bg-opacity-20 rounded-lg p-4"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  <p><strong>Sender:</strong> {escrow.sender.toBase58().slice(0, 8)}...</p>
+                  <p><strong>Recipient:</strong> {escrow.recipient.toBase58().slice(0, 8)}...</p>
+                  <p><strong>Amount:</strong> {escrow.amount.toString()} SOL</p>
+                  <p><strong>Condition:</strong> {escrow.condition}</p>
+                </motion.li>
+              ))}
+            </AnimatePresence>
+          </ul>
+        </motion.div>
+
+               {/* Payments Section */}
+               <motion.div
+          className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-xl p-6 shadow-xl"
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.2 }}
+        >
+          <h2 className="text-2xl font-bold mb-4 flex items-center">
+            <FiCreditCard className="mr-2" /> Payments
+          </h2>
+          <ul className="space-y-4">
+            <AnimatePresence>
+              {payments.map((payment, index) => (
+                <motion.li
+                  key={index}
+                  className="bg-white bg-opacity-20 rounded-lg p-4"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                >
+                  <p><strong>Recipient:</strong> {payment.recipient.toBase58().slice(0, 8)}...</p>
+                  <p><strong>Amount:</strong> {payment.amount.toString()} SOL</p>
+                  <p><strong>Timestamp:</strong> {new Date(payment.timestamp.toNumber() * 1000).toLocaleString()}</p>
+                </motion.li>
+              ))}
+            </AnimatePresence>
+          </ul>
+        </motion.div>
+      </motion.div>
 
       <AnimatePresence>
         {escrowType && (
