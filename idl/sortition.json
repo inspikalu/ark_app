@@ -1,5 +1,5 @@
 {
-  "address": "7naXQjiC6W4Vz28Z4cPjBqjWVFVbRipVrZ9VQsuUAPcg",
+  "address": "BTE5KLhjYqg6dhmUakXMNJkgYcsNiia5sQyp6wb1neqL",
   "metadata": {
     "name": "sortition",
     "version": "0.1.0",
@@ -214,7 +214,7 @@
         },
         {
           "name": "treasury_program",
-          "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"
+          "address": "9rkxTYZH7uF5kd3xt9yrbvMEUFbeJCkfwFzSeqhmkN76"
         },
         {
           "name": "associated_token_program",
@@ -414,7 +414,7 @@
         },
         {
           "name": "treasury_program",
-          "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"
+          "address": "9rkxTYZH7uF5kd3xt9yrbvMEUFbeJCkfwFzSeqhmkN76"
         },
         {
           "name": "associated_token_program",
@@ -611,7 +611,7 @@
         },
         {
           "name": "ark_program",
-          "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"
+          "address": "9rkxTYZH7uF5kd3xt9yrbvMEUFbeJCkfwFzSeqhmkN76"
         },
         {
           "name": "system_program",
@@ -2105,31 +2105,11 @@
             }
           },
           {
-            "name": "polls",
-            "type": "u64"
-          },
-          {
-            "name": "approved",
-            "type": "u64"
-          },
-          {
-            "name": "rejected",
-            "type": "u64"
-          },
-          {
-            "name": "points",
-            "type": "u64"
-          },
-          {
-            "name": "created_at",
+            "name": "initialized_at",
             "type": "i64"
           },
           {
-            "name": "auth_bump",
-            "type": "u8"
-          },
-          {
-            "name": "state_bump",
+            "name": "bump",
             "type": "u8"
           }
         ]
@@ -2896,6 +2876,10 @@
           {
             "name": "program_id",
             "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
           }
         ]
       }

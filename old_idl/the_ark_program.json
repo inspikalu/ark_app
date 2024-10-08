@@ -1,5 +1,5 @@
 {
-  "address": "9rkxTYZH7uF5kd3xt9yrbvMEUFbeJCkfwFzSeqhmkN76",
+  "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V",
   "metadata": {
     "name": "the_ark_program",
     "version": "0.1.0",
@@ -236,28 +236,7 @@
         {
           "name": "ark_analytics",
           "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  97,
-                  114,
-                  107,
-                  95,
-                  97,
-                  110,
-                  97,
-                  108,
-                  121,
-                  116,
-                  105,
-                  99,
-                  115
-                ]
-              }
-            ]
-          }
+          "signer": true
         },
         {
           "name": "signer",
@@ -291,52 +270,12 @@
         },
         {
           "name": "ark_analytics",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  97,
-                  114,
-                  107,
-                  95,
-                  97,
-                  110,
-                  97,
-                  108,
-                  121,
-                  116,
-                  105,
-                  99,
-                  115
-                ]
-              }
-            ]
-          }
+          "writable": true
         },
         {
           "name": "state_info",
           "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  115,
-                  116,
-                  97,
-                  116,
-                  101,
-                  95,
-                  105,
-                  110,
-                  102,
-                  111
-                ]
-              }
-            ]
-          }
+          "signer": true
         },
         {
           "name": "government_program",
@@ -455,10 +394,6 @@
           {
             "name": "initialized_at",
             "type": "i64"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
           }
         ]
       }
@@ -529,10 +464,6 @@
           {
             "name": "program_id",
             "type": "pubkey"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
           }
         ]
       }

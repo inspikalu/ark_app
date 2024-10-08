@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { FiCheck } from 'react-icons/fi';
 import idl from '../../idl/the_ark_program.json';
 
-const PROGRAM_ID = new PublicKey('48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V');
+const PROGRAM_ID = new PublicKey('9rkxTYZH7uF5kd3xt9yrbvMEUFbeJCkfwFzSeqhmkN76');
 
 const InitializeArkAnalytics: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -22,15 +22,17 @@ const InitializeArkAnalytics: React.FC = () => {
       const provider = new AnchorProvider(connection, wallet as any, {});
       const program = new Program(idl as any, provider);
 
-      const arkAnalytics = web3.Keypair.generate();
+      const [arkAnalyticsPda] = PublicKey.findProgramAddressSync(
+        [Buffer.from("ark_analytics")],
+        program.programId
+      );
 
-      await program.methods.initializeArk()
+      await (program as any).methods.initializeArk()
         .accounts({
-          arkAnalytics: arkAnalytics.publicKey,
+          arkAnalytics: arkAnalyticsPda,
           signer: wallet.publicKey,
           systemProgram: web3.SystemProgram.programId,
         })
-        .signers([arkAnalytics])
         .rpc();
 
       setSuccess(true);
