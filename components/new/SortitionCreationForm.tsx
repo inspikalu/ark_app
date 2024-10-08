@@ -82,9 +82,9 @@ const SortitionCreationForm: React.FC<SortitionCreationFormProps> = ({ governanc
       if (name.startsWith('regions[') || name.startsWith('ageGroups[') || name.startsWith('otherDemographic[')) {
         const [arrayName, index] = name.split('[');
         const arrayIndex = parseInt(index);
-        const newArray = [...prev[arrayName.slice(0, -1)]];
-        newArray[arrayIndex] = value;
-        return { ...prev, [arrayName.slice(0, -1)]: newArray };
+        // const newArray = [...prev[arrayName.slice(0, -1)]];
+        // newArray[arrayIndex] = value;
+        // return { ...prev, [arrayName.slice(0, -1)]: newArray };
       }
       return { ...prev, [name]: value };
     });
