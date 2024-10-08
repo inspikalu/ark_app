@@ -4,32 +4,50 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
-import { AnchorProvider, Program, web3, BN } from '@coral-xyz/anchor';
+import { AnchorProvider, Program, web3, BN, Idl } from '@coral-xyz/anchor';
 import { FiCheck, FiX } from 'react-icons/fi';
 import DidYouKnowModal from "./DidYouKnowModal";
-import { GovernanceType } from '../create/DashboardSearch';
 
 // Import your IDL
 import idl from '../../idl/absolute_monarchy.json';
 
-const PROGRAM_ID = new PublicKey('ADp9DgS9ZpsVDCXb4ysDjJoB1d8cL3CUmm4ErwVtqWzu');
+const PROGRAM_ID = new PublicKey('D2VDfq9f7UaeuJVqpR5Qq1W4vBfqHbJWYSbvbE1Bsryc');
 
 interface PaoCreationFormProps {
-  governanceType: GovernanceType;
+  governanceType: 'absolute_monarchy';
+}
+
+interface MonarchyFormState {
+  name: string;
+  description: string;
+  monarchName: string;
+  divineMandate: string;
+  collectionPrice: string;
+  nftSupply: string;
+  splSupply: string;
+  royalDecreeThreshold: string;
+  minLoyaltyAmount: string;
+  membershipTokensThreshold: string;
+  knighthoodPrice: string;
+  nftTokenType: 'new' | 'existing';
+  splTokenType: 'new' | 'existing';
+  nftMintAddress: string;
+  splMintAddress: string;
+  nftSymbol: string;
+  splSymbol: string;
+  primaryKingdomToken: 'NFT' | 'SPL';
 }
 
 const PaoCreationForm: React.FC<PaoCreationFormProps> = ({ governanceType }) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [program, setProgram] = useState<Program | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [nftTokenType, setNftTokenType] = useState('new');
-  const [splTokenType, setSplTokenType] = useState('new');
   const router = useRouter();
   const { connection } = useConnection();
   const wallet = useWallet();
 
-  const [monarchyForm, setMonarchyForm] = useState({
+  const [monarchyForm, setMonarchyForm] = useState<MonarchyFormState>({
     name: '',
     description: '',
     monarchName: '',
@@ -41,6 +59,8 @@ const PaoCreationForm: React.FC<PaoCreationFormProps> = ({ governanceType }) => 
     minLoyaltyAmount: '',
     membershipTokensThreshold: '',
     knighthoodPrice: '',
+    nftTokenType: 'new',
+    splTokenType: 'new',
     nftMintAddress: '',
     splMintAddress: '',
     nftSymbol: '',
@@ -51,15 +71,20 @@ const PaoCreationForm: React.FC<PaoCreationFormProps> = ({ governanceType }) => 
   useEffect(() => {
     if (wallet.connected && wallet.publicKey) {
       const provider = new AnchorProvider(connection, wallet as any, {});
-      const program = new Program(idl as any, provider);
+      const program = new Program(idl as Idl, provider);
       setProgram(program);
-      setLoading(false);
     }
   }, [wallet.connected, wallet.publicKey, connection]);
 
+  useEffect(() => {
+    if (program && wallet.publicKey) {
+      initializeAndRegisterGovernment();
+    }
+  }, [program, wallet.publicKey]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setMonarchyForm(prev => ({ ...prev, [name]: value }));
+    setMonarchyForm(prev => ({ ...prev, [name]: value as any }));
   };
 
   const initializeAndRegisterGovernment = async () => {
@@ -83,7 +108,7 @@ const PaoCreationForm: React.FC<PaoCreationFormProps> = ({ governanceType }) => 
           arkAnalytics: arkAnalyticsPda,
           stateInfo: stateInfoPda,
           governmentProgram: program.programId,
-          arkProgram: new PublicKey("48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"),
+          arkProgram: new PublicKey("9rkxTYZH7uF5kd3xt9yrbvMEUFbeJCkfwFzSeqhmkN76"),
           systemProgram: web3.SystemProgram.programId,
         })
         .rpc();
@@ -104,11 +129,11 @@ const PaoCreationForm: React.FC<PaoCreationFormProps> = ({ governanceType }) => 
     setError(null);
 
     try {
-      const nftConfig = nftTokenType === 'new'
+      const nftConfig = monarchyForm.nftTokenType === 'new'
         ? { tokenType: { new: {} }, customMint: PublicKey.default }
         : { tokenType: { existing: {} }, customMint: new PublicKey(monarchyForm.nftMintAddress) };
 
-      const splConfig = splTokenType === 'new'
+      const splConfig = monarchyForm.splTokenType === 'new'
         ? { tokenType: { new: {} }, customMint: PublicKey.default }
         : { tokenType: { existing: {} }, customMint: new PublicKey(monarchyForm.splMintAddress) };
 
@@ -192,14 +217,10 @@ const PaoCreationForm: React.FC<PaoCreationFormProps> = ({ governanceType }) => 
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <h2 className="text-2xl font-semibold mb-4"><FiCheck className="inline-block mr-2" /> Initialize and Register Government</h2>
-        <button
-          onClick={initializeAndRegisterGovernment}
-          disabled={loading}
-          className="w-full bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 rounded flex items-center justify-center"
-        >
-          {loading ? 'Initializing...' : <><FiCheck className="mr-2" /> Initialize and Register Government</>}
-        </button>
+        <h2 className="text-2xl font-semibold mb-4">
+          <FiCheck className="inline-block mr-2" /> Initialize and Register Government
+        </h2>
+        <p>Government initialization and registration is automatic upon component mount.</p>
       </motion.div>
 
       <motion.form
@@ -209,119 +230,67 @@ const PaoCreationForm: React.FC<PaoCreationFormProps> = ({ governanceType }) => 
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <h2 className="text-2xl font-semibold mb-4"><FiCheck className="inline-block mr-2" /> Create Absolute Monarchy</h2>
+        <h2 className="text-2xl font-semibold mb-4">
+          <FiCheck className="inline-block mr-2" /> Create Absolute Monarchy
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label htmlFor="name" className="block text-white mb-2">Name</label>
-          <input type="text" id="name" name="name" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3" />
-        </div>
-        <div>
-          <label htmlFor="description" className="block text-white mb-2">Description</label>
-          <textarea id="description" name="description" rows={4} required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3"></textarea>
-        </div>
-        <div>
-          <label htmlFor="monarchName" className="block text-white mb-2">Monarch Name</label>
-          <input type="text" id="monarchName" name="monarchName" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3" />
-        </div>
-        <div>
-          <label htmlFor="divineMandate" className="block text-white mb-2">Divine Mandate</label>
-          <input type="text" id="divineMandate" name="divineMandate" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3" />
-        </div>
-        <div>
-          <label htmlFor="collectionPrice" className="block text-white mb-2">Collection Price</label>
-          <input type="number" id="collectionPrice" name="collectionPrice" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3" />
-        </div>
-        <div>
-          <label htmlFor="nftSupply" className="block text-white mb-2">NFT Supply</label>
-          <input type="number" id="nftSupply" name="nftSupply" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3" />
-        </div>
-        <div>
-          <label htmlFor="splSupply" className="block text-white mb-2">SPL Supply</label>
-          <input type="number" id="splSupply" name="splSupply" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3" />
-        </div>
-        <div>
-          <label htmlFor="royalDecreeThreshold" className="block text-white mb-2">Royal Decree Threshold</label>
-          <input type="number" id="royalDecreeThreshold" name="royalDecreeThreshold" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3" />
-        </div>
-        <div>
-          <label htmlFor="minLoyaltyAmount" className="block text-white mb-2">Min Loyalty Amount</label>
-          <input type="number" id="minLoyaltyAmount" name="minLoyaltyAmount" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3" />
-        </div>
-        <div>
-          <label htmlFor="membershipTokensThreshold" className="block text-white mb-2">Membership Tokens Threshold</label>
-          <input type="number" id="membershipTokensThreshold" name="membershipTokensThreshold" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3" />
-        </div>
-        <div>
-          <label htmlFor="knighthoodPrice" className="block text-white mb-2">Knighthood Price</label>
-          <input type="number" id="knighthoodPrice" name="knighthoodPrice" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3" />
-        </div>
-        {/* NFT Configuration */}
-        <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-white">NFT Configuration</h3>
-          <div>
-            <label htmlFor="nftTokenType" className="block text-white mb-2">NFT Token Type</label>
-            <select 
-              id="nftTokenType" 
-              name="nftTokenType" 
-              className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3"
-              value={nftTokenType}
-              onChange={(e) => setNftTokenType(e.target.value)}
-            >
-              <option value="new">Create New NFT</option>
-              <option value="existing">Use Existing NFT</option>
-            </select>
-          </div>
-          {nftTokenType === 'existing' && (
-            <div>
-              <label htmlFor="nftMintAddress" className="block text-white mb-2">NFT Mint Address</label>
-              <input 
-                type="text" 
-                id="nftMintAddress" 
-                name="nftMintAddress" 
-                className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3" 
-                placeholder="Enter NFT mint address"
-              />
-            </div>
+          <InputField name="name" label="Name" value={monarchyForm.name} onChange={handleInputChange} />
+          <InputField name="description" label="Description" value={monarchyForm.description} onChange={handleInputChange} />
+          <InputField name="monarchName" label="Monarch Name" value={monarchyForm.monarchName} onChange={handleInputChange} />
+          <InputField name="divineMandate" label="Divine Mandate" value={monarchyForm.divineMandate} onChange={handleInputChange} />
+          <InputField name="collectionPrice" label="Collection Price" type="number" value={monarchyForm.collectionPrice} onChange={handleInputChange} />
+          <InputField name="nftSupply" label="NFT Supply" type="number" value={monarchyForm.nftSupply} onChange={handleInputChange} />
+          <InputField name="splSupply" label="SPL Supply" type="number" value={monarchyForm.splSupply} onChange={handleInputChange} />
+          <InputField name="royalDecreeThreshold" label="Royal Decree Threshold" type="number" value={monarchyForm.royalDecreeThreshold} onChange={handleInputChange} />
+          <InputField name="minLoyaltyAmount" label="Min Loyalty Amount" type="number" value={monarchyForm.minLoyaltyAmount} onChange={handleInputChange} />
+          <InputField name="membershipTokensThreshold" label="Membership Tokens Threshold" type="number" value={monarchyForm.membershipTokensThreshold} onChange={handleInputChange} />
+          <InputField name="knighthoodPrice" label="Knighthood Price" type="number" value={monarchyForm.knighthoodPrice} onChange={handleInputChange} />
+          
+          <SelectField 
+            name="nftTokenType" 
+            label="NFT Token Type" 
+            value={monarchyForm.nftTokenType} 
+            onChange={handleInputChange}
+            options={[
+              { value: 'new', label: 'Create New NFT' },
+              { value: 'existing', label: 'Use Existing NFT' },
+            ]} 
+          />
+          
+          {monarchyForm.nftTokenType === 'existing' && (
+            <InputField name="nftMintAddress" label="NFT Mint Address" value={monarchyForm.nftMintAddress} onChange={handleInputChange} />
           )}
-        </div>
-
-        {/* SPL Configuration */}
-        <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-white">SPL Token Configuration</h3>
-          <div>
-            <label htmlFor="splTokenType" className="block text-white mb-2">SPL Token Type</label>
-            <select 
-              id="splTokenType" 
-              name="splTokenType" 
-              className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3"
-              value={splTokenType}
-              onChange={(e) => setSplTokenType(e.target.value)}
-            >
-              <option value="new">Create New SPL Token</option>
-              <option value="existing">Use Existing SPL Token</option>
-            </select>
-          </div>
-          {splTokenType === 'existing' && (
-            <div>
-              <label htmlFor="splMintAddress" className="block text-white mb-2">SPL Token Mint Address</label>
-              <input 
-                type="text" 
-                id="splMintAddress" 
-                name="splMintAddress" 
-                className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3" 
-                placeholder="Enter SPL token mint address"
-              />
-            </div>
+          
+          <SelectField 
+            name="splTokenType" 
+            label="SPL Token Type" 
+            value={monarchyForm.splTokenType} 
+            onChange={handleInputChange}
+            options={[
+              { value: 'new', label: 'Create New SPL Token' },
+              { value: 'existing', label: 'Use Existing SPL Token' },
+            ]} 
+          />
+          
+          {monarchyForm.splTokenType === 'existing' && (
+            <InputField name="splMintAddress" label="SPL Mint Address" value={monarchyForm.splMintAddress} onChange={handleInputChange} />
           )}
+          
+          <InputField name="nftSymbol" label="NFT Symbol" value={monarchyForm.nftSymbol} onChange={handleInputChange} />
+          <InputField name="splSymbol" label="SPL Symbol" value={monarchyForm.splSymbol} onChange={handleInputChange} />
+          
+          <SelectField 
+            name="primaryKingdomToken" 
+            label="Primary Kingdom Token" 
+            value={monarchyForm.primaryKingdomToken} 
+            onChange={handleInputChange}
+            options={[
+              { value: 'NFT', label: 'NFT' },
+              { value: 'SPL', label: 'SPL' },
+            ]} 
+          />
         </div>
-        <div>
-          <label htmlFor="primaryKingdomToken" className="block text-white mb-2">Primary Kingdom Token</label>
-          <select id="primaryKingdomToken" name="primaryKingdomToken" required className="w-full bg-gray-800 text-white border border-gray-700 rounded py-2 px-3">
-            <option value="nft">NFT</option>
-            <option value="spl">SPL</option>
-          </select>
-        </div>
-        </div>
+        
         <motion.button
           whileHover={{ scale: 0.98 }}
           whileTap={{ scale: 0.95 }}
@@ -344,7 +313,7 @@ const PaoCreationForm: React.FC<PaoCreationFormProps> = ({ governanceType }) => 
         </motion.div>
       )}
 
-      {success && (
+{success && (
         <motion.div 
           className="mt-4 p-4 bg-green-100 text-green-700 rounded flex items-center"
           initial={{ opacity: 0, y: 20 }}
@@ -358,6 +327,53 @@ const PaoCreationForm: React.FC<PaoCreationFormProps> = ({ governanceType }) => 
   );
 };
 
+interface InputFieldProps {
+  name: string;
+  label: string;
+  type?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const InputField: React.FC<InputFieldProps> = ({ name, label, type = "text", value, onChange }) => (
+  <div>
+    <label htmlFor={name} className="block text-gray-700 mb-2">{label}</label>
+    <input 
+      type={type} 
+      id={name} 
+      name={name} 
+      value={value} 
+      onChange={onChange} 
+      className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3"
+      required 
+    />
+  </div>
+);
+
+interface SelectFieldProps {
+  name: string;
+  label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  options: { value: string; label: string }[];
+}
+
+const SelectField: React.FC<SelectFieldProps> = ({ name, label, value, onChange, options }) => (
+  <div>
+    <label htmlFor={name} className="block text-gray-700 mb-2">{label}</label>
+    <select 
+      id={name} 
+      name={name} 
+      value={value} 
+      onChange={onChange}
+      className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3"
+      required
+    >
+      {options.map(option => (
+        <option key={option.value} value={option.value}>{option.label}</option>
+      ))}
+    </select>
+  </div>
+);
+
 export default PaoCreationForm;
-
-

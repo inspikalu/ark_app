@@ -700,9 +700,9 @@ const REDIRECT_URL = 'https://app.useark.xyz/chat';
 
 // Define providers
 const providers = [
-  { id: process.env.NEXT_PUBLIC_TWITTER_FOLLOWER_COUNT_ID, name: "Twitter Follower Count Feb2 Demo" },
+  { id: process.env.NEXT_PUBLIC_TWITTER_FOLLOWER_COUNT_ID, name: "Twitter Follower Count" },
   { id: process.env.NEXT_PUBLIC_STEAM_ID, name: "Steam ID" },
-  { id: process.env.NEXT_PUBLIC_DUBAI_LAND_METADATA_ID, name: "Dubai Land Department - Metadata" },
+  { id: process.env.NEXT_PUBLIC_DUBAI_LAND_METADATA_ID, name: "Dubai Land Department" },
   { id: process.env.NEXT_PUBLIC_DUBAI_LAND_EMIRATES_ID, name: "Dubai Land Department - Emirates Id" },
   { id: process.env.NEXT_PUBLIC_LINKEDIN_POST_IMPRESSIONS_ID, name: "Linkedin Provider for Post Impressions" },
   { id: process.env.NEXT_PUBLIC_DUBAI_LAND_TENANT_V2_ID, name: "Dubai Land Department - Tenant Verification V2" },
@@ -715,10 +715,10 @@ const providers = [
   { id: process.env.NEXT_PUBLIC_KAGGLE_USERNAME_ID, name: "Kaggle username working" },
   { id: process.env.NEXT_PUBLIC_COINBASE_KYC_ID, name: "Coinbase Completed KYC" },
   { id: process.env.NEXT_PUBLIC_TWITTER_CREDENTIALS_ID, name: "Twitter Credentials" },
-  { id: process.env.NEXT_PUBLIC_SPOTIFY_PUBLIC_PLAYLIST_ID, name: "Spotify_Proof_of_Public_Playlist" },
+  { id: process.env.NEXT_PUBLIC_SPOTIFY_PUBLIC_PLAYLIST_ID, name: "Spotify Proof of Public Playlist" },
   { id: process.env.NEXT_PUBLIC_FACEBOOK_ID, name: "Facebook" },
   { id: process.env.NEXT_PUBLIC_AIRBNB_HOST_ID, name: "AirbnbHost" },
-  { id: process.env.NEXT_PUBLIC_SOUTH_AFRICA_ID, name: "SOUTH AFRICA ID 05.06" },
+  { id: process.env.NEXT_PUBLIC_SOUTH_AFRICA_ID, name: "SOUTH AFRICA ID" },
   { id: process.env.NEXT_PUBLIC_UZ_TAX_PAID_ID, name: "UZ Tax paid" },
   { id: process.env.NEXT_PUBLIC_BINANCE_KYC_LEVEL_ID, name: "Binance KYC Level" },
   { id: process.env.NEXT_PUBLIC_AMAZON_PRIME_MEMBERSHIP_ID, name: "Amazon Prime Membership" },

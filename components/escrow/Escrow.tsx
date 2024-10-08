@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Connection, PublicKey } from '@solana/web3.js';
 import { AnchorProvider, Program, web3, Idl, BN } from '@coral-xyz/anchor';
 import { useAnchorWallet } from '@solana/wallet-adapter-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiDollarSign, FiUser, FiCalendar, FiCheckCircle, FiBook, FiX, FiList, FiCreditCard } from 'react-icons/fi';
+import { FiDollarSign, FiUser, FiCalendar, FiCheckCircle, FiBook, FiX, FiList, FiCreditCard, FiRefreshCw, FiAlertCircle } from 'react-icons/fi';
 
 // Import your IDL
 import idl from '../../idl/standard.json';
@@ -72,6 +72,7 @@ const EscrowUI: React.FC = () => {
   const [program, setProgram] = useState<Program<StandardIDL> | null>(null);
   const [transactionSignature, setTransactionSignature] = useState<string | null>(null);
   const [escrowType, setEscrowType] = useState<EscrowType>(null);
+  const [isInitializing, setIsInitializing] = useState<boolean>(false);
   const [conditionalData, setConditionalData] = useState<ConditionalEscrowData>({
     amount: '',
     recipient: '',
@@ -98,12 +99,118 @@ const EscrowUI: React.FC = () => {
     }
   }, [wallet]);
 
-  useEffect(() => {
-    if (program && wallet) {
-      fetchEscrows();
-      fetchPayments();
+  const checkAndInitializeLists = useCallback(async () => {
+    if (!program || !wallet) return;
+
+    setIsInitializing(true);
+    setError(null);
+
+    try {
+      await initializeEscrowList();
+      await initializePaymentList();
+      await fetchEscrows();
+      await fetchPayments();
+    } catch (err) {
+      console.error("Error during initialization:", err);
+      setError(`Initialization failed: ${err instanceof Error ? err.message : String(err)}`);
+    } finally {
+      setIsInitializing(false);
     }
   }, [program, wallet]);
+
+  useEffect(() => {
+    if (program && wallet) {
+      checkAndInitializeLists();
+    }
+  }, [program, wallet, checkAndInitializeLists]);
+
+  const initializeEscrowList = async (): Promise<void> => {
+    if (!program || !wallet) return;
+
+    const [escrowListPDA] = await PublicKey.findProgramAddressSync(
+      [Buffer.from("escrow_list")],
+      program.programId
+    );
+
+    // try {
+    //   const tx = await program.methods.initializeEscrowList()
+    //     .accounts({
+    //       escrowList: escrowListPDA,
+    //       authority: wallet.publicKey,
+    //       systemProgram: web3.SystemProgram.programId,
+    //     })
+    //     .rpc();
+    //   console.log("Escrow list initialized. Transaction signature:", tx);
+    // } catch (error) {
+    //   console.error("Error initializing escrow list:", error);
+    //   setError("Failed to initialize escrow list");
+    // }
+
+    try {
+      // Check if the escrow list already exists
+      await (program as any).account.escrowList.fetch(escrowListPDA);
+      console.log("Escrow list already initialized");
+    } catch (error) {
+      // If it doesn't exist, initialize it
+      try {
+        const tx = await program.methods.initializeEscrowList()
+          .accounts({
+            escrowList: escrowListPDA,
+            authority: wallet.publicKey,
+            systemProgram: web3.SystemProgram.programId,
+          })
+          .rpc();
+        console.log("Escrow list initialized. Transaction signature:", tx);
+      } catch (initError) {
+        console.error("Error initializing escrow list:", initError);
+        setError("Failed to initialize escrow list");
+      }
+    }
+  };
+
+  const initializePaymentList = async (): Promise<void> => {
+    if (!program || !wallet) return;
+
+    const [paymentListPDA] = await PublicKey.findProgramAddressSync(
+      [Buffer.from("payment_list")],
+      program.programId
+    );
+
+    // try {
+    //   const tx = await program.methods.initializePaymentList()
+    //     .accounts({
+    //       paymentList: paymentListPDA,
+    //       authority: wallet.publicKey,
+    //       systemProgram: web3.SystemProgram.programId,
+    //     })
+    //     .rpc();
+    //   console.log("Payment list initialized. Transaction signature:", tx);
+    // } catch (error) {
+    //   console.error("Error initializing payment list:", error);
+    //   setError("Failed to initialize payment list");
+    // }
+
+    try {
+      // Check if the payment list already exists
+      await (program as any).account.paymentList.fetch(paymentListPDA);
+      console.log("Payment list already initialized");
+    } catch (error) {
+      // If it doesn't exist, initialize it
+      try {
+        const tx = await program.methods.initializePaymentList()
+          .accounts({
+            paymentList: paymentListPDA,
+            authority: wallet.publicKey,
+            systemProgram: web3.SystemProgram.programId,
+          })
+          .rpc();
+        console.log("Payment list initialized. Transaction signature:", tx);
+      } catch (initError) {
+        console.error("Error initializing payment list:", initError);
+        setError("Failed to initialize payment list");
+      }
+    }
+  };
 
   const handleConditionalInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -282,6 +389,35 @@ const EscrowUI: React.FC = () => {
       >
         ARK Escrow
       </motion.h1>
+
+      {isInitializing && (
+        <motion.div 
+          className="text-center mb-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <FiRefreshCw className="inline-block mr-2 animate-spin" />
+          Initializing...
+        </motion.div>
+      )}
+
+      {error && (
+        <motion.div 
+          className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+          role="alert"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <strong className="font-bold mr-2"><FiAlertCircle className="inline" /></strong>
+          <span className="block sm:inline">{error}</span>
+          <button
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4"
+            onClick={checkAndInitializeLists}
+          >
+            Retry
+          </button>
+        </motion.div>
+      )}
 
       {!escrowType && (
         <motion.div

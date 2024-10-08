@@ -1,23 +1,39 @@
 'use client'
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiSearch, FiMenu, FiMessageSquare, FiUsers, FiFileText, FiChevronLeft, FiDollarSign, FiPlusCircle, FiInfo, FiCheckCircle, FiLock } from 'react-icons/fi';
+import { FiSearch, FiMenu, FiMessageSquare, FiUsers, FiFileText, FiChevronLeft, FiDollarSign, FiPlusCircle, FiInfo, FiCheckCircle, FiLock, FiRefreshCw, FiCommand } from 'react-icons/fi';
 import { useWallet } from '@solana/wallet-adapter-react';
 import CreatePAOModal from './PAOModal';
 import MessageInput from './MessageInput';
 import WalletDisplay from './WalletDisplay';
 import { IconType } from 'react-icons';
 import { useRouter } from 'next/navigation';
-import { PAO } from './Mock';
+import { PAO, GovernanceType } from './Mock';
 import ErrorBoundary from './ErrorBoundary';
 import TreasurySection from './TreasurySection';
 import ProposalSection from './ProposalSection';
 import ChatMessages from './ChatMessages';
+import GovernanceTransitionModal from './GovernanceTransition';
+import DAOActionsModal from './PAOActionsModal';
 
 interface Tab {
   id: string;
   icon: IconType;
   label: string;
+}
+
+interface AppStoreIcon {
+  icon: IconType;
+  label: string;
+  route?: string;
+  action?: () => void;
+}
+
+interface Message {
+  id: string;
+  text: string;
+  sender: string;
+  timestamp: number;
 }
 
 interface PAOChatInterfaceProps {
@@ -31,6 +47,9 @@ const PAOChatInterface: React.FC<PAOChatInterfaceProps> = ({ initialPAO, allPAOs
   const [isCreatePAOModalOpen, setIsCreatePAOModalOpen] = useState<boolean>(false);
   const [isPAODetailsOpen, setIsPAODetailsOpen] = useState<boolean>(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isGovernanceModalOpen, setIsGovernanceModalOpen] = useState<boolean>(false);
+  const [isDAOActionsModalOpen, setIsDAOActionsModalOpen] = useState<boolean>(false);
   const wallet = useWallet();
   const router = useRouter();
 
@@ -44,19 +63,35 @@ const PAOChatInterface: React.FC<PAOChatInterfaceProps> = ({ initialPAO, allPAOs
   const togglePAODetails = (): void => setIsPAODetailsOpen(!isPAODetailsOpen);
   const toggleSidebar = (): void => setIsSidebarOpen(!isSidebarOpen);
 
+  const appStoreIcons: AppStoreIcon[] = [
+    { icon: FiCheckCircle, label: "Verify", route: "/verify" },
+    { icon: FiLock, label: "Escrow", route: "/escrow" },
+    { icon: FiDollarSign, label: "Treasury", route: "/multisig" },
+    { icon: FiRefreshCw, label: "Governance", action: () => setIsGovernanceModalOpen(true) },
+    { icon: FiCommand, label: "DAO Actions", action: () => setIsDAOActionsModalOpen(true) },
+  ];
+
   useEffect(() => {
     if (selectedPAO) {
       router.push(`/chat/${selectedPAO.id}`);
+      const storedMessages = localStorage.getItem(`chat_messages_${selectedPAO.id}`);
+      if (storedMessages) {
+        setMessages(JSON.parse(storedMessages));
+      } else {
+        setMessages([]);
+      }
     } else {
       router.push('/chat');
     }
   }, [selectedPAO, router]);
 
-  const appStoreIcons = [
-    { icon: FiCheckCircle, label: "Verify", route: "/verify" },
-    { icon: FiLock, label: "Escrow", route: "/escrow" },
-    { icon: FiDollarSign, label: "Treasury", route: "/multisig" },
-  ];
+  const handleIconClick = (icon: AppStoreIcon) => {
+    if (icon.action) {
+      icon.action();
+    } else if (icon.route) {
+      router.push(icon.route);
+    }
+  };
 
   const handleSendMessage = useCallback((message: string) => {
     if (!selectedPAO) return;
@@ -68,17 +103,12 @@ const PAOChatInterface: React.FC<PAOChatInterfaceProps> = ({ initialPAO, allPAOs
       timestamp: Date.now(),
     };
 
-    const storedMessages = localStorage.getItem(`chat_messages_${selectedPAO.id}`);
-    const messages = storedMessages ? JSON.parse(storedMessages) : [];
-    messages.push(newMessage);
-    localStorage.setItem(`chat_messages_${selectedPAO.id}`, JSON.stringify(messages));
-
-    // Force a re-render of the ChatMessages component
-    setChatKey(prevKey => prevKey + 1);
+    setMessages(prevMessages => {
+      const updatedMessages = [...prevMessages, newMessage];
+      localStorage.setItem(`chat_messages_${selectedPAO.id}`, JSON.stringify(updatedMessages));
+      return updatedMessages;
+    });
   }, [selectedPAO]);
-
-  const [chatKey, setChatKey] = useState(0);
-  console.log(chatKey);
 
 
   const renderMainContent = () => {
@@ -124,7 +154,7 @@ const PAOChatInterface: React.FC<PAOChatInterfaceProps> = ({ initialPAO, allPAOs
               <p className="text-center text-gray-500">
                 This is the beginning of your conversation in {selectedPAO.name}
               </p>
-              <ChatMessages paoId={selectedPAO.id.toString()} />
+              <ChatMessages messages={messages} />
             </div>
           )}
           {activeTab === 'proposals' && (
@@ -157,13 +187,13 @@ const PAOChatInterface: React.FC<PAOChatInterfaceProps> = ({ initialPAO, allPAOs
     <ErrorBoundary>
       <div className="flex h-screen bg-gradient-to-br from-teal-100 to-blue-100">
           {/* App Store Icons */}
-          <div className="w-16 bg-white shadow-lg flex flex-col items-center py-4">
+          <div className="w-16 bg-white shadow-lg flex flex-col items-center py-4 px-5">
           {appStoreIcons.map((icon, index) => (
             <motion.div
               key={index}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
-              onClick={() => router.push(icon.route)}
+              onClick={() => handleIconClick(icon)}
               className="cursor-pointer mb-4"
             >
               {React.createElement(icon.icon, { size: 24, className: "text-teal-600" })}
@@ -301,6 +331,25 @@ const PAOChatInterface: React.FC<PAOChatInterfaceProps> = ({ initialPAO, allPAOs
 
         {/* Create PAO Modal */}
         <CreatePAOModal isOpen={isCreatePAOModalOpen} onClose={() => setIsCreatePAOModalOpen(false)} />
+
+        {/* Governance Transition Modal */}
+        <GovernanceTransitionModal
+          isOpen={isGovernanceModalOpen}
+          onClose={() => setIsGovernanceModalOpen(false)}
+          currentGovernance={selectedPAO?.governanceType}
+          onTransition={(newGovernance: GovernanceType) => {
+            // Handle governance transition logic here
+            console.log(`Transitioning to ${newGovernance}`);
+            setIsGovernanceModalOpen(false);
+          }}
+        />
+
+        {/* DAO Actions Modal */}
+        <DAOActionsModal
+          isOpen={isDAOActionsModalOpen}
+          onClose={() => setIsDAOActionsModalOpen(false)}
+          governanceType={selectedPAO?.governanceType}
+        />
       </div>
     </ErrorBoundary>
   );

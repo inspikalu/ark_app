@@ -11,24 +11,15 @@ interface Message {
 }
 
 interface ChatMessagesProps {
-  paoId: string;
+  messages: Message[];
 }
 
-const ChatMessages: React.FC<ChatMessagesProps> = ({ paoId }) => {
-  const [messages, setMessages] = useState<Message[]>([]);
+const ChatMessages: React.FC<ChatMessagesProps> = ({ messages }) => {
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
   useEffect(() => {
-    const storedMessages = localStorage.getItem(`chat_messages_${paoId}`);
-    if (storedMessages) {
-      setMessages(JSON.parse(storedMessages));
-    }
-  }, [paoId]);
-
-  useEffect(() => {
-    localStorage.setItem(`chat_messages_${paoId}`, JSON.stringify(messages));
     scrollToBottom();
-  }, [messages, paoId]);
+  }, [messages]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
