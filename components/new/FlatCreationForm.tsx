@@ -9,7 +9,7 @@ import { FiCheck, FiX } from 'react-icons/fi';
 import { getAssociatedTokenAddress, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
 // Import your IDL
-import idl from '../../idl/flat_dao.json';
+import idl from '../../idl/flat.json';
 
 const PROGRAM_ID = new PublicKey('FNF2M3rVeAhQ28VTCNVYzfKTnX1ZcStGuDZ9geVzY38Q');
 

@@ -1,10 +1,11 @@
 {
-  "address": "DovMZfoRztSgQ1SKx1M3UKwZz5fZtNbshX3qYSZHacZ4",
+  "address": "9XQD57wwrLaigMLcrcpTJphwmwdbqNKhJWczBH9derGT",
   "metadata": {
     "name": "reclaim",
     "version": "0.1.0",
     "spec": "0.1.0",
-    "description": "Created with Anchor"
+    "description": "Reclaim Protocol SDK for Solana",
+    "repository": "https://gitlab.reclaimprotocol.org/reclaim-clients/solana-sdk"
   },
   "instructions": [
     {

@@ -4,59 +4,73 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { PublicKey } from '@solana/web3.js';
-import { AnchorProvider, Program, web3, BN } from '@coral-xyz/anchor';
+import { AnchorProvider, Program, web3, BN, Idl } from '@coral-xyz/anchor';
 import { FiCheck, FiX } from 'react-icons/fi';
 
-// Import your IDL
 import idl from '../../idl/conviction.json';
 
-// const PROGRAM_ID = new PublicKey('ATsZoBzoVyPF97HLn9kt2ffNSGcnYwUApbNxfsVknNVr');
+const PROGRAM_ID = new PublicKey('DnN713Fw9TFRiNfXL3uTNGyXUdktQr9VQsHnVRWLtc8p');
 
 interface ConvictionCreationFormProps {
   governanceType: 'conviction';
 }
 
+interface DaoFormState {
+  name: string;
+  description: string;
+  nftSymbol: string;
+  splSymbol: string;
+  nftSupply: string;
+  splSupply: string;
+  approvalThreshold: string;
+  minStakeAmount: string;
+  collectionPrice: string;
+  nftTokenType: 'new' | 'existing';
+  splTokenType: 'new' | 'existing';
+  nftMintAddress: string;
+  splMintAddress: string;
+  primaryGovernanceToken: 'NFT' | 'SPL';
+}
+
 const ConvictionCreationForm: React.FC<ConvictionCreationFormProps> = ({ governanceType }) => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [program, setProgram] = useState<Program | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
-  const [nftTokenType, setNftTokenType] = useState('new');
-  const [splTokenType, setSplTokenType] = useState('new');
   const router = useRouter();
   const { connection } = useConnection();
   const wallet = useWallet();
-  console.log(governanceType);
 
-
-  const [daoForm, setDaoForm] = useState({
+  const [daoForm, setDaoForm] = useState<DaoFormState>({
     name: '',
     description: '',
-    nft_symbol: '',
-    spl_symbol: '',
-    nft_supply: '',
-    spl_supply: '',
-    approval_threshold: '',
-    min_stake_amount: '',
-    collection_price: '',
+    nftSymbol: '',
+    splSymbol: '',
+    nftSupply: '',
+    splSupply: '',
+    approvalThreshold: '',
+    minStakeAmount: '',
+    collectionPrice: '',
+    nftTokenType: 'new',
+    splTokenType: 'new',
     nftMintAddress: '',
     splMintAddress: '',
-    primary_governance_token: 'NFT',
+    primaryGovernanceToken: 'NFT',
   });
 
   useEffect(() => {
     if (wallet.connected && wallet.publicKey) {
       const provider = new AnchorProvider(connection, wallet as any, {});
-      const program = new Program(idl as any, provider);
+      const program = new Program(idl as Idl, provider);
       setProgram(program);
-      setLoading(false);
     }
   }, [wallet.connected, wallet.publicKey, connection]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setDaoForm(prev => ({ ...prev, [name]: value }));
-  };
+  useEffect(() => {
+    if (program && wallet.publicKey) {
+      initializeAndRegisterGovernment();
+    }
+  }, [program, wallet.publicKey]);
 
   const initializeAndRegisterGovernment = async () => {
     if (!program || !wallet.publicKey) return;
@@ -79,7 +93,7 @@ const ConvictionCreationForm: React.FC<ConvictionCreationFormProps> = ({ governa
           arkAnalytics: arkAnalyticsPda,
           stateInfo: stateInfoPda,
           governmentProgram: program.programId,
-          arkProgram: new PublicKey("48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"),
+          arkProgram: new PublicKey("9rkxTYZH7uF5kd3xt9yrbvMEUFbeJCkfwFzSeqhmkN76"),
           systemProgram: web3.SystemProgram.programId,
         })
         .rpc();
@@ -92,6 +106,11 @@ const ConvictionCreationForm: React.FC<ConvictionCreationFormProps> = ({ governa
     setLoading(false);
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setDaoForm(prev => ({ ...prev, [name]: value as any }));
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!program || !wallet.publicKey) return;
@@ -99,11 +118,11 @@ const ConvictionCreationForm: React.FC<ConvictionCreationFormProps> = ({ governa
     setError(null);
 
     try {
-      const nftConfig = nftTokenType === 'new'
+      const nftConfig = daoForm.nftTokenType === 'new'
         ? { tokenType: { new: {} }, customMint: PublicKey.default }
         : { tokenType: { existing: {} }, customMint: new PublicKey(daoForm.nftMintAddress) };
 
-      const splConfig = splTokenType === 'new'
+      const splConfig = daoForm.splTokenType === 'new'
         ? { tokenType: { new: {} }, customMint: PublicKey.default }
         : { tokenType: { existing: {} }, customMint: new PublicKey(daoForm.splMintAddress) };
 
@@ -115,16 +134,16 @@ const ConvictionCreationForm: React.FC<ConvictionCreationFormProps> = ({ governa
       const tx = await program.methods.newGovernance({
         name: daoForm.name,
         description: daoForm.description,
-        nftSymbol: daoForm.nft_symbol,
-        splSymbol: daoForm.spl_symbol,
-        nftSupply: new BN(daoForm.nft_supply),
-        splSupply: new BN(daoForm.spl_supply),
-        approvalThreshold: new BN(daoForm.approval_threshold),
-        minStakeAmount: new BN(daoForm.min_stake_amount),
-        collectionPrice: new BN(daoForm.collection_price),
+        nftSymbol: daoForm.nftSymbol,
+        splSymbol: daoForm.splSymbol,
+        nftSupply: new BN(daoForm.nftSupply),
+        splSupply: new BN(daoForm.splSupply),
+        approvalThreshold: new BN(daoForm.approvalThreshold),
+        minStakeAmount: new BN(daoForm.minStakeAmount),
+        collectionPrice: new BN(daoForm.collectionPrice),
         nftConfig,
         splConfig,
-        primaryGovernanceToken: { [daoForm.primary_governance_token]: {} },
+        primaryGovernanceToken: { [daoForm.primaryGovernanceToken]: {} },
       })
       .accounts({
         authority: wallet.publicKey,
@@ -136,6 +155,7 @@ const ConvictionCreationForm: React.FC<ConvictionCreationFormProps> = ({ governa
         rent: web3.SYSVAR_RENT_PUBKEY,
       })
       .rpc();
+
       console.log('Transaction successful:', tx);
       setSuccess("Conviction PAO created successfully");
       router.push(`/pao/${tx}`);
@@ -146,14 +166,6 @@ const ConvictionCreationForm: React.FC<ConvictionCreationFormProps> = ({ governa
       setLoading(false);
     }
   };
-
-  if (!wallet.connected) {
-    return <div>Please connect your wallet to create a Conviction PAO.</div>;
-  }
-
-  if (loading) {
-    return <div>Initializing client...</div>;
-  }
 
   return (
     <motion.div
@@ -168,13 +180,7 @@ const ConvictionCreationForm: React.FC<ConvictionCreationFormProps> = ({ governa
         transition={{ duration: 0.5 }}
       >
         <h2 className="text-2xl font-semibold mb-4"><FiCheck className="inline-block mr-2" /> Initialize and Register Government</h2>
-        <button
-          onClick={initializeAndRegisterGovernment}
-          disabled={loading}
-          className="w-full bg-teal-500 hover:bg-teal-400 text-white font-bold py-2 px-4 rounded flex items-center justify-center"
-        >
-          {loading ? 'Initializing...' : <><FiCheck className="mr-2" /> Initialize and Register Government</>}
-        </button>
+        <p>Government initialization and registration is automatic upon component mount.</p>
       </motion.div>
 
       <motion.form
@@ -186,111 +192,40 @@ const ConvictionCreationForm: React.FC<ConvictionCreationFormProps> = ({ governa
       >
         <h2 className="text-2xl font-semibold mb-4"><FiCheck className="inline-block mr-2" /> Create Conviction PAO</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="name" className="block text-gray-700 mb-2">Name</label>
-            <input type="text" id="name" name="name" required value={daoForm.name} onChange={handleInputChange} className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3" />
-          </div>
-          <div>
-            <label htmlFor="description" className="block text-gray-700 mb-2">Description</label>
-            <input type="text" id="description" name="description" required value={daoForm.description} onChange={handleInputChange} className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3" />
-          </div>
-          <div>
-            <label htmlFor="nft_symbol" className="block text-gray-700 mb-2">NFT Symbol</label>
-            <input type="text" id="nft_symbol" name="nft_symbol" required value={daoForm.nft_symbol} onChange={handleInputChange} className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3" />
-          </div>
-          <div>
-            <label htmlFor="spl_symbol" className="block text-gray-700 mb-2">SPL Symbol</label>
-            <input type="text" id="spl_symbol" name="spl_symbol" required value={daoForm.spl_symbol} onChange={handleInputChange} className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3" />
-          </div>
-          <div>
-            <label htmlFor="nft_supply" className="block text-gray-700 mb-2">NFT Supply</label>
-            <input type="number" id="nft_supply" name="nft_supply" required value={daoForm.nft_supply} onChange={handleInputChange} className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3" />
-          </div>
-          <div>
-            <label htmlFor="spl_supply" className="block text-gray-700 mb-2">SPL Supply</label>
-            <input type="number" id="spl_supply" name="spl_supply" required value={daoForm.spl_supply} onChange={handleInputChange} className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3" />
-          </div>
-          <div>
-            <label htmlFor="approval_threshold" className="block text-gray-700 mb-2">Approval Threshold</label>
-            <input type="number" id="approval_threshold" name="approval_threshold" required value={daoForm.approval_threshold} onChange={handleInputChange} className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3" />
-          </div>
-          <div>
-            <label htmlFor="min_stake_amount" className="block text-gray-700 mb-2">Min Stake Amount</label>
-            <input type="number" id="min_stake_amount" name="min_stake_amount" required value={daoForm.min_stake_amount} onChange={handleInputChange} className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3" />
-          </div>
-          <div>
-            <label htmlFor="collection_price" className="block text-gray-700 mb-2">Collection Price</label>
-            <input type="number" id="collection_price" name="collection_price" required value={daoForm.collection_price} onChange={handleInputChange} className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3" />
-          </div>
-          <div>
-            <label htmlFor="nftTokenType" className="block text-gray-700 mb-2">NFT Token Type</label>
-            <select 
-              id="nftTokenType" 
-              name="nftTokenType" 
-              className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3"
-              value={nftTokenType}
-              onChange={(e) => setNftTokenType(e.target.value)}
-            >
-              <option value="new">Create New NFT</option>
-              <option value="existing">Use Existing NFT</option>
-            </select>
-          </div>
-          {nftTokenType === 'existing' && (
-            <div>
-              <label htmlFor="nftMintAddress" className="block text-gray-700 mb-2">NFT Mint Address</label>
-              <input 
-                type="text" 
-                id="nftMintAddress" 
-                name="nftMintAddress" 
-                value={daoForm.nftMintAddress}
-                onChange={handleInputChange}
-                className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3" 
-                placeholder="Enter NFT mint address"
-              />
-            </div>
+          <InputField name="name" label="Name" value={daoForm.name} onChange={handleInputChange} />
+          <InputField name="description" label="Description" value={daoForm.description} onChange={handleInputChange} />
+          <InputField name="nftSymbol" label="NFT Symbol" value={daoForm.nftSymbol} onChange={handleInputChange} />
+          <InputField name="splSymbol" label="SPL Symbol" value={daoForm.splSymbol} onChange={handleInputChange} />
+          <InputField name="nftSupply" label="NFT Supply" type="number" value={daoForm.nftSupply} onChange={handleInputChange} />
+          <InputField name="splSupply" label="SPL Supply" type="number" value={daoForm.splSupply} onChange={handleInputChange} />
+          <InputField name="approvalThreshold" label="Approval Threshold" type="number" value={daoForm.approvalThreshold} onChange={handleInputChange} />
+          <InputField name="minStakeAmount" label="Min Stake Amount" type="number" value={daoForm.minStakeAmount} onChange={handleInputChange} />
+          <InputField name="collectionPrice" label="Collection Price" type="number" value={daoForm.collectionPrice} onChange={handleInputChange} />
+          
+          <SelectField name="nftTokenType" label="NFT Token Type" value={daoForm.nftTokenType} onChange={handleInputChange} options={[
+            { value: 'new', label: 'Create New NFT' },
+            { value: 'existing', label: 'Use Existing NFT' },
+          ]} />
+          
+          {daoForm.nftTokenType === 'existing' && (
+            <InputField name="nftMintAddress" label="NFT Mint Address" value={daoForm.nftMintAddress} onChange={handleInputChange} />
           )}
-          <div>
-            <label htmlFor="splTokenType" className="block text-gray-700 mb-2">SPL Token Type</label>
-            <select 
-              id="splTokenType" 
-              name="splTokenType" 
-              className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3"
-              value={splTokenType}
-              onChange={(e) => setSplTokenType(e.target.value)}
-            >
-              <option value="new">Create New SPL Token</option>
-              <option value="existing">Use Existing SPL Token</option>
-            </select>
-          </div>
-          {splTokenType === 'existing' && (
-            <div>
-              <label htmlFor="splMintAddress" className="block text-gray-700 mb-2">SPL Token Mint Address</label>
-              <input 
-                type="text" 
-                id="splMintAddress" 
-                name="splMintAddress" 
-                value={daoForm.splMintAddress}
-                onChange={handleInputChange}
-                className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3" 
-                placeholder="Enter SPL token mint address"
-              />
-            </div>
+          
+          <SelectField name="splTokenType" label="SPL Token Type" value={daoForm.splTokenType} onChange={handleInputChange} options={[
+            { value: 'new', label: 'Create New SPL Token' },
+            { value: 'existing', label: 'Use Existing SPL Token' },
+          ]} />
+          
+          {daoForm.splTokenType === 'existing' && (
+            <InputField name="splMintAddress" label="SPL Mint Address" value={daoForm.splMintAddress} onChange={handleInputChange} />
           )}
-<div>
-            <label htmlFor="primary_governance_token" className="block text-gray-700 mb-2">Primary Governance Token</label>
-            <select 
-              id="primary_governance_token" 
-              name="primary_governance_token" 
-              required 
-              value={daoForm.primary_governance_token}
-              onChange={handleInputChange}
-              className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3"
-            >
-              <option value="NFT">NFT</option>
-              <option value="SPL">SPL</option>
-            </select>
-          </div>
+          
+          <SelectField name="primaryGovernanceToken" label="Primary Governance Token" value={daoForm.primaryGovernanceToken} onChange={handleInputChange} options={[
+            { value: 'NFT', label: 'NFT' },
+            { value: 'SPL', label: 'SPL' },
+          ]} />
         </div>
+        
         <motion.button
           whileHover={{ scale: 0.98 }}
           whileTap={{ scale: 0.95 }}
@@ -326,5 +261,54 @@ const ConvictionCreationForm: React.FC<ConvictionCreationFormProps> = ({ governa
     </motion.div>
   );
 };
+
+interface InputFieldProps {
+  name: string;
+  label: string;
+  type?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const InputField: React.FC<InputFieldProps> = ({ name, label, type = "text", value, onChange }) => (
+  <div>
+    <label htmlFor={name} className="block text-gray-700 mb-2">{label}</label>
+    <input 
+      type={type} 
+      id={name} 
+      name={name} 
+      value={value} 
+      onChange={onChange} 
+      className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3"
+      required 
+    />
+  </div>
+);
+
+interface SelectFieldProps {
+  name: string;
+  label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  options: { value: string; label: string }[];
+}
+
+const SelectField: React.FC<SelectFieldProps> = ({ name, label, value, onChange, options }) => (
+  <div>
+    <label htmlFor={name} className="block text-gray-700 mb-2">{label}</label>
+    <select 
+      id={name} 
+      name={name} 
+      value={value} 
+      onChange={onChange}
+      className="w-full bg-gray-100 text-gray-800 border border-gray-300 rounded py-2 px-3"
+      required
+    >
+      {options.map(option => (
+        <option key={option.value} value={option.value}>{option.label}</option>
+      ))}
+    </select>
+  </div>
+);
 
 export default ConvictionCreationForm;

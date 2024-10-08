@@ -1,5 +1,5 @@
 {
-  "address": "2eTVXGSKCaTaivadMawTEz3h14FLwhyGTY64UBYLyZ6p",
+  "address": "7aQvq1fEiDXqK36H7mW8MSTGdnHn6XAHDd9pauZwZXGQ",
   "metadata": {
     "name": "standard",
     "version": "0.1.0",
@@ -23,33 +23,7 @@
         {
           "name": "escrow",
           "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  115,
-                  99,
-                  114,
-                  111,
-                  119
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "sender"
-              },
-              {
-                "kind": "account",
-                "path": "recipient"
-              },
-              {
-                "kind": "account",
-                "path": "mint"
-              }
-            ]
-          }
+          "signer": true
         },
         {
           "name": "sender",
@@ -60,8 +34,7 @@
           "name": "recipient"
         },
         {
-          "name": "mint",
-          "writable": true
+          "name": "mint"
         },
         {
           "name": "sender_token_account",
@@ -70,124 +43,11 @@
         {
           "name": "escrow_token_account",
           "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "path": "escrow"
-              },
-              {
-                "kind": "const",
-                "value": [
-                  6,
-                  221,
-                  246,
-                  225,
-                  215,
-                  101,
-                  161,
-                  147,
-                  217,
-                  203,
-                  225,
-                  70,
-                  206,
-                  235,
-                  121,
-                  172,
-                  28,
-                  180,
-                  133,
-                  237,
-                  95,
-                  91,
-                  55,
-                  145,
-                  58,
-                  140,
-                  245,
-                  133,
-                  126,
-                  255,
-                  0,
-                  169
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "mint"
-              }
-            ],
-            "program": {
-              "kind": "const",
-              "value": [
-                140,
-                151,
-                37,
-                143,
-                78,
-                36,
-                137,
-                241,
-                187,
-                61,
-                16,
-                41,
-                20,
-                142,
-                13,
-                131,
-                11,
-                90,
-                19,
-                153,
-                218,
-                255,
-                16,
-                132,
-                4,
-                142,
-                123,
-                216,
-                219,
-                233,
-                248,
-                89
-              ]
-            }
-          }
-        },
-        {
-          "name": "escrow_list",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  115,
-                  99,
-                  114,
-                  111,
-                  119,
-                  95,
-                  108,
-                  105,
-                  115,
-                  116
-                ]
-              }
-            ]
-          }
+          "signer": true
         },
         {
           "name": "system_program",
           "address": "11111111111111111111111111111111"
-        },
-        {
-          "name": "associated_token_program",
-          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
         },
         {
           "name": "token_program",
@@ -232,7 +92,10 @@
         },
         {
           "name": "recipient",
-          "signer": true
+          "signer": true,
+          "relations": [
+            "escrow"
+          ]
         }
       ],
       "args": []
@@ -253,76 +116,7 @@
         {
           "name": "router_state",
           "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  114,
-                  111,
-                  117,
-                  116,
-                  101,
-                  114,
-                  95,
-                  115,
-                  116,
-                  97,
-                  116,
-                  101
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "name": "authority",
-          "writable": true,
           "signer": true
-        },
-        {
-          "name": "system_program",
-          "address": "11111111111111111111111111111111"
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "initialize_escrow_list",
-      "discriminator": [
-        100,
-        223,
-        178,
-        162,
-        147,
-        163,
-        170,
-        40
-      ],
-      "accounts": [
-        {
-          "name": "escrow_list",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  115,
-                  99,
-                  114,
-                  111,
-                  119,
-                  95,
-                  108,
-                  105,
-                  115,
-                  116
-                ]
-              }
-            ]
-          }
         },
         {
           "name": "authority",
@@ -352,40 +146,12 @@
         {
           "name": "market",
           "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  109,
-                  97,
-                  114,
-                  107,
-                  101,
-                  116
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "base_mint"
-              },
-              {
-                "kind": "account",
-                "path": "quote_mint"
-              }
-            ]
-          }
+          "signer": true
         },
         {
           "name": "authority",
           "writable": true,
           "signer": true
-        },
-        {
-          "name": "base_mint"
-        },
-        {
-          "name": "quote_mint"
         },
         {
           "name": "system_program",
@@ -404,120 +170,6 @@
       ]
     },
     {
-      "name": "initialize_payment_list",
-      "discriminator": [
-        179,
-        94,
-        238,
-        139,
-        74,
-        9,
-        51,
-        98
-      ],
-      "accounts": [
-        {
-          "name": "payment_list",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  112,
-                  97,
-                  121,
-                  109,
-                  101,
-                  110,
-                  116,
-                  95,
-                  108,
-                  105,
-                  115,
-                  116
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "name": "authority",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "system_program",
-          "address": "11111111111111111111111111111111"
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "list_conditional_escrows",
-      "discriminator": [
-        210,
-        95,
-        199,
-        186,
-        57,
-        65,
-        140,
-        254
-      ],
-      "accounts": [
-        {
-          "name": "authority",
-          "signer": true
-        },
-        {
-          "name": "escrow_list",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  115,
-                  99,
-                  114,
-                  111,
-                  119,
-                  95,
-                  108,
-                  105,
-                  115,
-                  116
-                ]
-              }
-            ]
-          }
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "list_placed_orders",
-      "discriminator": [
-        91,
-        193,
-        50,
-        140,
-        46,
-        88,
-        1,
-        206
-      ],
-      "accounts": [
-        {
-          "name": "market",
-          "writable": true
-        }
-      ],
-      "args": []
-    },
-    {
       "name": "list_reclaim_verifications",
       "discriminator": [
         163,
@@ -533,51 +185,6 @@
         {
           "name": "signer",
           "signer": true
-        }
-      ],
-      "args": []
-    },
-    {
-      "name": "list_released_payments",
-      "discriminator": [
-        52,
-        13,
-        29,
-        141,
-        80,
-        162,
-        196,
-        198
-      ],
-      "accounts": [
-        {
-          "name": "authority",
-          "signer": true
-        },
-        {
-          "name": "payment_list",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  112,
-                  97,
-                  121,
-                  109,
-                  101,
-                  110,
-                  116,
-                  95,
-                  108,
-                  105,
-                  115,
-                  116
-                ]
-              }
-            ]
-          }
         }
       ],
       "args": []
@@ -694,7 +301,7 @@
         },
         {
           "name": "reclaim_program",
-          "address": "DovMZfoRztSgQ1SKx1M3UKwZz5fZtNbshX3qYSZHacZ4"
+          "address": "9XQD57wwrLaigMLcrcpTJphwmwdbqNKhJWczBH9derGT"
         },
         {
           "name": "system_program",
@@ -836,47 +443,18 @@
       "accounts": [
         {
           "name": "escrow",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  115,
-                  99,
-                  114,
-                  111,
-                  119
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "sender"
-              },
-              {
-                "kind": "account",
-                "path": "recipient_token_account"
-              },
-              {
-                "kind": "account",
-                "path": "mint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "sender",
           "writable": true
         },
         {
-          "name": "signer",
-          "writable": true,
-          "signer": true
+          "name": "sender"
         },
         {
-          "name": "mint",
-          "writable": true
+          "name": "recipient",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "escrow"
+          ]
         },
         {
           "name": "escrow_token_account",
@@ -885,35 +463,6 @@
         {
           "name": "recipient_token_account",
           "writable": true
-        },
-        {
-          "name": "payment_list",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  112,
-                  97,
-                  121,
-                  109,
-                  101,
-                  110,
-                  116,
-                  95,
-                  108,
-                  105,
-                  115,
-                  116
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "name": "associated_token_program",
-          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
         },
         {
           "name": "token_program",
@@ -1049,19 +598,6 @@
       ]
     },
     {
-      "name": "EscrowList",
-      "discriminator": [
-        143,
-        128,
-        39,
-        228,
-        95,
-        2,
-        41,
-        125
-      ]
-    },
-    {
       "name": "Market",
       "discriminator": [
         219,
@@ -1072,19 +608,6 @@
         227,
         198,
         154
-      ]
-    },
-    {
-      "name": "PaymentList",
-      "discriminator": [
-        41,
-        5,
-        227,
-        149,
-        206,
-        195,
-        213,
-        122
       ]
     },
     {
@@ -1115,32 +638,6 @@
     }
   ],
   "events": [
-    {
-      "name": "EscrowsListed",
-      "discriminator": [
-        101,
-        35,
-        233,
-        186,
-        11,
-        23,
-        247,
-        36
-      ]
-    },
-    {
-      "name": "PaymentsListed",
-      "discriminator": [
-        194,
-        155,
-        50,
-        106,
-        28,
-        156,
-        74,
-        26
-      ]
-    },
     {
       "name": "VerificationCompleteEvent",
       "discriminator": [
@@ -1353,86 +850,6 @@
           {
             "name": "expiry_time",
             "type": "i64"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "EscrowData",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "sender",
-            "type": "pubkey"
-          },
-          {
-            "name": "recipient",
-            "type": "pubkey"
-          },
-          {
-            "name": "mint",
-            "type": "pubkey"
-          },
-          {
-            "name": "amount",
-            "type": "u64"
-          },
-          {
-            "name": "condition",
-            "type": "string"
-          },
-          {
-            "name": "is_fulfilled",
-            "type": "bool"
-          },
-          {
-            "name": "expiry_time",
-            "type": "i64"
-          }
-        ]
-      }
-    },
-    {
-      "name": "EscrowList",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "escrows",
-            "type": {
-              "vec": {
-                "defined": {
-                  "name": "EscrowData"
-                }
-              }
-            }
-          },
-          {
-            "name": "bump",
-            "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "EscrowsListed",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "escrows",
-            "type": {
-              "vec": {
-                "defined": {
-                  "name": "EscrowData"
-                }
-              }
-            }
           }
         ]
       }
@@ -1512,10 +929,6 @@
           {
             "name": "next_order_id",
             "type": "u64"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
           }
         ]
       }
@@ -1567,66 +980,6 @@
       }
     },
     {
-      "name": "Payment",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "amount",
-            "type": "u64"
-          },
-          {
-            "name": "recipient",
-            "type": "pubkey"
-          },
-          {
-            "name": "timestamp",
-            "type": "i64"
-          }
-        ]
-      }
-    },
-    {
-      "name": "PaymentList",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "payments",
-            "type": {
-              "vec": {
-                "defined": {
-                  "name": "Payment"
-                }
-              }
-            }
-          },
-          {
-            "name": "bump",
-            "type": "u8"
-          }
-        ]
-      }
-    },
-    {
-      "name": "PaymentsListed",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "payments",
-            "type": {
-              "vec": {
-                "defined": {
-                  "name": "Payment"
-                }
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
       "name": "RouterState",
       "type": {
         "kind": "struct",
@@ -1644,10 +997,6 @@
                 }
               }
             }
-          },
-          {
-            "name": "bump",
-            "type": "u8"
           }
         ]
       }

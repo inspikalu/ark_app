@@ -1,5 +1,5 @@
 {
-  "address": "DnN713Fw9TFRiNfXL3uTNGyXUdktQr9VQsHnVRWLtc8p",
+  "address": "ATsZoBzoVyPF97HLn9kt2ffNSGcnYwUApbNxfsVknNVr",
   "metadata": {
     "name": "conviction",
     "version": "0.1.0",
@@ -294,7 +294,7 @@
         },
         {
           "name": "treasury_program",
-          "address": "9rkxTYZH7uF5kd3xt9yrbvMEUFbeJCkfwFzSeqhmkN76"
+          "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"
         },
         {
           "name": "system_program",
@@ -666,7 +666,7 @@
         },
         {
           "name": "treasury_program",
-          "address": "9rkxTYZH7uF5kd3xt9yrbvMEUFbeJCkfwFzSeqhmkN76"
+          "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"
         },
         {
           "name": "system_program",
@@ -801,7 +801,7 @@
         },
         {
           "name": "ark_program",
-          "address": "9rkxTYZH7uF5kd3xt9yrbvMEUFbeJCkfwFzSeqhmkN76"
+          "address": "48qaGS4sA7bqiXYE6SyzaFiAb7QNit1A7vdib7LXhW2V"
         },
         {
           "name": "system_program",
@@ -1544,7 +1544,7 @@
         },
         {
           "name": "router_program",
-          "address": "2eTVXGSKCaTaivadMawTEz3h14FLwhyGTY64UBYLyZ6p"
+          "address": "7aQvq1fEiDXqK36H7mW8MSTGdnHn6XAHDd9pauZwZXGQ"
         },
         {
           "name": "router_state"
@@ -3046,11 +3046,31 @@
             }
           },
           {
-            "name": "initialized_at",
+            "name": "polls",
+            "type": "u64"
+          },
+          {
+            "name": "approved",
+            "type": "u64"
+          },
+          {
+            "name": "rejected",
+            "type": "u64"
+          },
+          {
+            "name": "points",
+            "type": "u64"
+          },
+          {
+            "name": "created_at",
             "type": "i64"
           },
           {
-            "name": "bump",
+            "name": "auth_bump",
+            "type": "u8"
+          },
+          {
+            "name": "state_bump",
             "type": "u8"
           }
         ]
@@ -3769,10 +3789,6 @@
           {
             "name": "program_id",
             "type": "pubkey"
-          },
-          {
-            "name": "bump",
-            "type": "u8"
           }
         ]
       }
