@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiArrowUpCircle, FiArrowDownCircle, FiCast, FiFileText, FiUsers } from 'react-icons/fi';
